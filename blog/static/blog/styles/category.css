@@ -1,0 +1,77 @@
+.middle-content {
+    display: none;
+}
+
+.tag-headerblock {
+    margin-top: 100px;
+    border-radius: 10px;
+}
+
+.tag-header {
+    background: linear-gradient(to top, rgba(0,0,0,0.8)50%, rgba(0,0,0,0.8)50%);
+    text-align: center;
+}
+
+.tag-icon {
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translate(-50%);
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    background-color: var(--main-color-dark);
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tag-header i {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 45px;
+}
+
+.tag-icons {
+    position: absolute;
+    font-size: 20px;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+}
+
+.tag-icons i{
+    color: var(--dark);
+    opacity: 0.6;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.tag-icons .btn {
+    padding: 5px 15px;
+    border-radius: 10px;
+    color: black;
+    background-color: var(--main-color);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+
+.post-icons {
+    justify-content: center;
+    font-size: 11px;
+    border-top: 1px solid white;
+}
+
+
+.empty {
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    align-content: center;
+}

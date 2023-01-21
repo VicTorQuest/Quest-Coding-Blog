@@ -1,0 +1,17 @@
+{% extends 'account_base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block link2 %}
+<link rel="stylesheet" href="{% static 'styles/edit_account.css' %}">
+
+{% endblock link2 %}
+{% block h1_title %}Edit Address{% endblock h1_title %}
+{% block account_contents %}
+<form action="" method="post">
+    {% csrf_token %}
+    {{customer_form|crispy}}
+    {{billing_form|crispy}}
+    <button type='submit' class="btn login-btn mt-3">Save address</button>
+</form>
+{% endblock account_contents %}
+

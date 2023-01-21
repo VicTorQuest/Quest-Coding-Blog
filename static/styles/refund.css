@@ -1,0 +1,22 @@
+.heading {
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.refund-content {
+    font-size: 17px;
+    color: #f0f0f0;
+    line-height: 2rem;
+}
+
+.popular-posts {
+    display: none;
+}
+
+.recent-projects {
+    display: none;
+}
+
+.recent-tweets {
+    display: none;
+}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block link %}
+<link rel='stylesheet' href="{% static 'blog/styles/authors.css' %}">
+<link rel='stylesheet' href="{% static 'blog/styles/category.css' %}">
+{% endblock link %}
+{% block title %}Authors | {% endblock title %}
+
+
+{% block rowslider %}
+<section class="tag-headerblock container-post mb-4 mb-lg-0" data-aos="fade-up">
+    <div class="p-5 tag-header">
+        <div class="tag-icon">
+            <!-- <i class="bi bi-mortarboard"></i> -->
+            <i class="fa-solid fa-user-edit fa-2x" style="padding-left: 10%;"></i>
+        </div>
+        <h2 class="text-white font-weight-bold mt-3">Authors</h2>
+    </div>
+</section>
+<div class="rowslider-container" data-aos="fade-up">
+    <div class="row">
+        {% for author in authors %}
+        <div class="col-lg-4 col-sm-6 mb-5">
+                <div class="single-author">
+                    <div class="author-img-area"><img src="{{author.avatar.url}}" alt="{{author.name}}'s avatar image"></div>
+                    <div class="author-bg">
+                        
+                    </div>
+                    <div class="author-img-text">
+                        <h2><a href="{% url 'author' author.slug %}">{{author.name}}</a></h2>
+                        <p>{{author.bio}}</p>
+                        <div class="about-me-socials mt-1 ml-0">
+                            {% if author.twitter %}
+                            <a href="{{author.twitter}}" target="_blank" class="owner-link mr-3"><i class="bi bi-twitter"></i></a>
+                            {% endif %}
+                            {% if author.github %}
+                            <a href="{{author.github}}" target="_blank" class="owner-link mr-3"><i class="bi bi-github"></i></a>
+                            {% endif %}
+                            {% if author.linkedin %}
+                            <a href="{{author.linkedin}}" target="_blank" class="owner-link mr-3"><i class="bi bi-linkedin"></i></a>
+                            {% endif %}
+                            {% if author.youtube %}
+                            <a href="{{author.youtube}}" target="_blank" class="owner-link mr-3"><i class="bi bi-youtube"></i></a>
+                            {% endif %}
+                            {% if author.portifolio %}
+                            <a href="{{author.portifolio}}" target="_blank" class="owner-link mr-3"><i class="bi bi-globe"></i></a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+        </div>
+        {% empty %}
+        <div class="empty text-center">
+            <h3 class="text-white">There are no posts for this category...<i class="bi bi-emoji-dizzy"></i></h3>
+        </div>
+        {% endfor %}
+
+    
+    </div>  
+
+    
+        
+</div>
+{% endblock rowslider %}

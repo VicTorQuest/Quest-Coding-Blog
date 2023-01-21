@@ -1,0 +1,50 @@
+{% extends 'account_base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block link2 %}
+<link rel="stylesheet" href="{% static 'styles/orders.css' %}">
+{% endblock link2 %}
+{% block h1_title %}Orders{% endblock h1_title %}
+{% block account_contents %}
+<div class="box-element">
+    <table class="table table-responsive-sm">
+        <tbody>
+            
+            {% for item in items %}
+            <tr>
+              <th scope="row"><img class="row-image" src="{{item.product.imageURL}}"></th>
+              <td>{{item.product.name}}</td>
+              <td>{{item.product.price|floatformat:2}}</td>
+              <td>x{{item.quantity}}</td>
+            </tr>
+            {% empty %}
+            
+            <!-- <div class="row">
+                <div class="col-md-6">
+                    No order has been made yet.
+                </div>
+                <div class="col-md-6">
+                    <a  class="btn btn-outline-light ml-5" href="{% url 'store' %}"><i class="bi bi-arrow-left"></i> Back to Store</a>
+                </div>
+            </div> -->
+            <th>No order has been made yet.     <a  class="btn btn-outline-light ml-lg-5" href="{% url 'store' %}"><i class="bi bi-cart-fill mr-3"></i>Go to Store</a>
+            </th>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+    {% if order.get_cart_items  %} 
+    <div class="row mt-5">
+        <div class="col-6">
+            <h6 class="checkout-summary">Items: {{order.get_cart_items}}</h6>
+            <h6 class="checkout-summary">Total: ${{order.get_cart_total|floatformat:2}}</h6>
+        </div>
+        <div class="col-6" style="text-align: right;">
+            <h6 class="checkout-summary order-id">order-id: {{order.order_id}}</h6>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock account_contents %}
+

@@ -1,0 +1,108 @@
+.box-element{
+    color: #f0f0f0;
+    padding-top: 10px;
+}
+
+.row-image{
+	width: 100px;
+}
+
+
+.table::-webkit-scrollbar{
+	height:2px;
+	border-radius:10px;
+}
+.table::-webkit-scrollbar-thumbs{
+	height: 2px;
+	border-radius:10px;
+}
+
+
+.table:hover::-webkit-scrollbar{
+	display:block;
+}
+.table:hover::-webkit-scrollbar-thumbs{
+	display:block;
+}
+
+.box-element .table thead tr th {
+    border-top: none;
+}
+
+
+@media screen and (max-width:1100px) {
+    .price {
+        font-size: 15px;
+    }
+
+    .thumbnail {
+        height: 150px;
+    }
+
+    .store-btn {
+        font-size: 0.7rem;
+    }
+
+    .form-field{
+        width: 100%;
+    }
+
+}
+
+
+@media screen and (max-width:1024px) {
+    .price {
+        font-size: 15px;
+    }
+
+    .thumbnail {
+        height: 150px;
+    }
+
+    .store-btn {
+        font-size: 0.7rem;
+    }
+
+    .form-field{
+        width: 100%;
+    }
+
+}
+
+@media screen and (max-width:480px) {
+    .checkout-summary {
+        font-size: 14px;
+    }
+
+    .order-summary {
+        font-size: 22px;
+    }
+
+    .cont-btn {
+        font-size: 15px;
+    }
+
+    .price {
+        font-size: 15px;
+    }
+
+    .store-btn {
+        font-size: 0.7rem;
+    }
+
+    .heading {
+        font-size: 26px;
+    }
+
+    .table tr th h5{
+        font-size: 15px;
+    }
+
+    .table tr th .btn{
+        font-size: 15px;
+    }
+}
+
+.order-id {
+    word-wrap: break-word;
+}

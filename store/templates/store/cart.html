@@ -1,0 +1,141 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block title %}Cart | {% endblock title %}
+{% block rowslider %}
+<section class="mx-lg-3 pt-lg-1" data-aos="fade-up">
+    <div class="my-5 mx-lg-3 m-lg-5 p-3 p-lg-5">
+        <h1 class="pb-3 mx-2 mx-lg-0 mb-2 mb-lg-4 heading text-white">Cart</h1>
+        <!-- <i class="bi bi-caret-up-fill"></i>
+
+        <i class="fa-solid fa-caret-up"></i> -->
+        <div class="row all-products">
+            <div class="col-lg-12">
+                <div class="box-element">
+                    <a class="btn btn-outline-light cont-btn" href="{% url 'store' %}"><i class="bi bi-arrow-left"></i> Continue shopping</a>
+                    <br>
+                    <br>
+    
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th scope="col"><h5>Items: <strong id="get_cart_items">{{order.get_cart_items}}</strong></h5></th>
+                                <th scope="col"><h5>Total: <strong id="get_cart_total">${{order.get_cart_total|floatformat:2}}</strong></h5></th>
+                                <th scope="col">
+                                    <a style="float: right;margin:5px" href="{% url 'checkout' %}" class="btn add-btn">Checkout</a>
+                                </th>
+                            </tr>
+                        </tbody>
+                  
+                    </table>
+                </div>
+                <br>
+                <div style="padding-bottom: 1px;" class="box-element">
+                    <table id="displayTable" class="table table-responsive-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col" style="border-top: none;"></th>
+                                <th scope="col"><strong>Item</strong></th>
+                                <th scope="col"><strong>Price</strong></th>
+                                <th scope="col"><strong>Quantity</strong></th>
+                                <th scope="col"><strong>Total</strong></th>
+                            </tr>
+                          </thead>
+                          <tbody id="displayCartItems">
+                              {% for item in items %}
+                            <tr>
+                              <th scope="row"><img src="{{item.product.imageURL}}" alt="item-img" class="row-image"></th>
+                              <td>{{item.product.name}}</td>
+                              <td>{{item.product.price|floatformat:2}}</td>
+                              <td>
+                                <p class="quantity" id="quantity-{{item.product.id}}">{{item.quantity}}</p>
+                                <div class="quantity">
+                                    <i data-product="{{item.product.id}}" data-action="add" class="bi bi-caret-up-fill chg-quantity update-cart m-0 p-0"></i>
+                                    <i data-product="{{item.product.id}}" data-action="remove" class="bi bi-caret-down-fill chg-quantity update-cart m-0 p-0"></i>
+                                </div>
+                              </td>
+                              <td style="flex: 1;" id="price-{{item.product.id}}">${{item.get_total|floatformat:2}}</td>
+                            </tr>
+                            {% endfor %}
+                         </tbody>
+                        
+                    </table>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+       
+        
+    </div>
+</section>
+{% endblock rowslider %}
+{% block addedscripts %}
+<script>
+    const updatItem = ()=> {
+    const updateBtn = [...document.getElementsByClassName('update-cart')]
+    updateBtn.forEach(i=> i.addEventListener('click', function(){
+        var productId = this.dataset.product
+        var action = this.dataset.action
+        console.log('productId:', productId, 'action:', action)
+
+        console.log('User:', user)
+        if (user == 'AnonymousUser') {
+            addCookieItem(productId, action)
+        }
+        else {
+            $.ajax({
+                type: 'POST',
+                url: '/update-item/',
+                data:  {'productId': productId, 'action': action, 'csrfmiddlewaretoken': csrftoken},
+                success: function(data){
+                    console.log(data)
+                    
+                }
+            })
+        }
+    }))
+}
+
+$(document).ready(function(){
+    setInterval(function(){
+        $.ajax({
+            type: 'GET',
+            url: '/getting_cart_items/',
+            success: function(response) {
+
+                $('#get_cart_items').empty();
+                $('#get_cart_total').empty();
+                
+                $('#get_cart_items').html(response.cartitems);
+                $('#get_cart_total').html('$'+response.carttotal);
+              
+                $('#displayCartItems').empty();
+                for (var item in response.items) {
+                    // $("#quantity-"+response.items[item].product.id).empty()
+                    // $("#price-"+response.items[item].product.id).empty()
+                    // $("#quantity-"+response.items[item].product.id).html(response.items[item].quantity)
+                    // $("#price-"+response.items[item].product.id).html('$'+response.items[item].get_total)
+                    console.log('total:' + response.items[item].quantity)
+                    var tempbody = "<tr><th scope='row'><img src="+response.items[item].product.imageURL+" alt='item-img' class='row-image'></th><td>"+response.items[item].product.name+"</td><td>"+response.items[item].product.price+"</td><td><p class='quantity'>"+response.items[item].quantity+"</p> <div class='quantity'><i data-product="+response.items[item].product.id+" data-action='add' class='bi bi-caret-up-fill chg-quantity update-cart m-0 p-0'></i> <i data-product="+response.items[item].product.id+" data-action='remove' class='bi bi-caret-down-fill chg-quantity update-cart m-0 p-0'></i> </div> </td><td style='flex: 1;'>$"+response.items[item].get_total+"</td></tr>"
+                    $('#displayTable').append(tempbody)
+                    if (response.items[item].quantity <= 0) {
+                        $('#displayCartItems').empty();
+                    }
+                }
+                updatItem()
+            },
+            error: function(response) {
+                console.log('error getting data')
+            }
+        })
+        // updatItem()
+    }, 1000);
+})
+</script>
+{% endblock addedscripts %}
+
+
+
+
+

@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block link %}
+<link rel="stylesheet" href="{% static 'blog/styles/author.css' %}">
+{% endblock link %}
+{% block title %}{{author.name|title}} | {% endblock title %}
+
+
+{% block rowslider %}
+<br>
+<section class="tag-headerblock container-post mt-5 mb-4 mb-lg-0" data-aos="fade-up">
+    <div class="p-5 tag-header text-center">
+        <div class="author-img-area text-center">
+            <img src="{{author.avatar.url}}" alt="{{author.name}}'s profile image">
+        </div>
+        <h1 class="text-white text-center font-weight-bold mt-3">{{author.name|title}}</h1>
+        <h2 class="text-center">{{author.bio}}</h2>
+        <div class="author-meta d-flex justify-content-center align-items-center">
+            <div class="author-location" data-test-label="author-location">
+                <i>{{author.location|title}}</i>
+                <span class="bull" data-test-label="bullet">
+                    •
+                </span>
+            </div>
+            <div class="author-stats" data-test-label="author-post-count">
+            
+                {{all_authors_posts.count}}  {% if all_authors_posts.count > 1 %}posts{% else %}post{% endif %} 
+            
+                <span class="bull" data-test-label="bullet">
+                    •
+                </span>
+            </div>
+            <div class="social-links">
+                {% if author.twitter %}
+                <a href="{{author.twitter}}" target="_blank" class=""><i class="bi bi-twitter"></i></a>
+                {% endif %}
+                {% if author.github %}
+                <a href="{{author.github}}" target="_blank" class=""><i class="bi bi-github"></i></a>
+                {% endif %}
+                {% if author.linkedin %}
+                <a href="{{author.linkedin}}" target="_blank" class=""><i class="bi bi-linkedin"></i></a>
+                {% endif %}
+                {% if author.youtube %}
+                <a href="{{author.youtube}}" target="_blank" class=""><i class="bi bi-youtube"></i></a>
+                {% endif %}
+                {% if author.portifolio %}
+                <a href="{{author.portifolio}}" target="_blank" class=""><i class="bi bi-globe"></i></a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock rowslider %}
+
+{% block contents %}
+<div class="author-posts">
+   
+    {% for post in posts %}
+    <div class="row mb-5" data-aos="fade-up">
+        <div class="col-md-4">
+            <img src="{{post.post_img.url}}" class="author-post-img" alt="post image">
+        </div>
+        <div class="col-md-8">
+            
+            <p class="d-flex author-post-category">{% for i in post.category.all %}{{i}} {% if not forloop.last %}| {% endif %}{% endfor %}</p>
+            
+            <h2><a href="{% url 'post_detail' post.slug %}">{{post.title}}</a></h2>
+            <div class="post-info">
+                <div class="author-img">
+                    <img src="{{post.author.avatar.url}}" alt="{{post.author}}'s profile image">
+                    {{post.author}}
+                </div>
+                <small>{{post.created_at|timesince}} ago</small>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    
+        
+</div>
+
+<div class="col-md-12 mb-5 pb-2"  data-aos="fade-up" data-aos-offset="0">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          {% if posts.has_previous %}
+          <li class="page-item mr-2">
+            <a class="page-link previous px-3" href="?page={{posts.previous_page_number}}" >Previous</a>
+          </li>
+          {% endif %}
+          <li class="page-item justify-content-center page-link page-of disabled">Page {{posts.number}} of {{posts.paginator.num_pages}}</li>
+          {% if posts.has_next %}
+          <li class="page-item">
+            <a class="page-link ml-2 next px-3" href="?page={{posts.next_page_number}}">Next</a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+</div>
+{% endblock contents %}

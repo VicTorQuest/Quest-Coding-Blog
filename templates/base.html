@@ -1,0 +1,494 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'aos/dist/aos.css' %}" />
+    <!-- https://unpkg.com/aos@next/dist/aos.css -->
+    <!-- Bootstrap icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+
+
+    <!-- font awesome -->
+    <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+    <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+
+    <!-- my css -->
+    <link rel="stylesheet" href="{% static 'styles/base.css' %}">
+
+
+    {% block link %}{% endblock link %}
+
+
+    <title>{% block title %}{% endblock title %}Quest Coding Blog</title>
+</head>
+
+<body>
+    <div class="loader-wrapper">
+        <span class="loader"><span class="loader-inner"></span></span>
+    </div>
+    <button id="btnScrollToTop">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+    <div class="main w-100">
+
+        <nav class="navbar">
+            <div class="nav-bar">
+                <div class="icon menu-btn">
+                    <i class="fa-solid fa-bars fa-sm"></i>
+                </div>
+                <div class="icon-img">
+                    <a class="" href="{% url 'home' %}"><img class="logo" alt="logo"
+                            src="{% static 'images/logo.svg' %}" alt=""></a>
+                </div>
+                <ul class="menu-list mx-auto">
+                    <div class="icon cancel-btn">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <li class="">
+                        <a {% if request.path == '/' %}class="current" {% endif %} href="{% url 'home' %}"><i
+                                class="fa-solid fa-file-pen mr-2"></i>Blog<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="">
+                        <a {% if request.path == '/store/' %}class="current" {% endif %} href="{% url 'store' %}"><i
+                                class="fa-solid fa-cart-shopping mr-2"></i>Store & Services</a>
+                    </li>
+
+
+                    <li class="">
+                        <a {% if '/my-account/' in request.path %}class="current" {% endif %}
+                            href="{% url 'my_account' %}"><i class="fa-solid fa-user-large mr-2"></i>My Account</a>
+                    </li>
+                    <li class="">
+                        <a {% if request.path == '/subscribe/' %}class="current" {% endif %}
+                            href="{% url 'subscribe' %}"><i class="fa-solid fa-paper-plane mr-2"></i>Subscribe</a>
+                    </li>
+                    <li class="">
+                        <a {% if request.path == '/contact/' %}class="current" {% endif %}href="{% url 'contact' %}"><i
+                                class="fa-solid fa-envelope mr-2"></i> Contact</a>
+                    </li>
+                </ul>
+
+
+
+                <div id="cart-item-indicator" class="form-inline cart-item-indicator">
+                    <a href="{% url 'cart' %}">
+                        <img id="cart-icon" alt="cart-icon" src="{% static 'store/images/cart.png' %}">
+                    </a>
+                    <p id="cart-total">{{cartitems}}</p>
+                </div>
+
+
+
+                <form class="search" action="{% url 'search' %}" method="GET">
+                    <div class="search_icon"></div>
+                    <div class="input">
+                        <input type="search" name="query" required placeholder="search" id="mysearch">
+                    </div>
+                    <span class="clear" onclick="document.getElementById('mysearch').value= '' "></span>
+                </form>
+
+                <form method="GET" name="query" action="{% url 'search' %}" class="search-sm">
+                    <i class="fa-solid fa-magnifying-glass text-white fa-lg"></i>
+                    <div class="search-box">
+                        <input type="search" name="query" placeholder="" />
+                        <input type="submit" value="Search" />
+                    </div>
+                </form>
+
+            </div>
+        </nav>
+
+
+
+    </div>
+
+
+    {% block landing_page_content %}
+
+    {% endblock landing_page_content %}
+
+
+
+
+    {% block rowslider %}
+
+    {% endblock rowslider %}
+
+
+
+    <div class="container-post middle-content">
+        <div class="row posts">
+
+
+            <div class="col-md-8 g-4">
+                {% block contents %}
+
+                {% endblock contents %}
+            </div>
+
+            <div class="col-md-4">
+                {% block related_posts %}
+                <div class="col-md-12 mb-5 popular-posts" data-aos="fade-up">
+                    <h4 class="px-2">Popular Posts</h4>
+                    <hr class="mx-2">
+
+                    <div class="popular-post-container pb-3">
+                        {% for post in popular_posts %}
+                        <div class="popular-post mx-lg-2 mb-2">
+                            <div class="shadow" style="border-radius: 50%;">
+                                <img src="{{post.post_img.url}}" alt="post image" class="popular-post-img" alt="">
+                            </div>
+
+                            <div>
+                                <small>{{post.created_at|date:'M d, Y'}}</small>
+                                <p class="post-description"><a class="post-description-a"
+                                        href="{% url 'post_detail' post.slug %}">{{post.title}}</a></p>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+
+                    </div>
+
+
+                </div>
+                {% endblock related_posts %}
+
+                <div class="col-md-12 mb-5 recent-tweets" data-aos="fade-up">
+                    <h4 class="px-2">Recent Tweets</h4>
+                    <hr class="mx-2">
+
+                    <div class="recent-tweet-container mb-5">
+
+                        <div class="recent-tweet mx-2 mb-2">
+                            <i class="bi bi-twitter"></i>
+                            <div class="recent-tweet-content">
+                                <p class="post-description mb-0">Lorem ipsum dolor sit amet consectetur adipisicing
+                                    elit.
+                                    Placeat hic incidunt necessitatibus sunt eos magni architecto culpa....<a
+                                        href="">https://t.co/GkHtpsnH17</a></p>
+                                <small>20 minutes ago</small>
+                            </div>
+                        </div>
+
+                        <div class="recent-tweet mx-2 mb-2">
+                            <i class="bi bi-twitter"></i>
+                            <div class="recent-tweet-content">
+                                <p class="post-description mb-0">Lorem ipsum dolor sit amet consectetur adipisicing
+                                    elit.
+                                    Placeat hic incidunt necessitatibus sunt eos magni architecto culpa....<a
+                                        href="">https://t.co/GkHtpsnH17</a></p>
+                                <small>1 hour ago</small>
+                            </div>
+                        </div>
+
+                        <div class="recent-tweet mx-2 mb-2">
+                            <i class="bi bi-twitter"></i>
+                            <div class="recent-tweet-content">
+                                <p class="post-description mb-0">Lorem ipsum dolor sit amet consectetur adipisicing
+                                    elit.
+                                    Placeat hic incidunt necessitatibus sunt eos magni architecto culpa....<a
+                                        href="">https://t.co/GkHtpsnH17</a></p>
+                                <small>3 hour ago</small>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="col-md-12 mb-5 categories" data-aos="fade-up">
+                    <h4 class="px-2">Categories</h4>
+                    <hr class="mx-2">
+
+                    <div class="categories-container pb-3">
+                        {% for category in categories %}
+                        <div class="category mx-2 mb-3">
+                            <div class="category-content">
+                                <a href="{% url 'category' category.slug %}" class="link">{{category.title}}</a>
+                                <p class="number">{{category.categories.all|length}}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+
+                </div>
+
+                <div class="col-md-12 mb-5 recent-projects" data-aos="fade-up">
+                    <h4 class="px-2">Recent Projects</h4>
+                </div>
+
+                <div class="col-md-12 mb-5 recent-projects" data-aos="fade-up">
+                    <div class="recent-project-container">
+                        <div class="recent-project mx-2">
+                            <i class="bi bi-github"></i>
+                            <div class="recent-project-content">
+                                <p class="post-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                    Placeat hic incidunt necessitatibus</p>
+                                <a href="">https://github.com/redianmarku/tweeter-email-scraper</a>
+                                <div class="repo-details">
+                                    <p>4 forks.</p>
+                                    <p>5 stars.</p>
+                                    <p>0 open issues</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-5 recent-projects" data-aos="fade-up">
+                    <div class="recent-project-container">
+                        <div class="recent-project mx-2">
+                            <i class="bi bi-github"></i>
+                            <div class="recent-project-content">
+                                <p class="post-description">A telegram bot that can send messages to members of a
+                                    group.
+                                </p>
+                                <a href="">https://github.com/redianmarku/tweeter-email-scraper</a>
+                                <div class="repo-details">
+                                    <p>4 forks.</p>
+                                    <p>5 stars.</p>
+                                    <p>0 open issues</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="container-post bottom-content">
+        <div class="row">
+            <div class="col-md-4 mb-3 recent-post" data-aos="fade-up">
+                <h3>Recent posts</h3>
+                <hr>
+                <div class="recent-posts">
+                    {% for recent_post in recent_posts %}
+                    <div class="last-post mx-2 mb-3">
+                        <img src="{{recent_post.post_img.url}}" alt="post image" class="popular-post-img" alt="">
+                        <div>
+                            <small>{{recent_post.created_at|date:"M d, Y"}}</small>
+                            <p class="post-description"><a class="post-description-a"
+                                    href="{% url 'post_detail' recent_post.slug %}">{{recent_post.title}}</a>
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div class="col-md-4 mb-4 recent-post" data-aos="fade-up">
+                <h3>Tag cloud</h3>
+                <hr>
+
+                <div class="tag-buttons">
+                    {% for category in categories %}
+                    <a href="{% url 'category' category.slug %}"
+                        class="btn tag-button one my-1 mr-1">{{category.title}}</a>
+                    {% endfor %}
+
+
+                </div>
+
+
+            </div>
+
+            <div class="col-md-4 recent-post" id="owner" data-aos="fade-up">
+                <h3>About me</h3>
+                <hr>
+                <div class="recent-posts">
+                    <div class="about-me mx-2">
+                        <img src="/static/images/me.webp" class="about-me-img" alt="author image">
+                        <div>
+                            <p class="post-description"><a href="">Victor Okolie </a></p>
+                            <small>Founder & Editor</small><br>
+                            <div class="about-me-socials mt-1">
+                                <a href="" class="btn owner-link"><i class="bi bi-twitter"></i></a>
+                                <a href="" class="btn owner-link"><i class="bi bi-github"></i></a>
+                                <a href="" class="btn owner-link"><i class="bi bi-linkedin"></i></a>
+                                <a href="" class="btn owner-link"><i class="bi bi-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-3 text-white">Backend web developer and software engineer</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cookie-container">
+        <p>
+            We use cookies and other tracking technologies to improve your browsing experience on our website, to show
+            you personalized content and targeted ads, to analyze our website traffic, and to understand where our
+            visitors are coming from. To learn more, read our <a href="{% url 'privacy' %}">privacy & policy</a> and <a
+                href="{% url 'terms' %}">terms of use</a>
+        </p>
+        <button class="cookie-btn">Okay</button>
+    </div>
+
+    <footer class="mt-5 mb-0">
+        <!-- <div class="top-footer">
+            <div class="py-4">
+                <div class="text-center">
+                    <a href=""><i class="bi bi-twitter text-dark mr-4"></i></a>
+                    <a href=""><i class="bi bi-github text-dark mr-4"></i></a>
+                    <a href=""><i class="bi bi-google text-dark mr-4"></i></a>
+                    <a href=""><i class="bi bi-youtube text-dark mr-4"></i></a>
+                    <a href=""><i class="bi bi-linkedin text-dark mr-4"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center text-md-left mt-5 w-100">
+            <div class="row row-footer mx-auto w-100">
+                <div class="col-md-4 mx-auto mb-4">
+                    <img src="{% static 'images/logo.svg' %}" class="footer-logo" alt="logo">
+                </div>
+
+                <div class="col-md-2 mx-auto mb-4">
+                    <h6 class="text-uppercase text-white font-weight-bold mb-0">Quick Links</h6>
+                    <hr class="mb-1 mt-0 d-inline-block mx-auto" style="width: 100px;height:2px">
+
+                    <ul class="list-unstyled">
+                        <li class="my-2"><a href="{% url 'home' %}">HOME</a></li>
+                        <li class="my-2"><a href="{% url 'my_account' %}">ACCOUNT</a></li>
+                        <li class="my-2"><a href="{% url 'store' %}">STORE</a></li>
+                        <li class="my-2"><a {% if request.path == '/' %}href="#blog"{% else %}href="{% url 'home' %}#blog"{% endif %}>BLOG</a></li>
+                        <li class="my-2"><a href="{% url 'videos' %}">VIDEOS</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-2 mx-auto mb-4">
+                    <h6 class="text-uppercase text-white font-weight-bold mb-0">Inquiries</h6>
+                    <hr class="mb-1 mt-0 d-inline-block mx-auto" style="width: 80px;height:2px">
+
+                    <ul class="list-unstyled">
+                        <li class="my-2"><a href="{% url 'terms' %}">TERMS & CONDITIONS</a></li>
+                        <li class="my-2"><a href="{% url 'privacy' %}">PRIVACY POLICY</a></li>
+                        <li class="my-2"><a href="{% url 'refund' %}">REFUND POLICY</a></li>
+                        <li class="my-2"><a href="{% url 'contact' %}">CONTACT</a></li>
+                        
+                    </ul>
+                </div>
+
+                <div class="col-md-4 mx-auto mb-4">
+                    <h6 class="text-uppercase text-white font-weight-bold mb-0">CONTACT</h6>
+                    <hr class="mb-1 mt-0 d-inline-block mx-auto" style="width: 80px;height:2px">
+
+                    <ul class="list-unstyled text-white">
+                        <li class="my-2"><i class="bi bi-house-fill mr-3"></i>India, 3 layup street Bangladesh</li>
+                        <li class="my-2"><i class="bi bi-envelope mr-3"></i>questcoding2001@gmail.com</li>
+                        <li class="my-2"><i class="bi bi-telephone mr-3"></i>+23409074562512</li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="footer-copyright text-center py-3">
+            <ul class="d-flex justify-content-center">
+                <li class="mr-2 mr-lg-5"><a class='footer-link' href="{% url 'terms' %}">Terms & conditions</a></li>
+                <li class="mr-2 mr-lg-5"><a class="footer-link" href="{% url 'contact' %}">Contact</a></li>
+                <li><a class="footer-link" href="{% url 'terms' %}">Privacy policy</a></li>
+            </ul>
+            <p class="">&copy; Copyright
+                <a class="footer-link" href="{% url 'home' %}">questcoding.blog</a> 2022
+            </p>
+        </div>
+    </footer>
+
+    <script src="{% static 'scripts/jquery-3.6.0.js' %}"></script>
+    <script>
+        $(window).on("load", function () {
+            $(".loader-wrapper").fadeOut("slow");
+        });
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+
+    <!-- My js -->
+    <script src="{% static 'scripts/search_bar_toggle.js' %}"></script>
+    <script src="{% static 'scripts/main.js' %}"></script>
+
+    <script>
+        const body = document.querySelector("body");
+        const navbar = document.querySelector(".navbar");
+        const menuBtn = document.querySelector(".menu-btn");
+        const cancelBtn = document.querySelector(".cancel-btn");
+        menuBtn.onclick = () => {
+            navbar.classList.add("show");
+            menuBtn.classList.add("hide");
+            body.classList.add("disabled");
+        }
+        cancelBtn.onclick = () => {
+            body.classList.remove("disabled");
+            navbar.classList.remove("show");
+            menuBtn.classList.remove("hide");
+        }
+        window.onscroll = () => {
+            this.scrollY > 20 ? navbar.classList.add("sticky") : navbar.classList.remove("sticky");
+            this.scrollY > 20 ? btnScrollToTop.classList.add("showbtnscrolltotop") : btnScrollToTop.classList.remove("showbtnscrolltotop");
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+
+            $(".fa-magnifying-glass").click(function () {
+                $(".search-box").toggle();
+                $("input[type='search']").focus();
+            });
+
+        });
+    </script>
+    <!-- <script src="https://unpkg.com/aos@next/dist/aos.js"></script> -->
+    <script src="{% static 'aos/dist/aos.js' %}"></script>
+    <script>
+        AOS.init({
+            offset: 200,
+            duration: 1000,
+        });
+    </script>
+    <script src="{% static 'scripts/backtotop.js' %}"></script>
+    <script>
+        var cartItemIndicator = document.querySelector('.cart-item-indicator')
+        var cartUrl = "{% url 'cart' %}"
+        var cartTotal = parseInt('{{cartitems}}')
+        if (cartTotal > 0) {
+            //pass
+        } else {
+            cartItemIndicator.style.display = "none";
+        }
+        // if (cartTotal > 0) {
+        //     console.log('cart total is over 0')
+        //     cartItemIndicator.classList.add('show-cart')
+        //     cartItemIndicator.classList.add('form-inline')
+        // }else {
+        //     cartItemIndicator.classList.remove('show-cart')
+        // }
+    </script>
+    {% block scripts %}{% endblock scripts %}
+</body>
+
+</html>

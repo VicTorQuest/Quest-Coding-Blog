@@ -1,0 +1,90 @@
+{% extends 'account_base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block link2 %}
+<link rel="stylesheet" href="{% static 'styles/orders.css' %}">
+<style>
+    .refund th, .refund td {
+        text-align: center;
+        padding: 4px 8px;
+        max-width: 40px;
+        word-wrap: break-word;
+        font-size: 14px;
+    }
+
+    .submit  {
+        background-color: cyan;
+        font-weight: 500;
+        transition: 0.35s;
+    }
+
+    .submit:hover {
+        background-color: #f0f0f0;
+    }
+
+    div.form-check {
+        display: flex;
+        align-items: center;
+    }
+
+    label.form-check-label {
+        margin-top: 5px;
+    }
+
+    .asteriskField {
+        display: none;
+    }
+</style>
+{% endblock link2 %}
+{% block h1_title %}Request for a refund{% endblock h1_title %}
+{% block account_contents %}
+<div class="box-element">
+    <table class="table table-responsive">
+        {% if refund %}
+        <thead>
+            <tr class="refund"></tr>
+                <th>Request ID</th>
+                <th>Order ID</th>
+                <th>Items</th>
+                <th>Status</th>
+                <th>Created Date</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr class="refund">
+                    <th scope="row">{{refund.id}}</th>
+                    <td>{{refund.order_id}}</td>
+                    <td >
+                        {% for i in refund.items.all %}
+                            {{i}}{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{refund.status}}</td>
+                    <td>{{refund.date|date:"M. d, Y"}}</td>
+                </tr>
+            {% else %}
+            <th>No request found.    <button class="btn btn-outline-light ml-lg-5" data-toggle="collapse" data-target="#collapseExample">Make a request?</button>
+            </th>
+            {% endif %}
+            
+            
+            
+            
+        </tbody>
+    </table>
+    <div class="collapse pt-0" id="collapseExample">
+        <div class="card card-body pt-0">
+        {% if completed_order %}
+          <form method="post">
+            {% csrf_token %}
+            {{form|crispy}}
+            <button type="submit" class="btn submit">Submit</button>
+          </form>
+          {% else %}
+          <p>You're Yet to purchase an item  <a  class="btn btn-outline-light ml-lg-3" href="{% url 'store' %}"><i class="bi bi-cart-fill"></i></a></p>
+        {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock account_contents %}
+

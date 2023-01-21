@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block link %}
+<style>
+    .heading {
+    font-weight: 600;
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.continue {
+    background-color: cyan;
+    padding: 5px 8px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: 0.35s ease;
+}
+
+.continue:hover {
+    background-color: white;
+}
+
+.middle-content {
+    display: none;
+}
+
+.bottom-content {
+    display: none;
+}
+
+.main-section p {
+    line-height: 2rem;
+}
+
+@media screen and (max-width:450px) {
+
+    .heading {
+        font-size: 26px;
+    }
+
+    .main-section p {
+        font-size: 14px;
+    }
+
+}
+</style>
+{% endblock link %}
+{% block title %}Login | {% endblock title %}
+{% block rowslider %}
+<section class="mx-lg-3 pt-lg-5 main-section" data-aos="fade-up">
+    <div class="my-5 mx-3 m-lg-5 post p-3 p-lg-5 full-post" data-aos="fade-up">
+    
+    {% if process == "connect" %}
+    <h1 class="pb-4 mb-5 heading">{% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}</h1>
+    
+    <p>{% blocktrans with provider.name as provider %}You are about to connect a new third party account from {{ provider }}.{% endblocktrans %}</p>
+    {% else %}
+    <h1 class="pb-4 mb-5 heading">{% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}</h1>
+    
+    <p>{% blocktrans with provider.name as provider %}You are about to sign in using a third party account from {{ provider }}.{% endblocktrans %}</p>
+    {% endif %}
+    
+    <form method="post">
+      {% csrf_token %}
+      <button class="continue" type="submit">{% trans "Continue" %}</button>
+    </form>
+    </div>
+</section>
+{% endblock rowslider %}
+

@@ -1,0 +1,60 @@
+.heading {
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.submit {
+    font-weight: 500;
+    background-color: var(--main-color);
+    transition: 0.3s ease-in-out;
+}
+
+.submit:hover {
+    background-color: var(--text-color);
+}
+
+.recent-tweets {
+    display: none;
+}
+
+.form-control {
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    color: #495057;
+}
+
+.form-control:focus {
+    background-color: #f0f0f0 !important;
+}
+
+.asteriskField {
+    display: none;
+}
+
+label {
+    color: #f0f0f0;
+}
+
+.subscription p {
+    color: #f0f0f0;
+}
+
+.form-check {
+    margin-top: 1.5rem;
+}
+
+ul {
+    list-style-type: none;
+}
+
+@media screen and (max-width:450px) {
+    .subscription p {
+        font-size: 14px;
+        line-height: 2rem;
+    }
+
+    .heading {
+        font-size: 26px;
+    }
+}

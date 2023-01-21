@@ -1,0 +1,68 @@
+.heading {
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.policy-content {
+    font-size: 17px;
+    color: #f0f0f0;
+    line-height: 2rem;
+}
+
+.policy h4, .policy h2, .policy h5, .policy h3 {
+    color: white;
+    font-weight: 500;
+}
+
+.policy-content {
+    word-wrap: break-word;
+}
+
+.page-links {
+    color: var(--main-color);
+    transition: 0.25s ease;
+}
+
+.page-links:hover {
+    color: #f0f0f0;
+}
+
+
+.popular-posts {
+    display: none;
+}
+
+.recent-projects {
+    display: none;
+}
+
+.recent-tweets {
+    display: none;
+}
+
+
+@media screen and (max-width:450px) {
+    .policy-content {
+        font-size: 14px;
+    }
+
+    .heading {
+        font-size: 26px;
+    }
+
+    .policy h2 {
+        font-size: 24px;
+    }
+
+    .policy h3 {
+        font-size: 22px;
+    }
+
+    .policy h4 {
+        font-size: 20px;
+    }
+
+    .policy h5 {
+        font-size: 18px;
+    }
+}

@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load socialaccount %}
+{% providers_media_js %}
+{% load crispy_forms_tags %}
+{% block link %}
+<link rel="stylesheet" href="{% static 'styles/account.css' %}">
+{% endblock link %}
+{% block title %}My account | {% endblock title %}
+{% block contents %}
+<div class="col-md-12 mb-0 post p-3 pb-4 my-4 my-lg-0 mb-5 p-lg-5 full-post" data-aos="fade-up">
+    <h1 class="pb-4 mb-5 heading">My account</h1>
+    {% include "message.html" %}
+{% if request.user.is_authenticated %}
+    <div class="row">
+        <div class="col-md-4" data-aos="fade-left">
+            <ul class="ml-5">
+                <li class="py-2"><a href="{% url 'my_account' %}" class="page-links">Dashboard</a></li>
+                <li class="py-2"><a href="{% url 'orders' %}" class="page-links">orders</a></li>
+                <li class="py-2"><a href="" class="page-links">Downloads</a></li>
+                <li class="py-2"><a href="{% url 'address' %}" class="page-links">Address</a></li>
+                <li class="py-2"><a href="{% url 'edit_account' %}" class="page-links">Account details</a></li>
+                <li class="py-2"><a href="{% url 'request_refund' %}" class="page-links">Request Refund</a></li>
+                <li class="py-2"><a href="{% url 'logout' %}" class="page-links">Logout</a></li>
+            </ul>
+        </div>
+        <div class="col-md-8 py-2 account-summary" data-aos="fade-right">
+            <p>
+                Hello <b>{{request.user}}</b>(not <b>{{request.user}}</b>? <a class="page-links" href="{% url 'logout' %}">Log Out?</a>)
+            </p>
+            <p class="mt-5">
+                From your account dashboard you can view your <a href="{% url 'orders' %}" class="page-links">recent orders</a>, manage your <a href="{% url 'address' %}" class="page-links">billing address</a>, and <a href="{% url 'edit_account' %}" class="page-links">edit your password and account details</a>.
+            </p>
+        </div>
+    </div>
+
+{% else %}
+    <div class="row">
+        <div class="col-md-6 mb-5" data-aos="fade-right">
+            <h3 class="text-center">Login</h3>
+            <form action="" class="userform" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="login" >
+                <input type="text" required class="form-input" placeholder="Username or email" name="username">
+                <input type="password" required id="login-password-field" class="form-input" name="password" placeholder="Password">
+                <div class="toggle-login-password-area pr-5">
+                    <div class="toggle-login-password">
+                        <i class="bi bi-eye"></i>
+                        <i class="bi bi-eye-slash"></i>
+                    </div>
+                </div>
+                <button class="btn login-btn">Login</button>
+            </form>
+            <p class="liw mt-4">Log in with <br>
+                <a href="{% url 'home' %}accounts/google/login/?process=login" class="social-icon mx-1"><i class="bi bi-google"></i></a>
+                <a href="{% provider_login_url 'facebook' method='oauth2' %}" class="social-icon mx-1"><i class="bi bi-facebook"></i></a>
+                <a href="{% url 'home' %}accounts/github/login/?process=login" class="social-icon mx-1"><i class="bi bi-github"></i></a><br>
+                <a href="{% url 'reset_password' %}" class="forgot-password">Forgot password?</a>
+            </p>
+        </div>
+        <div class="col-md-6 register userform"data-aos="fade-left">
+            <h3 class="text-center">Register</h3>
+            <form id="registerform" action="" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="form_type" value="register" >
+            <input type="text" required class="form-input" placeholder="Username" name="username">
+            <input type="email" required class="form-input" placeholder="Email" name="email">
+            <input type="password" required class="form-input regpassword" id="password-field" name="password" placeholder="Password">
+            <div class="toggle-password-area pr-5">
+                <div class="toggle-password">
+                    <i class="bi bi-eye"></i>
+                    <i class="bi bi-eye-slash"></i>
+                </div>
+            </div>
+            <div class="password-policies">
+                <div class="policy-length">
+                    8-15 characters <span class="pl-validate"><i class="bi bi-check"></i></span>
+                </div>
+                <div class="policy-number">
+                    Contains number <span class="pn-validate"><i class="bi bi-check"></i></span>
+                </div>
+                <div class="policy-uppercase">
+                    Contains uppercase <span class="pu-validate"><i class="bi bi-check"></i></span>
+                </div>
+                <div class="policy-special">
+                    Contains special characters <span class="ps-validate"><i class="bi bi-check"></i></span>
+                </div>
+            </div>
+            <div class="form-group form-check">
+                <input type="checkbox" name='subscribing' checked class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Subscribe to our newsletter</label>
+            </div>
+            <div class=""><p class="">Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our <a href="{% url 'privacy' %}" class="" target="_blank">privacy policy</a>.</p>
+            </div>
+            <small class="error" id="error"></small>
+            <button type='submit' class="btn login-btn mt-2">Register</button>
+            </form>
+        </div>
+    </div>
+{% endif %}
+</div>
+{% endblock contents %}
+{% block scripts %}
+<script src="{% static 'scripts/passwordvalidator.js' %}"></script>
+{% endblock scripts %}
+
+
+

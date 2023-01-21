@@ -1,0 +1,16 @@
+{% if messages %}
+            {% for message in messages %}
+            <div class="alert {{message.tags}} my-3" id="msg" role="alert">
+                {{message}}
+              </div>
+            
+            {% endfor %}
+{% endif %}
+
+<script>
+    setTimeout (function() {
+        if ($("#msg").length > 0) {
+           $("#msg").fadeOut("slow"); 
+        }
+    }, 3000)
+</script>

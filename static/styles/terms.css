@@ -1,0 +1,55 @@
+.middle-content {
+    display: none;
+}
+
+.heading {
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.terms-paragraph {
+    font-size: 17px;
+    color: #f0f0f0;
+    line-height: 2rem;
+}
+
+.terms-conditions {
+    font-size: 17px;
+    line-height: 2rem;
+}
+
+br {
+    line-height: 0.5px;
+    margin-top: 0px;
+}
+
+.recent-tweets {
+    display: none;
+}
+
+@media screen and (max-width:450px) {
+    .terms-conditions {
+        font-size: 14px;
+    }
+
+    .terms-paragraph {
+        font-size: 14px;
+    }
+
+    .heading {
+        font-size: 26px;
+    }
+
+    .terms-conditions h4 {
+        font-size: 20px;
+    }
+}
+
+.popular-posts {
+    display: none;
+}
+
+
+.recent-projects {
+    display: none;
+}

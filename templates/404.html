@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block link %}
+<style>
+
+.continue {
+    background-color: cyan;
+    font-weight: 600;
+    font-size: 18px;
+    color: black;
+    padding: 10px 18px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: 0.35s ease;
+}
+
+
+.continue:hover {
+    color: black;
+    background-color: white;
+}
+
+.middle-content {
+    display: none;
+}
+
+/* .bottom-content {
+    display: none;
+} */
+
+.main-section p {
+    line-height: 2rem;
+    font-weight: 500;
+    font-size: 40px;
+}
+
+.main-section i {
+    color: cyan;
+    font-size: 72px;
+}
+
+.main-section h1 {
+    font-size: 90px;
+}
+
+
+
+@media screen and (max-width:450px) {
+    .continue {
+    font-weight: 500;
+    font-size: 14px;
+    padding: 5px 8px;
+}
+
+
+    .main-section p {
+    font-size: 32px;
+}
+
+.main-section i {
+    font-size: 32px;
+}
+
+.main-section h1 {
+    font-size: 39px;
+}
+    .heading {
+        font-size: 26px;
+    }
+
+    .main-section p {
+        font-size: 14px;
+    }
+
+}
+</style>
+{% endblock link %}
+{% block title %}Page not found | {% endblock title %}
+{% block rowslider %}
+<section class="mx-lg-3 pt-lg-5 main-section" data-aos="fade-up">
+    <div class="my-5 mx-3 m-lg-5 p-3 p-lg-5 full-post text-center" data-aos="fade-in">
+        <i class="bi bi-exclamation-square-fill"></i>
+        <h1 class="font-weight-bold text-white mt-2 mt-lg-0">404</h1>
+        <p class="text-white">Page not found</p>
+        <a href="{% url 'home' %}" class="mt-lg-4 btn continue">return to home</a>
+    
+    </div>
+</section>
+{% endblock rowslider %}
+

@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load hitcount_tags %}
+{% load social_share %}
+{% load crispy_forms_tags %}
+{% block link %}
+<link rel="stylesheet" href="{% static 'blog/styles/post_detail.css' %}">
+<link rel="stylesheet" href="{% static 'owlcarousel/dist/assets/owl.theme.default.min.css' %}">
+<link rel="stylesheet" href="{% static 'owlcarousel/dist/assets/owl.carousel.min.css' %}">
+{% endblock link %}
+{% block title %}{{post.title}} | {% endblock title %}
+{% block contents %}
+<div class="col-md-12 mb-0 post my-4 my-md-0 my-lg-0 full-post" data-aos="fade-up">
+    <div class="tag-area">
+        {% for i in post.category.all %}
+        <a href="{% url 'category' i.slug %}" class="btn tag mr-2">{{i}}</a>
+        {% endfor %}
+    </div>
+    <div class="post-img-area p-lg-2 pt-3 pt-lg-4 pb-0 shadow">
+        <img src="{{post.post_img.url}}" class="post-img" alt="post image">
+    </div>
+    <div class="post-icons text-left mt-3">
+        <p class="mr-3 pl-lg-2 mb-1"><i class="bi bi-calendar mr-2"></i>{{post.created_at|date:'d M Y'}}<a class="comment-link ml-3" href="#comments"><i class="bi bi-chat-dots mr-2"></i>{{post.comments.total|length}}</a><i class="bi bi-eye ml-3 mx-2"></i>{% get_hit_count for post %}
+        </p>
+    </div>
+    <h2 class="text-left p-lg-2 post-title">{{post.title | title}}</h2>
+    
+    <p class="text-left post-intro p-lg-2 mb-4">{{post.intro}}</p>
+    
+    <div class="p-lg-2 post-content">
+        {{post.content|safe}}
+    </div>
+    
+    {% if request.user.is_authenticated %}
+        <section class="mt-4 p-lg-2 d-flex like-dislike">
+            <form action="{% url 'like_post' post.slug %}" id="likePost" method="post" class="mr-2">
+                {% csrf_token %}
+                <button type="submit" name="post_like" value="{{post.slug}}" class='btn-sm like'>
+                    {% if request.user in post.likes.all %}
+                    <span class="like-icon"><i class="bi bi-hand-thumbs-up-fill"></i></span>
+                    {% else %}
+                    <span class="like-icon"><i class="bi bi-hand-thumbs-up"></i></span>
+                    {% endif %}
+                    <span class="count like-count">{{post.likes.count}}</span> <span class="like-verbal-name">{% if post.likes.count > 1 %}Likes {% else %}Like{% endif %}</span> 
+                </button>
+            </form>
+            
+            <form action="{% url 'dislike_post' post.slug %}" id="dislikePost" method="post">
+                {% csrf_token %}
+                <button type="submit" name="post_dislike" value="{{post.slug}}" class='btn-sm dislike'>
+                    {% if request.user in post.dislikes.all %}
+                    <span class="dislike-icon"><i class="bi bi-hand-thumbs-down-fill"></i></span>
+                    {% else %}
+                    <span class="dislike-icon"><i class="bi bi-hand-thumbs-down"></i></span>
+                    {% endif %}
+                    <span class="dislike-count">{{post.dislikes.count}}</span> <span class="dislike-verbal-name">{% if post.dislikes.count > 1 %}Dislikes {% else %}Dislike{% endif %}</span> 
+                </button>
+            </form>
+        </section>
+    {% else %}
+    <section class="mt-4 p-lg-2 d-flex like-dislike">
+        <form action="{% url 'like_post' post.slug %}" method="post" class="mr-2">
+            {% csrf_token %}
+            <button type="submit" name="post_like" value="{{post.slug}}" class='btn-sm like'>
+                {% if request.user in post.likes.all %}
+                <span class="like-icon"><i class="bi bi-hand-thumbs-up-fill"></i></span>
+                {% else %}
+                <span class="like-icon"><i class="bi bi-hand-thumbs-up"></i></span>
+                {% endif %}
+                <span class="count like-count">{{post.likes.count}}</span> <span class="like-verbal-name">{% if post.likes.count > 1 %}Likes {% else %}Like{% endif %}</span> 
+            </button>
+        </form>
+        
+        <form action="{% url 'dislike_post' post.slug %}" method="post">
+            {% csrf_token %}
+            <button type="submit" name="post_dislike" value="{{post.slug}}" class='btn-sm dislike'>
+                {% if request.user in post.dislikes.all %}
+                <span class="dislike-icon"><i class="bi bi-hand-thumbs-down-fill"></i></span>
+                {% else %}
+                <span class="dislike-icon"><i class="bi bi-hand-thumbs-down"></i></span>
+                {% endif %}
+                <span class="dislike-count">{{post.dislikes.count}}</span> <span class="dislike-verbal-name">{% if post.dislikes.count > 1 %}Dislikes {% else %}Dislike{% endif %}</span> 
+            </button>
+        </form>
+    </section>
+    {% endif %}
+
+    <article class="mt-5 p-lg-2">
+        <h6 class="text left pt-3 related-header">More posts</h6>
+        <div class="row g-2 mt-4">
+            {% for random_post in posts %}
+            <div class="col-6 col-lg-4" data-aos="fade-in">
+                <p class="related-article"><a href="{% url 'post_detail' random_post.slug %}" class="related-title">{{random_post.title}}</a><br/><span class="related-time">{{random_post.created_at|date:'M d, Y'}}<br>in "{{random_post.category.all.0}}"</span> </p>
+                
+
+            </div>
+            {% endfor %}
+        </div>
+    </article>
+
+
+
+    <section class="px-lg-2 py-5 mx-2 mt-4 text-center share-container">
+        <div class="share-content text-center">
+            <h5 class="mt-lg-2 mr-2">Share Article: </h5>
+            <div class="share-icons text-center">
+                {% post_to_facebook "{{post.title | title}}" object_or_url %}
+                {% post_to_telegram "{{post.title | title}}" object_or_url  %}
+                {% post_to_reddit "{{post.title | title}}" object_or_url %}
+                {% post_to_twitter "{{post.title | title}}" object_or_url %}
+                {% post_to_whatsapp "{{post.title | title}}" object_or_url %}  
+            </div>
+        </div>
+        
+
+        <div class="share-link mt-4 text text-center">
+            <input class="share-link-input px-3 p-2" type="text" name="shortlink" value="{{request.build_absolute_uri}}" id="copy-link" readonly>
+            <div class="input-group-append">
+                <button class="copy-btn p-2 px-3" type="button" id="copy-button" onclick="copy()" data-toggle="tooltip" data-placement="top" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="py-4 sub-categories">
+        <p class="px-lg-2 mb-1"><i class="bi bi-tags mr-2"></i>
+            {% for post in post.category.all %}
+            <a href="{% url 'category' post.slug %}">{{post.title}}{% if not forloop.last %},{% endif %}</a>
+            {% endfor %}
+        </p>
+
+    </section>
+
+
+
+</div>
+
+<div class="tag-headerblock container-post pt-5 mx-0 px-0 col-md-12 mb-5" data-aos="fade-up">
+    <div class="p-5 tag-header text-center">
+        <div class="tag-icon mx-auto">
+            <img src="{{post.author.avatar.url}}" alt="author image">
+        </div>
+        <div class="mt-2 author-me">
+            <h2 class="text-white font-weight-bold">{{post.author.name}}</h2>
+            <p class="text-white">{{post.author.bio}}</p>
+            <a href="{{post.author.portifolio}}"><i class="fa fa-globe"></i></a>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="row rowslider" data-aos="fade-up">
+    {% if prev_post %}
+    <div class="col-md-6 mb-5">
+        <div class="card row-card h-100">
+            <div class="nav-button nav-prev">
+                <a href="{% url 'post_detail' prev_post.slug %}"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <img class="card-img-top row-card" src="{{prev_post.post_img.url}}" alt="post image">
+            <div class="card-body text-center row-card-bottom ">
+                <p class="mb-2 date"><i class="bi bi-calendar mr-2"></i>{{prev_post.created_at|date:'M. d, Y'}}</p>
+                <h4 class="card-title mb-0"><a href="{% url 'post_detail' prev_post.slug %}">{{prev_post.title}}</a></h4>
+            </div>
+            <small class="previous-post"><i class="bi bi-arrow-bar-left"></i> Previous</small>
+        </div> 
+    </div>
+    {% endif %}
+
+    {% if next_post %}
+    <div class="col-md-6  mb-5">
+        <div class="card row-card h-100">
+            <div class="nav-button nav-next">
+                <a href="{% url 'post_detail' next_post.slug %}"><i class="fas fa-arrow-right"></i></a>
+            </div>
+            <img class="card-img-top row-card" src="{{next_post.post_img.url}}" alt="post image">
+            <div class="card-body text-center row-card-bottom ">
+                <p class="mb-2 date"><i class="bi bi-calendar mr-2"></i>{{next_post.created_at|date:'M. d, Y'}}</p>
+                <h4 class="card-title"><a href="{% url 'post_detail' next_post.slug %}">{{next_post.title}}</a></h4>
+            </div>
+            <small class="next-post">Next <i class="bi bi-arrow-bar-right"></i></small>
+        </div> 
+    </div>
+   
+    {% endif %}
+
+</div>
+
+
+
+
+
+<div class="col-md-12 mb-5 mt-5 comments" id="comments" data-aos="fade-up">
+    <h4 class="text-white p-2 pt-5">{{post.comments.total|length }} {% if post.comments.all|length > 1 %}Comments{% else %}Comment{% endif %} </h4>
+    <hr class="mb-5 mx-2">
+
+    {% for comment in post.comments.all %}
+    <div class="pl-lg-2 pl-sm-2 pr-lg-5 pr-sm-2 pb-2 pt-3 mt-0 mb-5 shadow" data-aos="fade-up">
+        <div class="single-comment pb-0 mb-2" id="{{comment.email}}:{{comment.created_at|date:'M-d-Y'}}">
+            {% if comment.user %}
+            <img src="{{comment.user.avatar.url}}" alt="{{comment.name}}'s user avatar">
+            {% else %}
+            <img src="{% static 'blog/images/user-img.png' %}" alt="{{comment.name}}'s user avatar">
+            {% endif %}
+            <div class="ml-4">
+                <p class="comment-head w-100"><span class="comment-owner">{{comment.name|title}}</span> {{comment.created_at|timesince}} ago</p>
+                <p class="text-white pt-sm-0">{{comment.body}}</p>
+                
+
+                <p>
+                    <button class="btn reply-button" type="button" data-toggle="collapse" data-target="#replyForm{{comment.id}}" aria-expanded="false" aria-controls="replyForm{{comment.id}}">
+                      Reply
+                    </button>
+                </p>
+                <div class="collapse w-100 p-0 m-0" id="replyForm{{comment.id}}">
+                    <div class="card card-body p-0 m-0">
+                        <h4 class="mb-3">Reply to {{comment.name|title}}</h4>
+                        <form class="text-white w-100 p-0 m-0 col-md-12" method="POST" action="">
+                            {% csrf_token %}
+                            {{form.as_p}}
+                            <input type="hidden" name="parent_id" value="{{comment.id}}">
+                            <button type="submit" class="btn submit-comment">Post Comment</button>
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        
+        {% for replies in comment.children %}
+        <div class="single-comment ml-5 pl-4 pr-0 mt-4 mb-4" id="{{replies.email}}:{{replies.created_at|date:'M-d-Y'}}">
+            {% if replies.user %}
+            <img src="{{replies.user.avatar.url}}" alt="{{replies.name}}'s user avatar">
+            {% else %}
+            <img src="{% static 'blog/images/user-img.png' %}" alt="{{replies.name}}'s user avatar">
+            {% endif %}
+            <div class="ml-4">
+                <p class="comment-head"><span class="comment-owner">{{replies.name|title}}</span> {{replies.created_at|timesince}} ago</p>
+                <p class="text-white pt-sm-0">{{replies.body}}</p>
+                <p>
+                    <button class="btn reply-button" type="button" data-toggle="collapse" data-target="#replyForm{{replies.id}}" aria-expanded="false" aria-controls="replyForm{{replies.id}}">
+                      Reply
+                    </button>
+                </p>
+                <div class="collapse w-100 p-0 m-0" id="replyForm{{replies.id}}">
+                    <div class="card card-body p-0 m-0">
+                        <h4 class="mb-3">Reply to {{replies.name|title}}</h4>
+                        <form class="text-white w-100 p-0 m-0 col-md-12" method="POST" action="">
+                            {% csrf_token %}
+                            {{form.as_p}}
+                            <input type="hidden" name="parent_id" value="{{comment.id}}">
+                            <button type="submit" class="btn submit-comment">Post Comment</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}  
+    </div>
+    {% endfor %}
+
+    <h4 class="text-white p-2 pt-0">Leave a comment</h4>
+    <hr class="mb-3 mx-2">
+    <form class="text-white p-2" method="POST" action="" data-aos="fade-up">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button type="submit" class="btn submit-comment mb-3">Post Comment</button>
+    </form>
+
+</div>
+{% endblock contents %}
+
+{% block related_posts %}
+{% if related_posts %}
+<div class="col-md-12 mb-5 popular-posts" data-aos="fade-up">
+    <h4 class="px-2">Related Articles</h4>
+    <hr class="mx-2">
+
+    <div class="popular-post-container pb-2">
+        {% for related_post in related_posts %}
+        <div class="popular-post mx-lg-2 mb-3">
+            <img src="{{related_post.post_img.url}}" class="popular-post-img shadow" alt="post image">
+            <div>
+                <small>{{related_post.created_at|date:'M d, Y'}}</small>
+                <p class="post-description"><a class="post-description-a" href="{% url 'post_detail' related_post.slug %}">{{related_post.title}}</a></p>
+            </div>
+        </div>
+        {% endfor %}
+        
+    </div>
+
+
+</div>
+{% endif %}
+{% endblock related_posts %}
+
+{% block scripts %}
+<script src="{% static 'blog/scripts/likes.js' %}"></script>
+<script>
+    $(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+<script>
+    function copy() {
+        /* Get the text field */
+        var copyText = document.getElementById("copy-link");
+        const clipboard = document.querySelector(".bi-clipboard-fill")
+        const copybutton = document.getElementById("copy-button")
+        
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /* For mobile devices */
+        clipboard.classList.remove("bi-clipboard-fill");
+        clipboard.classList.add("bi-check-lg");
+        $(copybutton).tooltip().attr('data-original-title', "Copied!").tooltip('show');
+        
+        /* Copy the text inside the text field */
+        navigator.clipboard.writeText(copyText.value);
+        
+        setTimeout(function(){
+            clipboard.classList.add("bi-clipboard-fill");
+            clipboard.classList.remove("bi-check-lg");
+            $(copybutton).tooltip().attr('data-original-title', "Copy");
+        }, 2000);
+}
+</script>
+{% endblock scripts %}
+
+

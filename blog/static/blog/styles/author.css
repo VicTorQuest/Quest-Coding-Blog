@@ -1,0 +1,131 @@
+.popular-posts, .recent-tweets {
+    display: none !important;
+}
+
+.author-img-area img {
+    height: 150px;
+    width: 150px;
+    z-index: 10;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 6px var(--gray75);
+}
+
+.tag-headerblock {
+    margin-top: 100px;
+    border-radius: 10px;
+}
+
+.tag-header {
+    background: linear-gradient(to top, rgba(0,0,0,0.8)50%, rgba(0,0,0,0.8)50%);
+    text-align: center;
+}
+
+.tag-header h1 {
+    z-index: 10;
+    margin: 0;
+    padding: 0;
+    font-size: 2.4rem;
+    font-weight: 700;
+}
+
+.tag-header h2 {
+    font-size: 1.2rem;
+    line-height: 1.3em;
+    font-weight: 300;
+    letter-spacing: .5px;
+    opacity: .8;
+    color: #fff;
+    text-align: center !important;
+    margin: 5px 0 10px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.author-meta {
+    color: #fff;
+    opacity: .8;
+    text-align: center !important;
+}
+
+.bull {
+    display: inline-block;
+    margin: 0 12px;
+    opacity: 1;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 10px;
+    color: #fff;
+    opacity: 1;
+}
+
+.social-links a {
+    padding-right: 1rem;
+}
+
+.author-posts h2 {
+    font-size: 26px;
+}
+
+.author-post-img {
+    width: 100%;
+    height: 100%;
+}
+
+.post-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+}
+
+.author-img img{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.author-post-category {
+    color: #fff;
+    opacity: .8;
+}
+
+
+@media screen and (max-width: 768px) {
+    .author-location, .author-stats, br {
+        display: none;
+    }
+
+    .author-posts h2 {
+        font-size: 20px;
+    }
+}
+
+
+@media screen and (max-width: 480px) {
+    .author-location, .author-stats, br {
+        display: none;
+    }
+
+    .author-posts h2 {
+        font-size: 18px;
+    }
+
+    .author-post-category {
+        font-size: 15px;
+    }
+
+    .post-info {
+        font-size: 13px;
+    }
+
+    .tag-header h2 {
+        font-size: 18px;
+        max-width: fit-content;
+    }
+}

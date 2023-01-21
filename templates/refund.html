@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block link %}<link rel="stylesheet" href="{% static 'styles/refund.css' %}">{% endblock link %}
+{% block title %}Refund Policy | {% endblock title %}
+{% block contents %}
+<div class="col-md-12 mb-0 post p-3 pb-4 my-4 my-lg-0 mb-5 p-lg-5 full-post" data-aos="fade-up">
+    <h1 class="pb-3 mb-4 mb-lg-5 heading">Generic Refund Policy</h1>
+    <div class="refund-content">
+        <p class="mt-4">Thanks for purchasing our products (or subscribing to our services) at questcoding.blog. <br>
+            We offer a <b>full money-back guarantee</b> for all purchases made on our website. If you are not satisfied with the product that you have purchased from us, if you don’t receive your product as described, if you are not able to download the product you can get your money back no questions asked.</p>
+            
+        <p class="mt-4"><b>You are not eligible</b> for a full reimbursement if you receive your product but is not what you was thinking for, if you are not interested anymore about that product, if you apply bad usage in product or if you already spent 2 times opportunity to download the product.</p>
+        <p class="mt-4">A digital product such as a song download or an app download <b>cannot be returned.</b></p>
+        <p class="mt-4">If the product has problems because of update need you will get <b>a 50% refund</b> or <b>product replacement.</b></p>
+        <p class="mt-4">You eligible for a full reimbursement <b>within 5 calendar</b> days of your purchase.
+            After the 5-day period you will no longer be eligible and won’t be able to receive a refund. We encourage our customers to try the product (or service) in the first <b>3 days</b> after their purchase to ensure it fits your needs.
+            If you have any additional questions or would like to request a refund, feel free to contact us.</p>
+    </div>
+</div>
+{% endblock contents %}

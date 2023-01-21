@@ -1,0 +1,124 @@
+.recent-tweets {
+    display: none;
+}
+
+.page-links {
+    color: var(--main-color);
+    transition: 0.25s ease;
+}
+
+.page-links:hover {
+    color: #f0f0f0;
+}
+
+.account-summary {
+    line-height: 2rem;
+}
+
+ul {
+    list-style-type: square;
+    font-size: 17px;
+}
+
+.heading {
+    font-weight: 600;
+    color: white;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.full-post h3 {
+    color: var(--main-color);
+}
+
+.register p {
+    font-size: 14px;
+    color: #f0f0f0f0;
+}
+
+.register label {
+    font-size: 13px;
+    color: #f0f0f0f0;
+}
+
+.register {
+    display: block;
+}
+
+.toggle-password-area, .toggle-login-password-area {
+    position: absolute;
+    right: -5px;
+}
+
+.toggle-password, .toggle-login-password {
+    position: absolute;
+    height: 40px;
+    top: -35px;
+    font-size: 20px;
+    line-height: 35px;
+    color: var(--main-color);
+    cursor: pointer;
+}
+
+.userform .toggle-password.active i.bi-eye, .userform .toggle-login-password.active i.bi-eye {
+    display: none;
+}
+
+.userform .toggle-password.active i.bi-eye-slash, .userform .toggle-login-password.active i.bi-eye-slash {
+    display: inline;
+}
+
+.userform .toggle-password i.bi-eye-slash, .userform .toggle-login-password i.bi-eye-slash {
+    display: none;
+}
+
+
+.userform .password-policies {
+    position: relative;
+    top: 0pc;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 10px;
+    padding: 0;
+    font-size: 13px;
+    color: #f0f0f0f0;
+    box-sizing: border-box;
+    opacity: 1;
+    overflow: hidden;
+    height: 0;
+    transition: height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.userform .password-policies.active {
+    height:  90px;
+    opacity: 1;
+}
+
+.userform .password-policies > div {
+    font-weight: 600;
+}
+
+.userform .password-policies > div.active {
+    color: lightgreen;
+}
+
+.pu-validate, .pn-validate, .pl-validate, .ps-validate {
+    display: none;
+}
+
+.validated {
+    display: inline;
+    color: lightgreen;
+    font-size: 16px;
+}
+
+.error {
+    color: lightcoral;
+}
+
+.popular-posts {
+    display: none;
+}
+
+.recent-projects {
+    display: none;
+}

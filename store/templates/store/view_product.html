@@ -1,0 +1,134 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block sublink %}<link rel="stylesheet" href="{% static 'store/styles/view_product.css' %}"> {% endblock sublink %}
+{% block title %}{{product.name}} | {% endblock title %}
+{% block rowslider %}
+<section class="mx-lg-3 pt-lg-5 pb-5" data-aos="fade-up">
+    <div class="container mt-5">
+        <div class="row justify-content-center align-items-center mb-5">
+            <div class="col-lg-5 col-md-6 mb-3">
+                <img src="{{product.image.url}}" class="w-100" alt="product image">
+            </div>
+            <div class="col-lg-3 col-md-5 product-details">
+                <p class="sale text-center">Sale</p>
+                <h2>{{product.name|title}}</h2>
+                <p>Product id: {{product.id}}</p>
+                <div class="review-summary d-flex">
+                    <div class="ratings me-2">
+                        <i class="bi bi-star-fill star {% if product.rating > 0 %}checked{% endif %}"></i>
+                        <i class="bi bi-star-fill star {% if product.rating > 1 %}checked{% endif %}"></i>
+                        <i class="bi bi-star-fill star {% if product.rating > 2 %}checked{% endif %}"></i>
+                        <i class="bi bi-star-fill star {% if product.rating > 3 %}checked{% endif %}"></i>
+                        <i class="bi bi-star-fill star {% if product.rating > 4 %}checked{% endif %}"></i>
+                    </div>
+                    <p>{{product.total_ratings}} reviews</p>
+                </div>
+                <p class="product-price">USD ${{product.price}}</p>
+                <label for="">Quantity: </label>
+                <input type="text" readonly id="product-quantity" value="{{current_item.quantity}}">
+                <button id="update-cart" data-product={{product.id}} data-action="add" class="btn add-btn update-cart">Add to cart</button>
+            </div>
+        </div>
+        <h6 class="text-white pb-3 review-header">Reviews(6)</h6>
+        <div class="row mt-4">
+            <div class="col-md-7 review mb-4">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex customer align-items-center">
+                            <div class="review-image-area">
+                                <img src="http://127.0.0.1:8000/static/blog/images/user-img.png" alt="customer image" >
+                            </div>
+                            <div class="text-white name ms-3">
+                                <p>only1undeniablw@gmail.com</p>
+                                <i>september 7, 2020</i>
+                            </div>
+                        </div>
+                        <div class="ratings">
+                            <i class="bi bi-star-fill star review-star {% if product.rating > 0 %}checked{% endif %}"></i>
+                            <i class="bi bi-star-fill star review-star {% if product.rating > 1 %}checked{% endif %}"></i>
+                            <i class="bi bi-star-fill star review-star {% if product.rating > 2 %}checked{% endif %}"></i>
+                            <i class="bi bi-star-fill star review-star {% if product.rating > 3 %}checked{% endif %}"></i>
+                            <i class="bi bi-star-fill star review-star {% if product.rating > 4 %}checked{% endif %}"></i>
+                        </div>
+                    </div>
+                    <div class="pt-2 text-white review-comment">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque odit aliquam perspiciatis quo aut quis deserunt neque et quisquam. Praesentium saepe animi nobis dolorum doloribus, culpa dolor nihil? At, nulla.</p>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex customer align-items-center">
+                            <div class="review-image-area">
+                                <img src="http://127.0.0.1:8000/static/blog/images/user-img.png" alt="customer image" >
+                            </div>
+                            <div class="text-white name ms-3">
+                                <p>raymond felton</p>
+                                <i>september 7, 2020</i>
+                            </div>
+                        </div>
+                        <div class="ratings">
+                            <i class="bi bi-star-fill star review-star {% if product.rating > 0 %}checked{% endif %}"></i>
+                            <i class="bi bi-star-fill star review-star {% if product.rating > 1 %}checked{% endif %}"></i>
+                            <i class="bi bi-star-fill star review-star {% if product.rating > 2 %}checked{% endif %}"></i>
+                            <i class="bi bi-star-fill star review-star {% if product.rating > 3 %}checked{% endif %}"></i>
+                            <i class="bi bi-star-fill star review-star {% if product.rating > 4 %}checked{% endif %}"></i>
+                        </div>
+                    </div>
+                    <div class="pt-2 text-white review-comment">
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque odit aliquam perspiciatis quo aut quis deserunt neque et quisquam. Praesentium saepe animi nobis dolorum doloribus, culpa dolor nihil? At, nulla.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                {% if request.user.review %}
+                <div class="alert alert-info" role="alert">
+                    Thanks for the feedback <i class="bi bi-send-check"></i>
+                  </div>
+                {% else %}
+                <div>
+                    <h5 class="text-white" id="review-form-header">WRITE YOUR REVIEW</h5>
+                    <div id="confirm-box"></div>
+                    <form method="post" class="ratings" id="rate-form">
+                        {% csrf_token %}
+                        <textarea name="review" class="form-control review-message" required maxlength="250" placeholder="Your review" id="review" cols="30" rows="5"></textarea>
+                        <h6 class="py-3 mb-0 text-white">YOUR RATING:</h6>
+                        <input type="hidden" name="rating" required id="rating">
+                        <div class="rating-stars mb-3">
+                            <i  class="bi bi-star-fill star-btn" id="first"></i>
+                            <i  class="bi bi-star-fill star-btn" id="second"></i>
+                            <i  class="bi bi-star-fill star-btn" id="third"></i>
+                            <i  class="bi bi-star-fill star-btn" id="fourth"></i>
+                            <i  class="bi bi-star-fill star-btn" id="fifth"></i>
+                        </div>
+                        <div id="error-div"></div>
+                        {% if request.user.is_authenticated %}
+                        <button type="submit" id="submit-review" class="btn add-btn d-flex ms-0" >Submit <div class='spinner-border spinner-border-sm' role='status'><span class='visually-hidden'>Loading...</span></div></button>
+                        {% else %}
+                        <p>Your must be logged in before you submit a review</p>
+                        {% endif %}
+                        
+                    </form>
+                    
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock rowslider %}
+{% block addedscripts %}
+<script src="{% static 'store/scripts/rating.js' %}"></script>
+<script>
+    var product_id = parseInt("{{product.id}}")
+    
+</script>
+<script src="{% static 'store/scripts/items.js' %}"></script>
+{% endblock addedscripts %}
+
+
+
+
+
+
+
