@@ -7,7 +7,7 @@
 {% block titke %}Search |{% endblock titke %}
 
 {% block landing_page_content %}
-<section class="result-header text-center mt-5 w-100" data-aos="fade-up">
+<section class="result-header text-center mt-5 mb-5 w-100">
     <h1 class=" text-white p-5">Search results for: "{{query}}"</h1>
     <form class="search-form" action="{% url 'search' %}" method="GET">
         <input type="search" name="query" value="{{query}}" class="textbox" placeholder="Search">

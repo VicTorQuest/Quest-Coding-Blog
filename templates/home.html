@@ -12,51 +12,13 @@
 
 
 {% block landing_page_content %}
-<div class="row contents w-100">
-    <div class="col-md-8 ml-4 mr-5 pl-5">
-        <h1>Softwares & <br><span>Development</span><br>courses</h1>
-        <p class="par">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quos labore reprehenderit
-            veniam
-            impedit fugit <br> ipsum laudantium eaque, alias suscipit eius voluptate ut dolor molestiae <br>
-            deleniti numquam tenetur! Nesciunt, fuga totam.</p>
-        <a href="{% url 'my_account' %}" class="btn acc-link">My Account</a>
-    </div>
 
-    <form method="post" class="col-md-3 form userform">
-        {% csrf_token %}
-        <h2>Login Here</h2>
-        {% if messages %}
-        {% for message in messages %}
-        <small class="text-danger text-center">{{message}}</small>
-        {% endfor %}
-        {% endif %}
-        <input type="text" class="form-input" required placeholder="Enter email here" name="username">
-        <input type="password" required id="login-password-field" class="form-input" name="password" placeholder="Enter password here">
-        <div class="toggle-login-password-area pr-5">
-            <div class="toggle-login-password">
-                <i class="bi bi-eye"></i>
-                <i class="bi bi-eye-slash"></i>
-            </div>
-        </div>
-        <button type="submit" class="btn login-btn">Login</button>
-        <p class="link">Don't have an account?<br>
-            <a href="{% url 'my_account' %}">Sign up here</a>
-        </p>
-        <p class="liw mb-0">Log in with <br>
-            <a href="{% url 'home' %}accounts/google/login/?process=login" class="social-icon mx-1"><i class="bi bi-google"></i></a>
-            <a href="{% provider_login_url 'facebook' method='oauth2' %}" class="social-icon mx-1"><i class="bi bi-facebook"></i></a>
-            <a href="{% url 'home' %}accounts/github/login/?process=login" class="social-icon mx-1"><i class="bi bi-github"></i></a><br>
-            <a href="{% url 'reset_password' %}" class="forgot-password">Forgot password?</a>
-        </p>
-
-    </form>
-</div>
 {% endblock landing_page_content %}
 
 
 
 {% block rowslider %}
-<div class="rowslider-container mb-0" data-aos="fade-in">
+<div class="container pt-lg-5 pt-0" data-aos="fade-in">
     
 
     <div class="row rowslider">
@@ -66,8 +28,8 @@
             <div class="item mx-2">
                     <div class="card row-card h-100">
                         <div class="media-icons">
-                            <a href="{{featured.github_link}}"><i class="bi bi-github"></i></a>
-                            <a href="{{featured.youtube_link}}"><i class="bi bi-youtube"></i></a>
+                            <a target="_blank" href="{{featured.github_link}}"><i class="bi bi-github"></i></a>
+                            <a target="_blank" href="{{featured.youtube_link}}"><i class="bi bi-youtube"></i></a>
                         </div>
                         <img class="card-img-top row-card" src="{{featured.post.post_img.url}}" alt="featured post image">
                         <div class="card-body text-center row-card-bottom ">
@@ -142,14 +104,13 @@
 
 {% endblock contents %}
 {% block scripts %}
-<script src="{% static 'scripts/toggle_password.js' %}"></script>
 <script src="{% static 'owlcarousel\dist\owl.carousel.min.js' %}"></script>
 <script>
     $('.owl-carousel').owlCarousel({
     loop:true,
     margin:10,
     nav:true,
-    navText : ["<i class='fa fa-arrow-left'></i>","<i class='fa fa-arrow-right'></i>"],
+    navText : ["<i class='bi bi-arrow-left'></i>","<i class='bi bi-arrow-right'></i>"],
     responsive:{
         0:{
             items:1

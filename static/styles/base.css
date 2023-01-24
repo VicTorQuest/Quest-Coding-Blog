@@ -7,6 +7,7 @@
     --dark: black;
     
 }
+
 * {
     padding: 0;
     margin: 0;
@@ -17,6 +18,34 @@ html {
     scroll-behavior: smooth;
 }
 
+  /* custom scroll bar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+    
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+::selection{
+    background: rgb(0,123,255,0.3);
+}
+
+
+body{
+    margin: 0 auto;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.5)50%, rgba(0, 0, 0, 0.5)50%), url(/static/images/bg.webp);
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
 
 
 #btnScrollToTop {
@@ -83,11 +112,6 @@ html {
 .cookie-btn:focus, .cookie-btn:active {
     outline: none !important;
     border: none !important;
-}
-
-body{
-    max-width: 1400px;
-    margin: 0 auto;
 }
 
 .loader-wrapper {
@@ -179,16 +203,6 @@ a:hover {
 }
 
 
-body {
-    width: 100%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.5)50%, rgba(0, 0, 0, 0.5)50%), url(/static/images/bg.webp);
-    background-position: center;
-    background-size: cover;
-    background-attachment: fixed;
-    margin-bottom: 0px;
-    padding-bottom: 0px;
-}
-
 
 .main {
     height: 5vh;
@@ -202,50 +216,31 @@ body {
 .logo {
     float:  left;
     height: 40px;
-    padding-left: 20px;
-    padding-right: 46px;
     padding-top: 10px;
     font-weight: bold;
 }
 
 
-  /* custom scroll bar */
-  ::-webkit-scrollbar {
-    width: 10px;
-}
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-::-webkit-scrollbar-thumb {
-    background: #888;
-}
-::selection{
-  background: rgb(0,123,255,0.3);
-}
-.nav-bar{
-  width: 100%;
-  padding: 0 30px;
-}
-
 .navbar{
-  position: fixed;
   width: 100%;
-  max-width: 1400px;
-  padding: 10px 10px;
   transition: all 0.3s ease;
   z-index: 1100;
+  background-color: rgba(0, 0, 0, .15);
 }
+
 .navbar.sticky{
+  width: 100%;
+  position: fixed;
   background: #1b1b1b;
   padding: 10px 10px;
   box-shadow: 0px 3px 5px 0px rgba(0,0,0,0.1);
 }
 
-.dropdown-bg {
-    background: #1b1b1b;
-}
 
 .navbar .nav-bar{
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -261,7 +256,7 @@ body {
 }
 
 
-.menu-list li a, .menu-list li button{
+.menu-list li a{
   color: #fff ;
   font-size: 18px;
   font-weight: 500;
@@ -270,15 +265,6 @@ body {
   padding-bottom: 3px;
   transition: all 0.35s linear;
 }
-
-
-
-
-
-/* copied css */
-
-
-
 
 #cart-icon{
 	width:25px;
@@ -308,21 +294,13 @@ body {
 .cart-item-indicator.form-inline {
     display: flex;
     flex-flow: row wrap;
-    align-items: center; 
+    align-items: center;
+    margin-right: 2rem;
 }
 
 .show-cart {
     display: inherit;
 }
-
-
-
-
-/* copied css */
-
-
-
-
 
 
 @media (min-width: 768px) and (max-width: 1024px){
@@ -464,31 +442,6 @@ body {
     outline: none;
     cursor: pointer;
   }
-  /* Links inside the dropdown */
-
-
-
-
-
-  .dropdown-content a, .dropdown-menu li a{
-    color: var(--text-color);
-    padding: 12px 1px;
-    text-decoration: none;
-    display: block;
-    transition:all 0.35s ease;
-  }
-
-  
-
-  .dropdown:hover .dropdown-content {
-      display: block;
-    }
-
-.dropdown-content a:hover, .dropdown-menu li a:hover {
-    color: var(--main-color);
-    border-bottom: 1px solid var(--main-color);
-}
-  
 
 .search {
     position: relative;
@@ -501,7 +454,7 @@ body {
     box-shadow: 0 0 0 2px var(--text-color);
     margin-right: 20px;
     overflow: hidden;
-    margin-left: auto;
+    /* margin-left: auto; */
 }
 
 .search.active {
@@ -774,17 +727,23 @@ body {
     color: var(--main-color);
 }
 
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
 .rowslider-container {
+    margin: 0 auto;
     margin-top: 5%;
-    margin-left: 5%;
-    margin-right: 5%;
-    margin-bottom: 6rem;
+    max-width: 1200px;
 }
 
+
 .rowslider {
-    max-width: 1400px;
+    margin-top: 5%;
 }
+
 
 .row-card-bottom .date{
     font-size: 13px;
@@ -868,6 +827,10 @@ body {
     font-weight: 400;
 }
 
+.middle-content {
+    margin-top: 4rem;
+}
+
 @media screen and (max-width: 992px) {
     .rowslider {
         height: fit-content;
@@ -885,14 +848,14 @@ body {
     .search {
         display: none;
     }
-    
-
 
     .contents {
         display: none;
     }
 
-
+    .middle-content {
+        margin-top: 1rem;
+    }
     
 }
 
@@ -932,10 +895,12 @@ body {
     transition: all 0.3s ease;
 }
 
-.media-icons i:hover {
-    opacity: 1;
-    font-size: 25px;
-    cursor: pointer;
+.media-icons a:hover {
+    transform: scale(1.2);
+}
+
+.media-icons a:hover > i {
+    opacity: 1 !important;
 }
 
 .img-text {
@@ -978,7 +943,7 @@ body {
 
 
 .card-img-top {
-    height: 170px;
+    height: 145px;
 }
 
 .card-body {
@@ -1056,33 +1021,15 @@ body {
     background: var(--text-color);
 }
 
-.container-post {
-    margin-top: 5%;
-    margin-left: 5%;
-    margin-right: 5%;
-}
 
 @media (width: 912px) {
     .menu-list li a, .menu-list li button {
         font-size: 13px;
     }
 
-    .dropdown {
-        display: block;
-    }
-
-    .dropdown-sm {
-        display: none;
-    }
-
     .logo {
         padding: 0;
     }
-
-    /* .img-text p {
-        font-size: 12px;
-        margin-bottom: 20px;
-    } */
 
 }
 
@@ -1090,6 +1037,7 @@ body {
     background: #262626;
     color: var(--text-color);
     border-radius: 10px;
+    display: block;
 }
 
 .tag-area {
@@ -1250,6 +1198,7 @@ body {
 }
 
 @media screen and (max-width:480px) {
+
     .logo {
         height: 30px;
         padding-top: 4px;
@@ -1278,17 +1227,25 @@ body {
     }
 
     .nav-bar{
-        padding: 0 10px;
+        padding: 0 10px !important;
       }
 
 
       .tag-area {
+        display: block;
+        z-index: 100;
         top: 30px;
-        left: 30px;        
+        left: 30px;
+        text-align: left;
     }
 
 
-      .owl-nav .owl-prev, .nav-prev {
+    .tag-area a {
+        margin-bottom: 10px;
+    }
+
+
+    .owl-nav .owl-prev, .nav-prev {
         margin: 0;
         position: absolute;
         top: 40%;
@@ -1314,6 +1271,11 @@ body {
     .owl-nav .owl-next:hover, .nav-next:hover {
         transform: translateX(5px);
     }
+
+    .cart-item-indicator.form-inline {
+        display: flex;
+        margin-right: 0;
+    }
       
 }
 
@@ -1332,11 +1294,11 @@ hr {
     height: 1px;
   }
 
-.popular-post-container, .recent-tweet-container {
+.popular-post-container{
     padding: 20px 0;
 }
 
-.popular-posts, .recent-tweets, .categories {
+.popular-posts, .categories {
     background-color: #262626;
     border-radius: 10px;
     color: var(--text-color);
@@ -1350,11 +1312,11 @@ hr {
 
 
 
-.popular-posts h4, .recent-tweets h4, .categories h4{
+.popular-posts h4, .categories h4{
     padding-top: 30px;
 }
 
-.popular-post, .recent-tweet, .category, .last-post {
+.popular-post, .category, .last-post {
     display: flex;
     align-items: flex-start;
     overflow-wrap: break-word;
@@ -1395,24 +1357,11 @@ hr {
     height: fit-content;
 }
 
-.recent-tweet i {
-    float: left;
-    font-size: 20px;
-    color: var(--main-color);
-}
-
-.recent-tweet p {
-    font-size: 13px;
-}
-
-.recent-tweet a {
-    font-size: 12px;
-    color: var(--main-color);
-}
-
-
-.recent-tweet small {
-    margin-top: 0px;
+#sidebarposts {
+    position: sticky;
+    top: 5rem;
+    position: -webkit-sticky;
+    height: auto !important;
 }
 
 
@@ -1462,60 +1411,6 @@ hr {
     border-radius: 100%;
 }
 
-.recent-projects {
-    padding-top: 35px;
-    padding-bottom: 35px;
-    margin-bottom: 0px;
-    background-color: #262626;
-    border-radius: 10px;
-    color: var(--text-color);
-}
-
-.recent-projects h4 {
-    margin-bottom: 0px;
-}
-
-.recent-project {
-    display: flex;
-    align-items: flex-start;
-    width: 100%;
-}
-
-.recent-project p {
-    height: fit-content;
-    margin-left: 20px;
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-.recent-project a {
-    display: block;
-    width: 70%;
-    color: #f0f0f070;
-    margin-left: 20px;
-    margin-right: 20px;
-    font-size: 13px;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-all;
-    transition: 0.35s ease;
-}
-
-.recent-project a:hover {
-    color: var(--main-color-dark);
-    text-shadow: var(--main-color) 1px 0px 10px;
-}
-
-
-.recent-project i {
-    font-size: 32px;
-}
-
-.repo-details p {
-    height: fit-content;
-    font-size: 14px;
-    font-weight: 300;
-}
 
 .recent-post h3 {
     color: var(--text-color);
@@ -1693,4 +1588,8 @@ footer {
         top: 40px;
         left: 40px;
     }
+}
+
+.rc-anchor-container {
+    width: 100% !important;
 }

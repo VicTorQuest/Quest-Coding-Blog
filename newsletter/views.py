@@ -54,7 +54,7 @@ def subscribe(request):
                     continue
                 messages.error(request, error)
             
-    return render(request, 'subscribe.html', {
+    return render(request, 'newsletter/subscribe.html', {
         "posts": posts,
         'popular_posts': popular_posts,
         "categories": categories,
@@ -78,7 +78,7 @@ def subscription_confirmed(request, *args, **kwargs):
         recent = list(posts)
         recent_posts = recent[:3]
 
-        return render(request, 'subscription_confirmed.html', {
+        return render(request, 'newsletter/subscription_confirmed.html', {
             "posts": posts,
             'popular_posts': popular_posts,
             "categories": categories,
@@ -109,7 +109,7 @@ def unsubscribe(request, slug):
         subscriber.delete()
         messages.success(request, "Unsubscribed")
         return redirect('unsubscribe_successful')
-    return render(request, 'unsubscribe.html', {
+    return render(request, 'newsletter/unsubscribe.html', {
         "posts": posts,
         'popular_posts': popular_posts,
         "categories": categories,
@@ -144,7 +144,7 @@ def unsubscribe_successful(request):
                 unsubscribedemail.save()
                 messages.success(request, 'Thanks for the feedback')
                 return redirect('unsubscribe_successful')
-        return render(request, 'unsubscribe_successful.html', {
+        return render(request, 'newsletter/unsubscribe_successful.html', {
             "posts": posts,
             'popular_posts': popular_posts,
             "categories": categories,
@@ -177,7 +177,7 @@ def edit_preference(request, slug):
     
     recent = list(posts)
     recent_posts = recent[:3]
-    return render(request, 'edit_preference.html', {
+    return render(request, 'newsletter/edit_preference.html', {
         "posts": posts,
         'popular_posts': popular_posts,
         "categories": categories,
