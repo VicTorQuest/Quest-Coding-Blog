@@ -32,7 +32,7 @@ class ReviewFormat(admin.ModelAdmin):
     list_display = ['user', 'product', 'rating', 'review']
     list_filter = ['product', 'rating']
 
-class ShippingAddressFormat(admin.ModelAdmin):
+class BillingAddressFormat(admin.ModelAdmin):
     search_fields = ['customer__name', 'order__order_id', 'address', 'country']
     list_display = ['customer', 'order', 'address', 'country']
     list_filter = ['customer', 'order', 'address', 'country']
@@ -40,10 +40,17 @@ class ShippingAddressFormat(admin.ModelAdmin):
 class RefundFormat(admin.ModelAdmin):
     list_display = ['__str__', 'status', 'date']
 
+class DownloadFormat(admin.ModelAdmin):
+    search_fields = ['user__username', 'item', 'order__order_id']
+    list_filter = ['user', 'item', 'order', 'date']
+    list_display = ['user', 'item', 'order', 'date']
+    
+
 admin.site.register(Customer, CustomerFormat)
 admin.site.register(Order, OrderFormat)
 admin.site.register(OrderItem, OrderItemFormat)
 admin.site.register(Product, ProductFormat)
 admin.site.register(Review, ReviewFormat)
-admin.site.register(ShippingAddress, ShippingAddressFormat)
+admin.site.register(BillingAddress, BillingAddressFormat)
 admin.site.register(Refund, RefundFormat)
+admin.site.register(Download, DownloadFormat)

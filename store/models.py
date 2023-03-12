@@ -38,6 +38,7 @@ class Product(models.Model):
     image = models.ImageField(default='placeholder.png', upload_to='product_images', blank=True, null=True)
     digital = models.BooleanField(default=True, null=True)
     rating = models.DecimalField(default=0, validators=[MaxValueValidator(5.0), MinValueValidator(0.0)], decimal_places=1, max_digits=2)
+    rated_by = models.ManyToManyField(User, blank=True)
     combined_ratings = models.DecimalField(default=0, decimal_places=1, max_digits=1000)
     total_ratings = models.IntegerField(default=0, null=True)
 
@@ -61,7 +62,7 @@ class Product(models.Model):
 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     review = models.TextField(null=True)
     rating = models.DecimalField(default=0, validators=[MaxValueValidator(5.0), MinValueValidator(0.0)], decimal_places=1, max_digits=2, null=True)
     date = models.DateTimeField(auto_now_add=True)
@@ -119,18 +120,18 @@ class OrderItem(models.Model):
         return total
 
 
-class ShippingAddress(models.Model):
+class BillingAddress(models.Model):
     customer = models.ForeignKey(Customer, models.SET_NULL, null=True)
     order = models.ForeignKey(Order, models.SET_NULL, null=True)
     address = models.CharField(max_length=200, null=True)
-    country = CountryField(null=True)
+    country = CountryField(null=True, blank_label="Select country")
     state = models.CharField(max_length=200, null=True)
     city = models.CharField(max_length=200, null=True)
     zipcode = models.CharField(max_length=200, null=True)
     date_added = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name_plural = 'Shipping addresses'
+        verbose_name_plural = 'Billing addresses'
 
     def __str__(self):
         return "{}".format(self.address)
@@ -161,5 +162,11 @@ class Refund(models.Model):
             completed_order.delete()
         super(Refund, self).save(*args, **kwargs)
 
+
+class Download(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    item = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now=True)
 
     

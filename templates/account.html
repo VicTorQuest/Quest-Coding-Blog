@@ -8,7 +8,7 @@
 {% endblock link %}
 {% block title %}My account | {% endblock title %}
 {% block contents %}
-<div class="col-md-12 mb-0 post p-3 pb-4 my-4 my-lg-0 mb-5 p-lg-5 full-post" data-aos="fade-up">
+<div class="col-md-12 mb-0 post p-3 pb-4 my-4 my-lg-0 mb-5 p-lg-5 full-post">
     <h1 class="pb-4 mb-5 heading">My account</h1>
     {% include "message.html" %}
 {% if request.user.is_authenticated %}
@@ -17,7 +17,7 @@
             <ul class="ml-5">
                 <li class="py-2"><a href="{% url 'my_account' %}" class="page-links">Dashboard</a></li>
                 <li class="py-2"><a href="{% url 'orders' %}" class="page-links">orders</a></li>
-                <li class="py-2"><a href="" class="page-links">Downloads</a></li>
+                <li class="py-2"><a href="{% url 'downloads' %}" class="page-links">Downloads</a></li>
                 <li class="py-2"><a href="{% url 'address' %}" class="page-links">Address</a></li>
                 <li class="py-2"><a href="{% url 'edit_account' %}" class="page-links">Account details</a></li>
                 <li class="py-2"><a href="{% url 'request_refund' %}" class="page-links">Request Refund</a></li>
@@ -53,7 +53,6 @@
             </form>
             <p class="liw mt-4">Log in with <br>
                 <a href="{% url 'home' %}accounts/google/login/?process=login" class="social-icon mx-1"><i class="bi bi-google"></i></a>
-                <a href="{% provider_login_url 'facebook' method='oauth2' %}" class="social-icon mx-1"><i class="bi bi-facebook"></i></a>
                 <a href="{% url 'home' %}accounts/github/login/?process=login" class="social-icon mx-1"><i class="bi bi-github"></i></a><br>
                 <a href="{% url 'reset_password' %}" class="forgot-password">Forgot password?</a>
             </p>
@@ -87,7 +86,7 @@
                 </div>
             </div>
             <div class="form-group form-check">
-                <input type="checkbox" name='subscribing' checked class="form-check-input" id="exampleCheck1">
+                <input type="checkbox" name='subscribing' class="form-check-input" id="exampleCheck1">
                 <label class="form-check-label" for="exampleCheck1">Subscribe to our newsletter</label>
             </div>
             <div class=""><p class="">Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our <a href="{% url 'privacy' %}" class="" target="_blank">privacy policy</a>.</p>

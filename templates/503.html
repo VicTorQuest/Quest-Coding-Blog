@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block link %}
+<style>
+
+.continue {
+    background-color: cyan;
+    font-weight: 600;
+    font-size: 18px;
+    color: black;
+    padding: 10px 18px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: 0.35s ease;
+}
+
+header {
+    display: none;
+}
+
+.container.bottom-content {
+    display: none;
+}
+
+.middle-content {
+    display: none;
+}
+
+footer {
+    display: none;
+}
+
+.main-section {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+
+.main-section img {
+    height: 400px;
+}
+
+.main-section p {
+    font-weight: 500;
+    font-size: 40px;
+}
+
+.main-section i {
+    color: cyan;
+    font-size: 72px;
+}
+
+.main-section h1 {
+    font-size: 90px;
+}
+
+body {
+    background: #f0f0f0;
+}
+
+
+
+@media screen and (max-width:480px) {
+    .continue {
+    font-weight: 500;
+    font-size: 14px;
+    padding: 5px 8px;
+}
+
+.main-section img {
+    height: auto;
+    width: 100%;
+}
+
+    .main-section p {
+    font-size: 18px;
+}
+
+.main-section i {
+    font-size: 32px;
+}
+
+.main-section h1 {
+    font-size: 39px;
+}
+    .heading {
+        font-size: 26px;
+    }
+
+    .main-section p {
+        font-size: 14px;
+    }
+
+}
+</style>
+{% endblock link %}
+{% block rowslider %}
+<section class="main-section">
+    <div class="full-post text-center" data-aos="fade-in">
+        <img src="{% static 'images/maintenance.png' %}" alt="">
+        <p class="text-dark pt-4 px-3">we are currently performing some routine maintenance and will be back online shortly.</p>
+    
+    </div>
+</section>
+{% endblock rowslider %}
+{% block author %}
+<div class="col-md-4 recent-post" id="owner" >
+    <h3>About me</h3>
+    <hr>
+    <div class="recent-posts">
+        <div class="about-me mx-2">
+            <img src="{{author.avatar.url}}" class="about-me-img" alt="author image">
+            <div>
+                <p class="post-description"><a href="">Victor Okolie</a></p>
+                <small>Founder & Editor</small><br>
+                <div class="about-me-socials mt-1">
+                    <a href="{{author.twitter}}" target="_blank" class="btn owner-link"><i class="bi bi-twitter"></i></a>
+                    <a href="{{author.github}}" target="_blank" class="btn owner-link"><i class="bi bi-github"></i></a>
+                    <a href="{{author.linkedin}}" target="_blank" class="btn owner-link"><i class="bi bi-linkedin"></i></a>
+                    <a href="{{author.youtube}}" target="_blank" class="btn owner-link"><i class="bi bi-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <p class="mt-3 text-white">{{author.bio}}</p>
+    </div>
+</div>
+{% endblock author %}

@@ -9,8 +9,12 @@ from .views import (
     getting_cart_total,
     getting_cart_items,
     getting_item_number,
-    rating_product
+    rating_product,
+    show_productfiles,
+    download_file,
+    paid_items
 )
+
 
 urlpatterns = [
     path('store/', store, name='store'),
@@ -23,4 +27,7 @@ urlpatterns = [
     path('checkout/', checkout, name='checkout'),
     path('update-item/', updateitem, name='update_item'),
     path('process-order/', processorder, name='process_order'),
+    path('show-files/', show_productfiles, name='show-files'),
+    path('order-completed/<str:order_id>', paid_items, name='order_complete'),
+    path('download-files/<int:id>/<str:order_id>', download_file, name='download_file'),
 ]

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.mail import EmailMessage
 from django.shortcuts import redirect, render, get_object_or_404
@@ -7,12 +8,15 @@ from django.template.loader import get_template
 from django.urls import reverse
 from .models import Subscriber, UnsubscribedEmail
 from .thread import EmailThreading
-from blog.models import Post, Category
+from blog.models import Post, Category, Author
 from newsletter.forms import Subscribetoletter, SendNewsLetter, EditPreference, UnsubscribedEmailReason
 from hitcount.models import HitCount
 
 domain_name = getattr(settings, 'DOMAIN_NAME', 'questcoding.blog')
+User = get_user_model()
 site_email = getattr(settings, 'APPLICATION_EMAIL', "questcoding2001gmail.com")
+user = User.objects.get(username="Quest")
+author = Author.objects.get(user=user)
 
 # Create your views here.
 def subscribe(request):
@@ -27,7 +31,6 @@ def subscribe(request):
     
     recent = list(posts)
     recent_posts = recent[:3]
-    print(request.get_host)
     form = Subscribetoletter()
     if request.method == "POST":
         form = Subscribetoletter(request.POST or None)
@@ -50,7 +53,7 @@ def subscribe(request):
         else:
             for key, error in list(form.errors.items()):
                 if key == 'captcha' and error[0] == 'This field is required.':
-                    messages.error(request, 'You mus pass the reCAPTCHA ')
+                    messages.error(request, 'You must pass the reCAPTCHA ')
                     continue
                 messages.error(request, error)
             
@@ -59,7 +62,8 @@ def subscribe(request):
         'popular_posts': popular_posts,
         "categories": categories,
         'recent_posts': recent_posts,
-        'form': form
+        'form': form,
+        'author': author
     })
 
 
@@ -83,10 +87,54 @@ def subscription_confirmed(request, *args, **kwargs):
             'popular_posts': popular_posts,
             "categories": categories,
             'recent_posts': recent_posts,
-            'email_slug': email_slug
+            'email_slug': email_slug,
+            'author': author
         })
     else:
         redirect('subscribe')
+
+
+def start_unsubscribe(request):
+    categories = Category.objects.all()
+
+    posts = Post.objects.filter(status=Post.ACTIVE)
+    
+    hitcount = HitCount.objects.order_by('-hits')[:3]
+    popular_posts = []
+    for i in hitcount:
+        popular_posts.append(get_object_or_404(Post, pk=i.object_pk))
+    
+    recent = list(posts)
+    recent_posts = recent[:3]
+    if request.method =="POST":
+        email = request.POST.get('email')
+        try:
+            subscriber = Subscriber.objects.get(email=email)
+            template_name = 'newsletter/unsubscribe_email.html'
+            context = {'link': domain_name + reverse('unsubscribe', kwargs={'slug': subscriber.slug}), 'contact_link': domain_name + reverse('contact')}
+            email_html_template = get_template(template_name).render(context)
+            mail = EmailMessage(subject='Unsubscribe from our email', body=email_html_template, from_email=site_email, to = [subscriber.email])
+            mail.content_subtype = 'html'
+            mail.attach_alternative = (email_html_template, "text/html")
+            EmailThreading(mail).start()
+            messages.success(request, "unsubscribe Link has been sent to {}. Can't find the link? check your spam folder".format(email))
+            return redirect('start_unsubscribe')
+        except Subscriber.DoesNotExist:
+            messages.error(request, 'This email does not exist on our list')
+            return render(request, 'newsletter/start_unsubscribe.html', {
+            'popular_posts': popular_posts,
+            "categories": categories,
+            'recent_posts': recent_posts,
+            'written_email': email,
+            'author': author
+        })
+    return render(request, 'newsletter/start_unsubscribe.html', {
+            'popular_posts': popular_posts,
+            "categories": categories,
+            'recent_posts': recent_posts,
+            'author': author
+    })
+
 
 def unsubscribe(request, slug):
     subscriber = get_object_or_404(Subscriber, slug=slug)
@@ -114,6 +162,7 @@ def unsubscribe(request, slug):
         'popular_posts': popular_posts,
         "categories": categories,
         'recent_posts': recent_posts,
+        'author': author,
     })
 
     
@@ -149,7 +198,8 @@ def unsubscribe_successful(request):
             'popular_posts': popular_posts,
             "categories": categories,
             'recent_posts': recent_posts,
-            'form': form
+            'form': form,
+            'author': author
         })
     else:
         return redirect('unsubscribe')
@@ -182,7 +232,8 @@ def edit_preference(request, slug):
         'popular_posts': popular_posts,
         "categories": categories,
         'recent_posts': recent_posts,
-        'form': form
+        'form': form,
+        'author': author
     })
 
 
@@ -212,5 +263,6 @@ def send_news_letter(request):
         'popular_posts': popular_posts,
         "categories": categories,
         'recent_posts': recent_posts,
-        'form': form
+        'form': form,
+        'author': author
     })

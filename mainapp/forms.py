@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from store.models import ShippingAddress, Customer
+from store.models import BillingAddress, Customer
 from django_countries.widgets import CountrySelectWidget
 
 
@@ -43,7 +43,7 @@ class EditCustomer(forms.ModelForm):
 
 class EditBillingAddress(forms.ModelForm):
     class Meta:
-        model = ShippingAddress
+        model = BillingAddress
         fields = [
             'address',
             'country',

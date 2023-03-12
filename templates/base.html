@@ -7,6 +7,39 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+
+    
+    
+  <!-- HTML Meta Tags -->
+  <meta name="description" content="{% block description %}Backend web development tips, tricks, and best practices covering areas like Django, SQL, Python, and APIs.{% endblock description %}">
+  <meta name="keywords" content="{% block keywords %}{% endblock keywords %} backend, web development, blog, django, postgresql, SQL, learn backend development, quest coding, victor okolie, software engineering, articles, blog posts">
+  <meta name="copyright" content="Copyright © 2022 Quest Coding All Rights Reserved">
+  <meta name="page-type" content="Website/blog">
+  <meta name="audience" content="Everyone">
+  <!-- Facebook Meta Tags -->
+  <meta property="og:site_name" content="Quest Coding Blog">
+  <meta property="og:url" content="{{request.build_absolute_uri}}">
+  <meta property="og:type" content="{% block ogtype %}website{% endblock ogtype %}">
+  {% block more_tags %}{% endblock more_tags %}
+  <meta property="og:title" content="{% block ogtitle %}Blog | Quest Coding{% endblock ogtitle %}">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:description" content="{% block ogdescription %}Backend web development tips, tricks, and best practices covering areas like Django, SQL, Python, and APIs.{% endblock ogdescription %}">
+  <meta property="og:image" itemprop="image" content="{% block ogimage %}{% static 'thumbnail.png' %}{% endblock ogimage %}">
+  <meta property="og:image:type" content="image/png">
+
+
+  <!-- Twitter Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="twitter:domain" content="questcoding.blog">
+  <meta property="twitter:url" content="{{request.build_absolute_uri}}">
+  <meta name="twitter:title" content="{% block twitter_title %}Blog - Quest Coding{% endblock twitter_title %}">
+  <meta name="twitter:description" content="{% block twitter_desc %}Backend web development tips, tricks, and best practices covering areas like Django, SQL, Python, and APIs.{% endblock twitter_desc %}">
+  <meta name="twitter:image" content="{% block twitter_img %}{% static 'thumbnail.png' %}{% endblock twitter_img %}">
+
+  <!-- Meta Tags Generated via https://www.opengraph.xyz -->
+        
+
+
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
@@ -30,230 +63,233 @@
 </head>
 
 <body>
-    <div class="loader-wrapper">
-        <span class="loader"><span class="loader-inner"></span></span>
-    </div>
-    <button id="btnScrollToTop">
-        <i class="bi bi-arrow-up"></i>
-    </button>
-    <header class="main">
-        <nav class="navbar">
-            <div class="container nav-bar">
-                <div class="icon menu-btn">
-                    <i class="bi bi-list"></i>
-                </div>
-                <div class="icon-img">
-                    <a class="" href="{% url 'home' %}"><img class="logo" alt="logo"
-                            src="{% static 'images/logo.svg' %}" alt=""></a>
-                </div>
-                <ul class="menu-list mx-auto">
-                    <div class="icon cancel-btn">
-                        <i class="bi bi-x-lg"></i>
-                    </div>
-                    <li class="">
-                        <a {% if request.path == '/' %}class="current ml-0" {% endif %} href="{% url 'home' %}"><i class="bi bi-journal-text mr-2"></i>Blog<span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="">
-                        <a {% if request.path == '/store/' or request.path == '/cart/' or request.path == '/checkout/' %}class="current" {% endif %} href="{% url 'store' %}"><i class="bi bi-cart3 mr-2"></i>Store & Services</a>
-                    </li>
-
-
-                    <li class="">
-                        <a {% if '/my-account/' in request.path %}class="current" {% endif %}
-                            href="{% url 'my_account' %}"><i class="bi bi-person mr-2"></i>My Account</a>
-                    </li>
-                    <li class="">
-                        <a {% if request.path == '/subscribe/' %}class="current" {% endif %}
-                            href="{% url 'subscribe' %}"><i class="bi bi-send-check mr-2"></i>Subscribe</a>
-                    </li>
-                    <li class="">
-                        <a {% if request.path == '/contact/' %}class="current" {% endif %}href="{% url 'contact' %}"><i class="bi bi-envelope-at mr-2"></i></i>Contact</a>
-                    </li>
-                </ul>
-
-
-
-                <div id="cart-item-indicator" class="form-inline cart-item-indicator">
-                    <a href="{% url 'cart' %}">
-                        <img id="cart-icon" alt="cart-icon" src="{% static 'store/images/cart.png' %}">
-                    </a>
-                    <p id="cart-total">{{cartitems}}</p>
-                </div>
-
-
-
-                <form class="search" action="{% url 'search' %}" method="GET">
-                    <div class="search_icon"></div>
-                    <div class="input">
-                        <input type="search" name="query" required placeholder="search" id="mysearch">
-                    </div>
-                    <span class="clear" onclick="document.getElementById('mysearch').value= '' "></span>
-                </form>
-
-                <form method="GET" name="query" action="{% url 'search' %}" class="search-sm">
-                    <i class="bi bi-search"></i>
-                    <div class="search-box">
-                        <input type="search" name="query" placeholder="" />
-                        <input type="submit" value="Search" />
-                    </div>
-                </form>
-
-            </div>
-        </nav>
-    </header>
-        
-
-
-
-
-
-    {% block landing_page_content %}
-
-    {% endblock landing_page_content %}
-
-
-
-
-    {% block rowslider %}
-
-    {% endblock rowslider %}
-
-
-
-    <div class="container middle-content">
-        <div class="row posts">
-
-
-            <div class="col-md-8">
-                {% block contents %}
-
-                {% endblock contents %}
-            </div>
-
-            <div class="col-md-4" data-aos="fade-up">
-                <div id="sidebarposts">
-                    {% block related_posts %}
-                    <div class="col-md-12 mb-5 popular-posts">
-                        <h4 class="px-2">Popular Posts</h4>
-                        <hr class="mx-2">
-
-                        <div class="popular-post-container pb-3">
-                            {% for post in popular_posts %}
-                            <div class="popular-post mx-lg-2 mb-2">
-                                <div class="shadow" style="border-radius: 50%;">
-                                    <img src="{{post.post_img.url}}" alt="post image" class="popular-post-img" alt="">
-                                </div>
-
-                                <div>
-                                    <small>{{post.created_at|date:'M d, Y'}}</small>
-                                    <p class="post-description"><a class="post-description-a"
-                                            href="{% url 'post_detail' post.slug %}">{{post.title}}</a></p>
-                                </div>
-                            </div>
-                            {% endfor %}
-
-
-                        </div>
-
-
-                    </div>
-                    {% endblock related_posts %}
-
-
-                    <div class="col-md-12 mb-5 categories" data-aos="fade-up">
-                        <h4 class="px-2">Categories</h4>
-                        <hr class="mx-2">
-
-                        <div class="categories-container pb-3">
-                            {% for category in categories %}
-                            <div class="category mx-2 mb-3">
-                                <div class="category-content">
-                                    <a href="{% url 'category' category.slug %}" class="link">{{category.title}}</a>
-                                    <p class="number">{{category.categories.all|length}}</p>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-
-
-                    </div>
-                </div>
-                
-
-            </div>
+    <div class="main-content">
+        <div class="loader-wrapper">
+            <span class="loader"><span class="loader-inner"></span></span>
         </div>
-    </div>
-
-
-
-
-    <div class="container bottom-content">
-        <div class="row">
-            <div class="col-md-4 mb-3 recent-post" data-aos="fade-up">
-                <h3>Recent posts</h3>
-                <hr>
-                <div class="recent-posts">
-                    {% for recent_post in recent_posts %}
-                    <div class="last-post mx-2 mb-3">
-                        <img src="{{recent_post.post_img.url}}" alt="post image" class="popular-post-img" alt="">
-                        <div>
-                            <small>{{recent_post.created_at|date:"M d, Y"}}</small>
-                            <p class="post-description"><a class="post-description-a"
-                                    href="{% url 'post_detail' recent_post.slug %}">{{recent_post.title}}</a>
-                            </p>
-                        </div>
+        <button id="btnScrollToTop">
+            <i class="bi bi-arrow-up"></i>
+        </button>
+        <header class="main">
+            <nav class="navbar">
+                <div class="container nav-bar">
+                    <div class="icon menu-btn">
+                        <i class="bi bi-list"></i>
                     </div>
-                    {% endfor %}
+                    <div class="icon-img">
+                        <a class="" href="{% url 'home' %}"><img class="logo" alt="logo"
+                                src="{% static 'images/logo.svg' %}" alt=""></a>
+                    </div>
+                    <ul class="menu-list mx-auto">
+                        <div class="icon cancel-btn">
+                            <i class="bi bi-x-lg"></i>
+                        </div>
+                        <li class="">
+                            <a {% if request.path == '/' %}class="current ml-0" {% endif %} href="{% url 'home' %}"><i class="bi bi-journal-text mr-2"></i>Blog<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="">
+                            <a {% if '/store/' in request.path %}class="current" {% endif %} href="{% url 'store' %}"><i class="bi bi-cart3 mr-2"></i>Store & Services</a>
+                        </li>
+    
+    
+                        <li class="">
+                            <a {% if '/my-account/' in request.path %}class="current" {% endif %}
+                                href="{% url 'my_account' %}"><i class="bi bi-person mr-2"></i>My Account</a>
+                        </li>
+                        <li class="">
+                            <a {% if request.path == '/subscribe/' %}class="current" {% endif %}
+                                href="{% url 'subscribe' %}"><i class="bi bi-send-check mr-2"></i>Subscribe</a>
+                        </li>
+                        <li class="">
+                            <a {% if request.path == '/contact/' %}class="current" {% endif %}href="{% url 'contact' %}"><i class="bi bi-envelope-at mr-2"></i></i>Contact</a>
+                        </li>
+                    </ul>
+    
+    
+    
+                    <div id="cart-item-indicator" class="form-inline cart-item-indicator">
+                        <a href="{% url 'cart' %}">
+                            <img id="cart-icon" alt="cart-icon" src="{% static 'store/images/cart.png' %}">
+                        </a>
+                        <p id="cart-total">{{cartitems}}</p>
+                    </div>
+    
+    
+    
+                    <form class="search" action="{% url 'search' %}" method="GET">
+                        <div class="search_icon"></div>
+                        <div class="input">
+                            <input type="search" name="query" required placeholder="search" id="mysearch">
+                        </div>
+                        <span class="clear" onclick="document.getElementById('mysearch').value= '' "></span>
+                    </form>
+    
+                    <form method="GET" name="query" action="{% url 'search' %}" class="search-sm">
+                        <i class="bi bi-search"></i>
+                        <div class="search-box">
+                            <input type="search" name="query" placeholder="" />
+                            <input type="submit" value="Search" />
+                        </div>
+                    </form>
+    
                 </div>
-            </div>
-
-            <div class="col-md-4 mb-4 recent-post" data-aos="fade-up">
-                <h3>Tag cloud</h3>
-                <hr>
-
-                <div class="tag-buttons">
-                    {% for category in categories %}
-                    <a href="{% url 'category' category.slug %}"
-                        class="btn tag-button one my-1 mr-1">{{category.title}}</a>
-                    {% endfor %}
-
-
+            </nav>
+        </header>
+            
+    
+    
+    
+    
+    
+        {% block landing_page_content %}
+    
+        {% endblock landing_page_content %}
+    
+    
+    
+    
+        {% block rowslider %}
+    
+        {% endblock rowslider %}
+    
+    
+    
+        <div class="container middle-content">
+            <div class="row posts">
+    
+    
+                <div class="col-md-8">
+                    {% block contents %}
+    
+                    {% endblock contents %}
                 </div>
-
-
-            </div>
-
-            <div class="col-md-4 recent-post" id="owner" data-aos="fade-up">
-                <h3>About me</h3>
-                <hr>
-                <div class="recent-posts">
-                    <div class="about-me mx-2">
-                        <img src="/static/images/me.webp" class="about-me-img" alt="author image">
-                        <div>
-                            <p class="post-description"><a href="">Victor Okolie </a></p>
-                            <small>Founder & Editor</small><br>
-                            <div class="about-me-socials mt-1">
-                                <a href="" class="btn owner-link"><i class="bi bi-twitter"></i></a>
-                                <a href="" class="btn owner-link"><i class="bi bi-github"></i></a>
-                                <a href="" class="btn owner-link"><i class="bi bi-linkedin"></i></a>
-                                <a href="" class="btn owner-link"><i class="bi bi-youtube"></i></a>
+    
+                <div class="col-md-4">
+                    <div id="sidebarposts">
+                        {% block related_posts %}
+                        <div class="col-md-12 mb-5 popular-posts">
+                            <h4 class="px-2">Popular Posts</h4>
+                            <hr class="mx-2">
+    
+                            <div class="popular-post-container pb-3">
+                                {% for post in popular_posts %}
+                                <div class="popular-post mx-lg-2 mb-2">
+                                    <div class="shadow" style="border-radius: 50%;">
+                                        <img src="{{post.post_img.url}}" alt="post image" class="popular-post-img" alt="">
+                                    </div>
+    
+                                    <div>
+                                        <small>{{post.created_at|date:'M d, Y'}}</small>
+                                        <p class="post-description"><a class="post-description-a"
+                                                href="{% url 'post_detail' post.slug %}">{{post.title}}</a></p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+    
+    
                             </div>
+    
+    
+                        </div>
+                        {% endblock related_posts %}
+    
+    
+                        <div class="col-md-12 mb-5 categories" >
+                            <h4 class="px-2">Categories</h4>
+                            <hr class="mx-2">
+    
+                            <div class="categories-container pb-3">
+                                {% for category in categories %}
+                                <div class="category mx-2 mb-3">
+                                    <div class="category-content">
+                                        <a href="{% url 'category' category.slug %}" class="link">{{category.title}}</a>
+                                        <p class="number">{{category.categories.all|length}}</p>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+    
+    
                         </div>
                     </div>
-                    <p class="mt-3 text-white">Backend web developer and software engineer</p>
+                    
+    
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="cookie-container">
-        <p>
-            We use cookies and other tracking technologies to improve your browsing experience on our website, to show
-            you personalized content and targeted ads, to analyze our website traffic, and to understand where our
-            visitors are coming from. To learn more, read our <a href="{% url 'privacy' %}">privacy & policy</a> and <a
-                href="{% url 'terms' %}">terms of use</a>
-        </p>
-        <button class="cookie-btn">Okay</button>
+    
+    
+    
+    
+        <div class="container bottom-content">
+            <div class="row">
+                <div class="col-md-4 mb-3 recent-post" >
+                    <h3>Recent posts</h3>
+                    <hr>
+                    <div class="recent-posts">
+                        {% for recent_post in recent_posts %}
+                        <div class="last-post mx-2 mb-3">
+                            <img src="{{recent_post.post_img.url}}" alt="post image" class="popular-post-img" alt="">
+                            <div>
+                                <small>{{recent_post.created_at|date:"M d, Y"}}</small>
+                                <p class="post-description"><a class="post-description-a"
+                                        href="{% url 'post_detail' recent_post.slug %}">{{recent_post.title}}</a>
+                                </p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+    
+                <div class="col-md-4 mb-4 recent-post" >
+                    <h3>Tag cloud</h3>
+                    <hr>
+    
+                    <div class="tag-buttons">
+                        {% for category in categories %}
+                        <a href="{% url 'category' category.slug %}"
+                            class="btn tag-button one my-1 mr-1">{{category.title}}</a>
+                        {% endfor %}
+    
+    
+                    </div>
+    
+    
+                </div>
+                {% block author %}
+                <div class="col-md-4 recent-post" id="owner" >
+                    <h3>About me</h3>
+                    <hr>
+                    <div class="recent-posts">
+                        <div class="about-me mx-2">
+                            <img src="{{author.avatar.url}}" class="about-me-img" alt="author image">
+                            <div>
+                                <p class="post-description"><a href="{% url 'author' author.slug %}">{{author.name|title}}</a></p>
+                                <small>Founder & Editor</small><br>
+                                <div class="about-me-socials mt-1">
+                                    <a href="{{author.twitter}}" target="_blank" class="btn owner-link"><i class="bi bi-twitter"></i></a>
+                                    <a href="{{author.github}}" target="_blank" class="btn owner-link"><i class="bi bi-github"></i></a>
+                                    <a href="{{author.linkedin}}" target="_blank" class="btn owner-link"><i class="bi bi-linkedin"></i></a>
+                                    <a href="{{author.youtube}}" target="_blank" class="btn owner-link"><i class="bi bi-youtube"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="mt-3 text-white">{{author.bio}}</p>
+                    </div>
+                </div>
+                {% endblock author %}
+            </div>
+        </div>
+    
+        <div class="cookie-container">
+            <p>
+                We use cookies and other tracking technologies to improve your browsing experience on our website, to show
+                you personalized content and targeted ads, to analyze our website traffic, and to understand where our
+                visitors are coming from. To learn more, read our <a href="{% url 'privacy' %}">privacy & policy</a> and <a
+                    href="{% url 'terms' %}">terms of use</a>
+            </p>
+            <button class="cookie-btn">Okay</button>
+        </div>
     </div>
 
     <footer class="mt-5 mb-0">
@@ -318,10 +354,10 @@
             <ul class="d-flex justify-content-center">
                 <li class="mr-2 mr-lg-5"><a class='footer-link' href="{% url 'terms' %}">Terms & conditions</a></li>
                 <li class="mr-2 mr-lg-5"><a class="footer-link" href="{% url 'contact' %}">Contact</a></li>
-                <li><a class="footer-link" href="{% url 'terms' %}">Privacy policy</a></li>
+                <li><a class="footer-link" href="{% url 'privacy' %}">Privacy policy</a></li>
             </ul>
             <p class="">&copy; Copyright
-                <a class="footer-link" href="{% url 'home' %}">questcoding.blog</a> 2022
+                <a class="footer-link" href="{% url 'home' %}">questcoding.blog</a> 2023
             </p>
         </div>
     </footer>

@@ -79,7 +79,7 @@ $(document).ready(function(){
 
             },
             error: function(response){
-                alert('error getting data')
+                console.log('error getting data')
             }
         })
     }, 2000);

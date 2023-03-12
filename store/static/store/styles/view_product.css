@@ -112,9 +112,11 @@ i.review-star {
     font-size: 14px;
 }
 
-.spinner-border {
-    display: none;
+#submit-review {
+    font-weight: 500 !important;
+    font-size: 15px;
 }
+
 
 @media screen and (max-width:1024px) {
     .product-details h2{

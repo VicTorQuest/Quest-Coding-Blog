@@ -1,0 +1,26 @@
+{% extends 'account_base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block link2 %}
+<link rel="stylesheet" href="{% static 'styles/orders.css' %}">
+{% endblock link2 %}
+{% block h1_title %}Downloads{% endblock h1_title %}
+{% block account_contents %}
+<div class="box-element">
+    <table class="table table-responsive-sm">
+        <tbody>
+            
+            {% for download in downloads %}
+            <tr>
+              <th scope="row" class="d-flex"><img class="row-image" src="{{download.item.image.url}}"><p class="ml-3">{{download.item}}</p></th>
+              <td>{{download.date}}</td>
+            </tr>
+            {% empty %}
+ 
+            <th>No downloads yet. <a  class="btn btn-outline-light ml-lg-5" href="{% url 'store' %}"><i class="bi bi-cart-fill mr-3"></i>Go to Store</a>
+            </th>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock account_contents %}

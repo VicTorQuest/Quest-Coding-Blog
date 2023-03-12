@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block ogtitle %}{{author.name}} | questcoding.blog{% endblock ogtitle %}
+{% block ogdescription %}{{author.bio}}{% endblock ogdescription %}
+
+{% block twitter_title %}{{author.name}}{% endblock twitter_title %}
+{% block twitter_desc %}{{author.bio}}{% endblock twitter_desc %}
+{% block more_tags %}
+<meta property="profile:first_name" content="{{author.name}}" />
+<meta property="profile:username" content="{{author.user.username}}" />
+{% endblock more_tags %}
 {% block link %}
 <link rel="stylesheet" href="{% static 'blog/styles/author.css' %}">
 {% endblock link %}
@@ -8,13 +17,13 @@
 
 {% block rowslider %}
 <br>
-<section class="tag-headerblock container-post mt-5 mb-4 mb-lg-0" data-aos="fade-up">
+<section class="tag-headerblock container-post mt-5 mb-4 mb-lg-0"
     <div class="p-5 tag-header text-center">
         <div class="author-img-area text-center">
             <img src="{{author.avatar.url}}" alt="{{author.name}}'s profile image">
         </div>
         <h1 class="text-white text-center font-weight-bold mt-3">{{author.name|title}}</h1>
-        <h2 class="text-center">{{author.bio}}</h2>
+        <h3 class="text-center text-light">{{author.bio}}</h3>
         <div class="author-meta d-flex justify-content-center align-items-center">
             <div class="author-location" data-test-label="author-location">
                 <i>{{author.location|title}}</i>
@@ -80,7 +89,7 @@
         
 </div>
 
-<div class="col-md-12 mb-5 pb-2"  data-aos="fade-up" data-aos-offset="0">
+<div class="col-md-12 mb-5 pb-2"  data-aos="fade-up" data-aos-delay="200">
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
           {% if posts.has_previous %}

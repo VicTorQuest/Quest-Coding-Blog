@@ -4,11 +4,16 @@ for (var i = 0; i < updateBtns.length; i++) {
     updateBtns[i].addEventListener('click', function() {
         var productId = this.dataset.product
         var action = this.dataset.action
-        console.log('productId:', productId, 'action:', action)
+        var thisBtn = document.querySelectorAll(`[data-product="${productId}"]`);
+        console.log(thisBtn[0].innerHTML) 
+        
+        this.innerHTML = "Add to Cart<div class='btn-loader ml-1'></div>"
+        this.style.pointerEvents = 'none'
+        
 
-        console.log('User:', user)
         if (user == 'AnonymousUser') {
             addCookieItem(productId, action)
+            this.innerHTML = "Add to Cart"
         }
         else {
             $.ajax({
@@ -17,8 +22,9 @@ for (var i = 0; i < updateBtns.length; i++) {
                 data:  {'productId': productId, 'action': action},
                 csrfmiddlewaretoken: csrftoken,
                 success: function(data){
-                    console.log(data)
-                    
+                    thisBtn[0].innerHTML = "Add to Cart"
+                    thisBtn[0].style.pointerEvents = ""
+                    console.log(thisBtn[0].innerHTML)
                 }
             })
         }

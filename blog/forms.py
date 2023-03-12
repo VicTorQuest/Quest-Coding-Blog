@@ -3,6 +3,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from .models import Comment, Post
+from captcha.fields import ReCaptchaField
+from captcha.widgets import ReCaptchaV2Checkbox
 
 
 class PostForm(forms.ModelForm):
@@ -29,6 +31,7 @@ custom_bad_words = ['nigga', 'nigger', 'fag', 'faggot']
 profanity.add_censor_words(custom_bad_words)
 
 class CommentForm(forms.ModelForm):
+    captcha = ReCaptchaField(widget=ReCaptchaV2Checkbox())
     class Meta:
         model = Comment
         fields = ['name', 'email', 'body']

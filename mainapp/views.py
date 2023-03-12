@@ -1,28 +1,33 @@
+import json
 import re
-import threading
+import time
 from django.conf import settings
-from mainapp.models import User
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.core.paginator import Paginator
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.template.loader import get_template
 from django.views.generic import CreateView
-from blog.models import Post, Category, FeaturedPost
-from store.models import ShippingAddress, Customer, Refund, Order
-from store.forms import RefundForm
-from newsletter.models import Subscriber
 from .forms import EditAccount, EditBillingAddress, EditCustomer
+from blog.models import Post, Category, FeaturedPost, Author
+from mainapp.models import User
+from newsletter.models import Subscriber
 from newsletter.thread import EmailThreading
+from store.models import BillingAddress, Customer, Refund, Order, Download
+from store.forms import RefundForm
 from store.utils import cartdata
 from hitcount.models import HitCount
+from maintenance_mode.core import get_maintenance_mode, set_maintenance_mode
 
 domain_name = getattr(settings, 'DOMAIN_NAME', 'questcoding.blog')
 site_email = getattr(settings, 'APPLICATION_EMAIL', "admin@questcoding.blog")
+user = User.objects.get(username="Quest")
+author = Author.objects.get(user=user)
 # Create your views here.
 def home(request):
   
@@ -49,46 +54,11 @@ def home(request):
     page = request.GET.get("page")
     current_page = this_page.get_page(page)
 
-
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        isanemail = re.match("([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", username)
-        if isanemail:
-            try:
-                userobj = User.objects.get(email=username)
-            except:
-                messages.error(request, "Unknown email address. Check again or try your username.")
-                return redirect("home")
-
-                
-            if userobj:
-                objusername = userobj.username
-                user = authenticate(request, username=objusername, password=password)
-                if user != None:
-                    login(request, user)
-                    return redirect('my_account')
-                else:
-                    messages.error(request, "The password you entered for the email '{}' is incorrect".format(username))
-                    return redirect('home')
-
-            else:
-                messages.error(request, "Unknown email address. Check again or try your username.")
-                return redirect("home")
-        else:
-            if User.objects.filter(username=username).exists() == False:
-                messages.error(request, "The username '{}' is not registered on this site. If you are unsure of your username, try your email address instead.".format(username))
-                return redirect("home")
-
-            user = authenticate(request, username=username, password=password)
-            if user != None:
-                login(request, user)
-                return redirect('my_account')
-            else:
-                messages.error(request, "The password you entered for the username '{}' is incorrect".format(username))
-
     data = cartdata(request)
     cartitems = data['cartitems']
+
+    user = User.objects.get(username="Quest")
+    author = Author.objects.get(user=user)
     return  render(request,'home.html', {
         "posts": posts,
         'popular_posts': popular_posts,
@@ -96,7 +66,8 @@ def home(request):
         "categories": categories,
         'recent_posts': recent_posts,
         'featured_post': featured_post,
-        'cartitems': cartitems
+        'cartitems': cartitems,
+        'author': author
     })
 
 
@@ -194,7 +165,8 @@ def account(request):
         'popular_posts': popular_posts,
         "categories": categories,
         'recent_posts': recent_posts,
-        'cartitems': cartitems
+        'cartitems': cartitems,
+        'author': author
     })
 
 @login_required
@@ -231,7 +203,8 @@ def edit_account(request):
         "categories": categories,
         'recent_posts': recent_posts,
         'form': form,
-        'cartitems': cartitems
+        'cartitems': cartitems,
+        'author': author
     })
 
 
@@ -257,7 +230,7 @@ def address(request):
 
     customer_form = EditCustomer(instance = customer)
 
-    billing_obj, created = ShippingAddress.objects.get_or_create(customer = customer, id=customer.id)
+    billing_obj, created = BillingAddress.objects.get_or_create(customer = customer, id=customer.id)
     billing_form = EditBillingAddress(instance = billing_obj)
 
     
@@ -285,7 +258,8 @@ def address(request):
         'cartitems': cartitems,
         'customer_form': customer_form,
         'billing_form': billing_form,
-        'cartitems': cartitems
+        'cartitems': cartitems,
+        'author': author
     })
 
 
@@ -309,7 +283,8 @@ def recent_order(request):
         'recent_posts': recent_posts,
         'items': items,
         'order': order,
-        'cartitems': cartitems
+        'cartitems': cartitems,
+        'author': author
     })
 
 
@@ -332,12 +307,13 @@ class RequestRefund(CreateView):
         customer = Customer.objects.get(user = self.request.user)
         completed_order =Order.objects.filter(customer=customer, completed=True).first()
         context["categories"] = Category.objects.all()
-        context["posts"]  = posts
+        context["posts"] = posts
         context["recent_posts"] = recent[:3]
         context["data"] = data
         context["cartitems"] = cartitems
         context["refund"] = refund
         context["completed_order"] = completed_order
+        context['author'] = author
         return context
 
     def get_form_kwargs(self):
@@ -393,6 +369,7 @@ def contact(request):
         'popular_posts': popular_posts,
         "categories": categories,
         'recent_posts': recent_posts,
+        'author': author
     })
 
 def terms(request):
@@ -404,6 +381,7 @@ def terms(request):
         "posts": posts,
         "categories": categories,
         'recent_posts': recent_posts,
+        'author': author
     })
 
 def refund_policy(request):
@@ -421,6 +399,7 @@ def refund_policy(request):
         'popular_posts': popular_posts,
         "categories": categories,
         'recent_posts': recent_posts,
+        'author': author
     })
 
 
@@ -442,6 +421,27 @@ def privacy_policy(request):
         'popular_posts': popular_posts,
         "categories": categories,
         'recent_posts': recent_posts,
+        'author': author
+    })
+
+@login_required
+def downloads(request):
+    categories = Category.objects.all()
+    posts = Post.objects.filter(status=Post.ACTIVE)
+    hitcount = HitCount.objects.order_by('-hits')[:3]
+    popular_posts = []
+    for i in hitcount:
+        popular_posts.append(get_object_or_404(Post, pk=i.object_pk))
+    recent = list(posts)
+    recent_posts = recent[:3]
+    all_downloads = Download.objects.filter(user=request.user)
+    return render(request, 'downloads.html', {
+        "posts": posts,
+        'popular_posts': popular_posts,
+        "categories": categories,
+        'recent_posts': recent_posts,
+        'author': author,
+        "downloads": all_downloads
     })
 
 def videos(request):
@@ -459,8 +459,26 @@ def videos(request):
         'popular_posts': popular_posts,
         "categories": categories,
         'recent_posts': recent_posts,
+        'author': author
     })
 
+@staff_member_required
+def toggle_maintenance(request):
+    return render(request, 'toggle_maintenance.html')
+
+@staff_member_required
+def maintenance_switch(request):
+    mode = json.loads(request.POST.get('mode')) 
+    set_maintenance_mode(mode)
+  
+    if get_maintenance_mode():
+        current_mode = 'On'
+        message = 'Maintenance mode has been turned on'
+    else:
+        current_mode = 'Off'
+        message = 'Maintenance mode has been turned off'
+    time.sleep(1.5)
+    return JsonResponse({'mode': current_mode, 'message': message})
 
 def robots_txt(request):
     text = [
@@ -483,8 +501,8 @@ def customhandler404(request, exception):
     recent_posts = recent[:3]
     return render(request, '404.html', {
         'categories': categories,
-        'recent_posts': recent_posts
-
+        'recent_posts': recent_posts,
+        'author': author
     })
 
 def customhandler403(request, exception=None):
@@ -495,7 +513,8 @@ def customhandler403(request, exception=None):
     recent_posts = recent[:3]
     return render(request, '403.html', {
         'categories': categories,
-        'recent_posts': recent_posts
+        'recent_posts': recent_posts,
+        'author': author
     })
 
 def customhandler500(request):
@@ -506,6 +525,6 @@ def customhandler500(request):
     recent_posts = recent[:3]
     return render(request, '500.html', {
         'categories': categories,
-        'recent_posts': recent_posts
-
+        'recent_posts': recent_posts,
+        'author': author
     })

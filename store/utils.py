@@ -1,6 +1,6 @@
 import json
 import uuid
-from .models import Product, Order, Customer, ShippingAddress, OrderItem
+from .models import Product, Order, Customer, BillingAddress, OrderItem
 
 def cookiecart(request):
     try:

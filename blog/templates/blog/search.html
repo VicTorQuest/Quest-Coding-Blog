@@ -19,7 +19,7 @@
 {% block contents %}
 {% for post in current_page %}
 
-<div class="col-md-12 mb-5 pb-2 post" id="text" data-aos="fade-up">
+<div class="col-md-12 mb-5 pb-2 post" id="text">
     <div class="tag-area">
         {% for i in post.category.all %}
         <a href="{% url 'category' i.slug %}" class="btn tag mr-2">{{i}}</a>
@@ -46,7 +46,7 @@
 <h2 class="text-white col-md-12 mb-5 mt-4">No result for the given query: '{{query}}'.....<i class="bi bi-emoji-dizzy"></i></h2>
 {% endfor %}
 {% if current_page %}
-<div class="col-md-12 mb-5 pb-2" data-aos="fade-up">
+<div class="col-md-12 mb-5 pb-2" data-aos="fade-up" data-aos-delay="200">
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
           {% if current_page.has_previous %}

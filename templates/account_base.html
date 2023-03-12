@@ -7,7 +7,7 @@
 {% endblock link %}
 {% block title %}My account | {% endblock title %}
 {% block contents %}
-<div class="col-md-12 mb-0 post p-3 pb-4 my-4 my-lg-0 mb-5 p-lg-5 full-post" data-aos="fade-up">
+<div class="col-md-12 mb-0 post p-3 pb-4 my-4 my-lg-0 mb-5 p-lg-5 full-post">
     <h1 class="pb-4 mb-5 heading">{% block h1_title %}{% endblock h1_title %}</h1>
     {% include "message.html" %}
     <div class="row g-4">
@@ -15,7 +15,7 @@
             <ul class="ml-5">
                 <li class="py-2"><a href="{% url 'my_account' %}" class="page-links">Dashboard</a></li>
                 <li class="py-2"><a href="{% url 'orders' %}" class="page-links">orders</a></li>
-                <li class="py-2"><a href="" class="page-links">Downloads</a></li>
+                <li class="py-2"><a href="{% url 'downloads' %}" class="page-links">Downloads</a></li>
                 <li class="py-2"><a href="{% url 'address' %}" class="page-links">Address</a></li>
                 <li class="py-2"><a href="{% url 'edit_account' %}" class="page-links">Account details</a></li>
                 <li class="py-2"><a href="{% url 'request_refund' %}" class="page-links">Request Refund</a></li>

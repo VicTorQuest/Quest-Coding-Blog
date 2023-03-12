@@ -3,6 +3,7 @@
 {% block sublink %}<link rel="stylesheet" href="{% static 'store/styles/view_product.css' %}"> {% endblock sublink %}
 {% block title %}{{product.name}} | {% endblock title %}
 {% block rowslider %}
+
 <section class="mx-lg-3 pt-lg-5 pb-5" data-aos="fade-up">
     <div class="container mt-5">
         <div class="row justify-content-center align-items-center mb-5">
@@ -21,7 +22,7 @@
                         <i class="bi bi-star-fill star {% if product.rating > 3 %}checked{% endif %}"></i>
                         <i class="bi bi-star-fill star {% if product.rating > 4 %}checked{% endif %}"></i>
                     </div>
-                    <p>{{product.total_ratings}} reviews</p>
+                    <p class="ml-2" id="productRating">{{product.rating}}</p>
                 </div>
                 <p class="product-price">USD ${{product.price}}</p>
                 <label for="">Quantity: </label>
@@ -29,59 +30,37 @@
                 <button id="update-cart" data-product={{product.id}} data-action="add" class="btn add-btn update-cart">Add to cart</button>
             </div>
         </div>
-        <h6 class="text-white pb-3 review-header">Reviews(6)</h6>
+        <h6 class="text-white pb-3 review-header" id='review-header'>Reviews({{reviews.count}})</h6>
         <div class="row mt-4">
             <div class="col-md-7 review mb-4">
+                {% for i in reviews %}
                 <div class="mb-4">
                     <div class="d-flex justify-content-between">
                         <div class="d-flex customer align-items-center">
-                            <div class="review-image-area">
-                                <img src="http://127.0.0.1:8000/static/blog/images/user-img.png" alt="customer image" >
+                            <div class="review-image-area mr-2">
+                                <img src="{{i.user.avatar.url}}" alt="customer image">
                             </div>
                             <div class="text-white name ms-3">
-                                <p>only1undeniablw@gmail.com</p>
+                                <p>{{i.user.email}}</p>
                                 <i>september 7, 2020</i>
                             </div>
                         </div>
                         <div class="ratings">
-                            <i class="bi bi-star-fill star review-star {% if product.rating > 0 %}checked{% endif %}"></i>
-                            <i class="bi bi-star-fill star review-star {% if product.rating > 1 %}checked{% endif %}"></i>
-                            <i class="bi bi-star-fill star review-star {% if product.rating > 2 %}checked{% endif %}"></i>
-                            <i class="bi bi-star-fill star review-star {% if product.rating > 3 %}checked{% endif %}"></i>
-                            <i class="bi bi-star-fill star review-star {% if product.rating > 4 %}checked{% endif %}"></i>
+                            <i class="bi bi-star-fill star review-star {% if i.rating > 0 %}checked{% endif %}"></i>
+                            <i class="bi bi-star-fill star review-star {% if i.rating > 1 %}checked{% endif %}"></i>
+                            <i class="bi bi-star-fill star review-star {% if i.rating > 2 %}checked{% endif %}"></i>
+                            <i class="bi bi-star-fill star review-star {% if i.rating > 3 %}checked{% endif %}"></i>
+                            <i class="bi bi-star-fill star review-star {% if i.rating > 4 %}checked{% endif %}"></i>
                         </div>
                     </div>
                     <div class="pt-2 text-white review-comment">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque odit aliquam perspiciatis quo aut quis deserunt neque et quisquam. Praesentium saepe animi nobis dolorum doloribus, culpa dolor nihil? At, nulla.</p>
+                        <p>{{i.review}}</p>
                     </div>
                 </div>
-
-                <div class="mb-4">
-                    <div class="d-flex justify-content-between">
-                        <div class="d-flex customer align-items-center">
-                            <div class="review-image-area">
-                                <img src="http://127.0.0.1:8000/static/blog/images/user-img.png" alt="customer image" >
-                            </div>
-                            <div class="text-white name ms-3">
-                                <p>raymond felton</p>
-                                <i>september 7, 2020</i>
-                            </div>
-                        </div>
-                        <div class="ratings">
-                            <i class="bi bi-star-fill star review-star {% if product.rating > 0 %}checked{% endif %}"></i>
-                            <i class="bi bi-star-fill star review-star {% if product.rating > 1 %}checked{% endif %}"></i>
-                            <i class="bi bi-star-fill star review-star {% if product.rating > 2 %}checked{% endif %}"></i>
-                            <i class="bi bi-star-fill star review-star {% if product.rating > 3 %}checked{% endif %}"></i>
-                            <i class="bi bi-star-fill star review-star {% if product.rating > 4 %}checked{% endif %}"></i>
-                        </div>
-                    </div>
-                    <div class="pt-2 text-white review-comment">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque odit aliquam perspiciatis quo aut quis deserunt neque et quisquam. Praesentium saepe animi nobis dolorum doloribus, culpa dolor nihil? At, nulla.</p>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
             <div class="col-md-5">
-                {% if request.user.review %}
+                {% if already_reviewed %}
                 <div class="alert alert-info" role="alert">
                     Thanks for the feedback <i class="bi bi-send-check"></i>
                   </div>
@@ -103,9 +82,9 @@
                         </div>
                         <div id="error-div"></div>
                         {% if request.user.is_authenticated %}
-                        <button type="submit" id="submit-review" class="btn add-btn d-flex ms-0" >Submit <div class='spinner-border spinner-border-sm' role='status'><span class='visually-hidden'>Loading...</span></div></button>
+                        <button type="submit" id="submit-review" class="btn add-btn d-flex justify-content-center align-items-center ms-0 ml-0" >Submit</button>
                         {% else %}
-                        <p>Your must be logged in before you submit a review</p>
+                        <p class='text-white'>Your must be logged in before you submit a review</p>
                         {% endif %}
                         
                     </form>

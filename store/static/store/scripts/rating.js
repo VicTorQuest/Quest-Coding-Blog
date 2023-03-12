@@ -152,11 +152,10 @@
         return
       }
       errordiv.innerHTML = ""
-      submitBtn.innerHTML = "Submitting &nbsp; <div class='spinner-border spinner-border-sm' role='status'><span class='visually-hidden'>Loading...</span></div>"
+      submitBtn.innerHTML = "Submitting &nbsp; <div class='btn-loader'></div>"
       submitBtn.style.pointerEvents = 'none'
       
       
-      $(".spinner-border").fadeIn('slow')
       $.ajax({
         type: 'POST',
         url: '/rate/',
@@ -167,7 +166,9 @@
           $("#review-form-header").fadeOut('slow')
           $("#rate-form").fadeOut('slow')
           confirmBox.innerHTML =  "<div class='alert alert-success' role='alert'>Your review was submitted, Thanks for the feedback.</div>"
-          var newReview = `<div class='mb-4'><div class='d-flex justify-content-between'><div class='d-flex customer align-items-center'><div class='review-image-area'><img src='${response.image}' alt='customer image'></div><div class='text-white name ms-3'><p>${response.email}</p><i>${response.date}</i></div></div><div class='ratings'>${genrateStarRating(response.rating)}</div></div><div class='pt-2 text-white review-comment'><p>${response.review}.</p></div></div>`
+          var newReview = `<div class='mb-4'><div class='d-flex justify-content-between'><div class='d-flex customer align-items-center'><div class='review-image-area mr-2 ms-2'><img src='${response.image}' alt='customer image'></div><div class='text-white name ms-3'><p>${response.email}</p><i>${response.date}</i></div></div><div class='ratings'>${genrateStarRating(response.rating)}</div></div><div class='pt-2 text-white review-comment'><p>${response.review}.</p></div></div>`
+          $('#review-header').text(`Reviews(${response.total_review})`)
+          $('#productRating').text(`${response.product_rating}`)
           $(".review").prepend(newReview)
         },
         error: function(){

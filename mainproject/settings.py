@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.facebook',
+    # 'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.github',
 
     #my apps
@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'hitcount',
     'django_countries',
     'captcha',
+    'maintenance_mode',
 ]
 
 MIDDLEWARE = [
@@ -78,6 +79,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'maintenance_mode.middleware.MaintenanceModeMiddleware',
 ]
 
 
@@ -94,6 +96,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "maintenance_mode.context_processors.maintenance_mode",
             ],
         },
     },
@@ -206,6 +209,15 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 APPLICATION_EMAIL = os.environ.get('APPLICATION_EMAIL')
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
 
+
+DEFAULT_FILE_STORAGE = 'mainproject.storages.MediaStore'
+
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+AWS_QUERYSTRING_AUTH = False 
+AWS_DEFAULT_ACL = 'public-read'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -305,7 +317,7 @@ JAZZMIN_SETTINGS = {
         "store.order": "fas fa-shopping-cart",
         "store.product": "fas fa-gift",
         "store.review": "fas fa-comments",
-        "store.shippingaddress": "fas fa-shipping-fast",
+        "store.billingaddress": "fas fa-shipping-fast",
         "store.refund": "fas fa-undo-alt"
     },
 
@@ -352,6 +364,11 @@ RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY')
 
 
 RECAPTCHA_REQUIRED_SCORE = 0.85
+
+
+MAINTENANCE_MODE_IGNORE_ADMIN_SITE = True
+MAINTENANCE_MODE_IGNORE_URLS = ['/toggle-maintenance/', '/getting_cart_total/', '/maintenance-switch/']
+
 
 if DEBUG:
     DOMAIN_NAME = 'http://' + '127.0.0.1:8000'

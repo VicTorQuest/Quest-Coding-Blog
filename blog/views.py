@@ -1,6 +1,8 @@
 import random
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
+from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse
@@ -11,9 +13,14 @@ from .forms import CommentForm
 from .models import Post, FeaturedPost, Category, Comment, Author
 from store.utils import cartdata
 from .thread import SendThreadEmail
+from .serializers import PostSerializer
 from hitcount.models import HitCount
+from rest_framework import viewsets
 
 from_this_email = getattr(settings, 'APPLICATION_EMAIL', "questcoding2001gmail.com")
+User = get_user_model()
+user = User.objects.get(username="Quest")
+main_author = Author.objects.get(user=user)
 # Create your views here.
 def post_detail(request, slug):
 
@@ -76,7 +83,12 @@ def post_detail(request, slug):
             
             SendThreadEmail(comment, post, link).start()
             return redirect("post_detail", slug=slug)
-    
+        else:
+            for key, error in list(form.errors.items()):
+                if key == 'captcha' and error[0] == 'This field is required.':
+                    messages.error(request, 'You must pass the reCAPTCHA ')
+                    continue
+                messages.error(request, error)
 
 
 
@@ -92,7 +104,8 @@ def post_detail(request, slug):
         'recent_posts': recent_posts,
         'next_post': next_post,
         'prev_post': prev_post,
-        'cartitems': cartitems
+        'cartitems': cartitems,
+        'author': main_author
     }
     hit_count = get_hitcount_model().objects.get_for_object(post)
     hits = hit_count.hits
@@ -150,7 +163,8 @@ def authors(request):
         'category':category,
         'categories': categories,
         'recent_posts': recent_posts,
-        'cartitems': cartitems
+        'cartitems': cartitems,
+        'author': main_author
     })
 
 def author(request, slug):
@@ -165,6 +179,8 @@ def author(request, slug):
     categories = Category.objects.all()
     data = cartdata(request)
     cartitems = data['cartitems']
+
+    print(author.user.username)
     return render(request, 'blog/author.html', {
         'all_authors_posts': all_authors_posts,
         'posts': posts,
@@ -172,7 +188,8 @@ def author(request, slug):
         'category':category,
         'categories': categories,
         'recent_posts': recent_posts,
-        'cartitems': cartitems
+        'cartitems': cartitems,
+        'author': main_author
     })
 
 def category(request, slug):
@@ -194,8 +211,15 @@ def category(request, slug):
         'posts': posts,
         'categories': categories,
         'recent_posts': recent_posts,
-        'cartitems': cartitems
+        'cartitems': cartitems,
+        'author': main_author
     })
+
+
+class blogposts(viewsets.ModelViewSet):
+    queryset = Post.objects.filter(status=Post.ACTIVE)
+    serializer_class = PostSerializer
+    http_method_names = ['get']
 
 
 def search(request):
@@ -225,5 +249,6 @@ def search(request):
         'categories': categories,
         'recent_posts': recent_posts,
         'current_page': current_page,
-        'popular_posts': popular_posts
+        'popular_posts': popular_posts,
+        'author': main_author
     })
