@@ -1,6 +1,14 @@
 {% extends 'store/main.html' %}
 {% load static %}
 {% block title %}Store | {% endblock title %}
+{% block cart %}
+<div id="cart-item-indicator" class="form-inline cart-item-indicator">
+    <a href="{% url 'cart' %}">
+        <img id="cart-icon" alt="cart-icon" src="{% static 'store/images/cart.png' %}">
+    </a>
+    <p id="cart-total">{{cartitems}}</p>
+</div>
+{% endblock cart %}
 {% block rowslider %}
 <section class="mx-lg-3 pt-lg-5" data-aos="fade-up">
     <div class="my-5 mx-lg-3 mx-md-4 m-lg-5 p-3 p-lg-5">
@@ -9,7 +17,7 @@
         <div class="row all-products">
             {% for product in products %}
             <div class="col-lg-4 col-md-6 shadow">
-                <img class="thumbnail" src="{{product.imageURL}}" alt="product-img">
+                <img class="thumbnail" src="{{product.imageURL}}" loading="lazy" alt="product-img">
                 <div class="box-element product">
                     <h4 class="text-white pb-5 mb-4"><strong>{{product.name}}</strong></h4>
                     <button id="update-cart" data-product={{product.id}} data-action="add" class="btn add-btn store-btn update-cart">Add to Cart</button>
@@ -17,6 +25,8 @@
                     <h4 class="price">${{product.price|floatformat:2}}</h4>
                 </div>
             </div>
+            {% empty %}
+            <h5 class="text-white p-3">No product on sale right now</h5>
             {% endfor %}
         </div>
         

@@ -28,6 +28,6 @@ urlpatterns = [
     path('update-item/', updateitem, name='update_item'),
     path('process-order/', processorder, name='process_order'),
     path('show-files/', show_productfiles, name='show-files'),
-    path('order-completed/<str:order_id>', paid_items, name='order_complete'),
-    path('download-files/<int:id>/<str:order_id>', download_file, name='download_file'),
+    path('order-completed/<str:order_id>/', paid_items, name='order_complete'),
+    path('download-files/<int:id>/<str:order_id>/', download_file, name='download_file'),
 ]

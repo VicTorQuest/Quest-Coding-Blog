@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
@@ -6,6 +7,8 @@ from mainapp.models import User
 from django.utils.translation import gettext_lazy as _
 from .validators import  validate_email, validate_name
 from ckeditor_uploader.fields import RichTextUploadingField
+
+domain_name = getattr(settings, 'DOMAIN_NAME', 'questcoding.blog')
 
 #Managers
 class CommentManager(models.Manager):
@@ -98,10 +101,19 @@ class Post(models.Model):
     #         raise ValidationError({'category': _("You can't assign more than 3 categories")})
     #     super(Post, self).clean(*args, **kwargs)
 
-
+    
     def get_absolute_url(self):
         return reverse('post_detail', kwargs={'slug': self.slug})
+    
+    @property
+    def get_post_url(self):
+        return domain_name + reverse('post_detail', kwargs={'slug': self.slug})
 
+    def save(self, *args, **kwargs):
+        if self.slug == "" or self.slug is None:
+            newslug = slugify(self.title)
+            self.slug = newslug
+        super(Post, self).save(*args, **kwargs)
 
 class FeaturedPost(models.Model):
     post = models.OneToOneField(Post, on_delete=models.CASCADE, blank=False, unique=True)

@@ -93,7 +93,6 @@
 
     const genrateStarRating = function(rating) {
       let ratingString
-      console.log(rating)
       if (rating == 1) {
         ratingString = `<i class='bi bi-star-fill star checked'></i><i class='bi bi-star-fill star'></i><i class='bi bi-star-fill star'></i><i class='bi bi-star-fill star'></i><i class='bi bi-star-fill star'></i>`
       }

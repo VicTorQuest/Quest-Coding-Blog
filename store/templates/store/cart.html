@@ -43,7 +43,7 @@
                           <tbody id="displayCartItems">
                               {% for item in items %}
                             <tr>
-                              <th scope="row"><img src="{{item.product.imageURL}}" alt="item-img" class="row-image"></th>
+                              <th scope="row"><img src="{{item.product.imageURL}}" loading='lazy' alt="item-img" class="row-image"></th>
                               <td>{{item.product.name}}</td>
                               <td>{{item.product.price|floatformat:2}}</td>
                               <td>
@@ -77,9 +77,7 @@
     updateBtn.forEach(i=> i.addEventListener('click', function(){
         var productId = this.dataset.product
         var action = this.dataset.action
-        console.log('productId:', productId, 'action:', action)
 
-        console.log('User:', user)
         if (user == 'AnonymousUser') {
             addCookieItem(productId, action)
         }
@@ -88,9 +86,7 @@
                 type: 'POST',
                 url: '/update-item/',
                 data:  {'productId': productId, 'action': action, 'csrfmiddlewaretoken': csrftoken},
-                success: function(data){
-                    console.log(data)
-                    
+                success: function(data){                    
                 }
             })
         }
@@ -112,11 +108,6 @@ $(document).ready(function(){
               
                 $('#displayCartItems').empty();
                 for (var item in response.items) {
-                    // $("#quantity-"+response.items[item].product.id).empty()
-                    // $("#price-"+response.items[item].product.id).empty()
-                    // $("#quantity-"+response.items[item].product.id).html(response.items[item].quantity)
-                    // $("#price-"+response.items[item].product.id).html('$'+response.items[item].get_total)
-                    console.log('total:' + response.items[item].quantity)
                     var tempbody = "<tr><th scope='row'><img src="+response.items[item].product.imageURL+" alt='item-img' class='row-image'></th><td>"+response.items[item].product.name+"</td><td>"+response.items[item].product.price+"</td><td><p class='quantity'>"+response.items[item].quantity+"</p> <div class='quantity'><i data-product="+response.items[item].product.id+" data-action='add' class='bi bi-caret-up-fill chg-quantity update-cart m-0 p-0'></i> <i data-product="+response.items[item].product.id+" data-action='remove' class='bi bi-caret-down-fill chg-quantity update-cart m-0 p-0'></i> </div> </td><td style='flex: 1;'>$"+response.items[item].get_total+"</td></tr>"
                     $('#displayTable').append(tempbody)
                     if (response.items[item].quantity <= 0) {
@@ -126,7 +117,6 @@ $(document).ready(function(){
                 updatItem()
             },
             error: function(response) {
-                console.log('error getting data')
             }
         })
         // updatItem()

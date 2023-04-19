@@ -35,7 +35,6 @@ AUTH_USER_MODEL = 'mainapp.User'
 # Application definition
 
 INSTALLED_APPS = [
-    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,6 +60,7 @@ INSTALLED_APPS = [
 
     #installed packages
     'rest_framework',
+    'rest_framework.authtoken',
     'crispy_forms',
     'django_social_share',
     'ckeditor',
@@ -118,11 +118,31 @@ WSGI_APPLICATION = 'mainproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
+
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+        'NAME': os.environ.get('DATABASE_NAME'),
+
+        'USER': 'postgres',
+
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+
+        'HOST': '127.0.0.1',
+
+        'PORT': '5432',
+
     }
+
 }
 
 
@@ -156,6 +176,7 @@ USE_I18N = True
 
 USE_TZ = True
 
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
 
 # Static files (CSS, JavaScript, Images)
@@ -215,6 +236,7 @@ DEFAULT_FILE_STORAGE = 'mainproject.storages.MediaStore'
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+# AWS_S3_CUSTOM_DOMAIN = "%s.s3.amazonaws.com" % AWS_STORAGE_BUCKET_NAME
 AWS_QUERYSTRING_AUTH = False 
 AWS_DEFAULT_ACL = 'public-read'
 
@@ -222,6 +244,7 @@ AWS_DEFAULT_ACL = 'public-read'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
 SITE_ID = 2
 LOGIN_REDIRECT_URL = '/my-account/'

@@ -40,10 +40,8 @@ $('#likePost').on('submit', function(e){
                 $('.like-icon').html(unlikedtemp)
                 $('.like-count').html(response.likes+" "+verbal_name)
             }
-            console.log()
         },
         error: function(error) {
-            console.log(error)
         }
     })
 })
@@ -90,10 +88,8 @@ $('#dislikePost').on('submit', function(e){
                 $('.dislike-icon').html(undislikedtemp)
                 $('.dislike-count').html(response.dislikes+" "+verbal_name)
             }
-            console.log()
         },
         error: function(error) {
-            console.log(error)
         }
     })
 })

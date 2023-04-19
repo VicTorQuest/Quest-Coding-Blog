@@ -1,10 +1,14 @@
-import uuid
+import boto3
+from botocore.client import Config
+from botocore import UNSIGNED
 import time
 import json
+import os
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, JsonResponse, FileResponse
+from django.http import HttpResponse, JsonResponse, FileResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from blog.models import Category, Post, Author
 from hitcount.models import HitCount
@@ -320,16 +324,36 @@ def paid_items(request, order_id):
         'recent_posts': recent_posts,
         'author': author
     })
-
-
+    
 
 def download_file(request, id, order_id):
     if request.session['paid']:
         try:
             obj = Product.objects.get(id=id)
-            order = Order.objects.get(order_id=order_id)
-            file = obj.file.path
-            response = FileResponse(open(file, 'rb'))
+            order = Order.objects.get(order_id=order_id)    
+            
+            s3 = boto3.client('s3')
+            bucket_name = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+            file_name = 'media/' + str(obj.file) 
+            
+            # Generate a pre-signed URL for the file with a 10-minute expiration time
+            url = s3.generate_presigned_url(
+                'get_object',
+                Params={
+                    'Bucket': bucket_name,
+                    'Key': file_name,
+                },
+                ExpiresIn=600,  # 10 minutes
+            )
+            
+            # Download the file using the pre-signed URL
+            file_obj = s3.get_object(Bucket=bucket_name, Key=file_name)
+            file_content = file_obj['Body'].read()
+
+            # Create a response object with the file content and content type headers
+            response = HttpResponse(file_content, content_type='application/octet-stream')
+            response['Content-Disposition'] = 'attachment; filename="{}"'.format(file_name)
+            
             if request.user.is_authenticated:
                 user = request.user
             else:
@@ -342,4 +366,3 @@ def download_file(request, id, order_id):
     else:
         messages.error(request, "Trasaction was unauthorized")
         return False
-    

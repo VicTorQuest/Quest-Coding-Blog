@@ -30,7 +30,7 @@ class FeaturedPostAdmin(admin.ModelAdmin):
     list_display = ['post', 'github_link', 'youtube_link']
 
 class CommentAdmin(admin.ModelAdmin):
-    search_fields = ["name", "email", "body"]
+    search_fields = ["name", "email", "body", "post__title", "user__username"]
     list_display = ['__str__', 'post', 'created_at']
     list_filter = ['name', 'email', 'post', 'created_at']
 

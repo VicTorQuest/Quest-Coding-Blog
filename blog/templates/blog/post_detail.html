@@ -21,8 +21,7 @@
 {% block twitter_img %}{{post.post_img.url}}{% endblock twitter_img %}
 {% block link %}
 <link rel="stylesheet" href="{% static 'blog/styles/post_detail.css' %}">
-<link rel="stylesheet" href="{% static 'owlcarousel/dist/assets/owl.theme.default.min.css' %}">
-<link rel="stylesheet" href="{% static 'owlcarousel/dist/assets/owl.carousel.min.css' %}">
+<link rel="stylesheet" href="{% static 'blog/libs/highlight/styles/pop.min.css' %}">
 {% endblock link %}
 {% block title %}{{post.title}} | {% endblock title %}
 {% block contents %}
@@ -315,36 +314,45 @@
 {% endblock related_posts %}
 
 {% block scripts %}
-<script src="{% static 'blog/scripts/likes.js' %}"></script>
-<script>
+<script src="{% static 'blog/libs/highlight/highlight.min.js' %}"></script>
+<script defer src="{% static 'blog/scripts/likes.js' %}"></script>
+<script defer>
+    hljs.highlightAll();
+
     $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
-</script>
-<script>
-    function copy() {
-        /* Get the text field */
-        var copyText = document.getElementById("copy-link");
-        const clipboard = document.querySelector(".bi-clipboard-fill")
-        const copybutton = document.getElementById("copy-button")
-        
-        /* Select the text field */
-        copyText.select();
-        copyText.setSelectionRange(0, 99999); /* For mobile devices */
-        clipboard.classList.remove("bi-clipboard-fill");
-        clipboard.classList.add("bi-check-lg");
-        $(copybutton).tooltip().attr('data-original-title', "Copied!").tooltip('show');
-        
-        /* Copy the text inside the text field */
-        navigator.clipboard.writeText(copyText.value);
-        
-        setTimeout(function(){
-            clipboard.classList.add("bi-clipboard-fill");
-            clipboard.classList.remove("bi-check-lg");
-            $(copybutton).tooltip().attr('data-original-title', "Copy");
-        }, 2000);
+
+function copy() {
+    /* Get the text field */
+    var copyText = document.getElementById("copy-link");
+    const clipboard = document.querySelector(".bi-clipboard-fill")
+    const copybutton = document.getElementById("copy-button")
+    
+    /* Select the text field */
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); /* For mobile devices */
+    clipboard.classList.remove("bi-clipboard-fill");
+    clipboard.classList.add("bi-check-lg");
+    $(copybutton).tooltip().attr('data-original-title', "Copied!").tooltip('show');
+    
+    /* Copy the text inside the text field */
+    navigator.clipboard.writeText(copyText.value);
+    
+    setTimeout(function(){
+        clipboard.classList.add("bi-clipboard-fill");
+        clipboard.classList.remove("bi-check-lg");
+        $(copybutton).tooltip().attr('data-original-title', "Copy");
+    }, 2000);
 }
+
+function copyToClipboard(codeId) {
+    const codeBlock = document.getElementById(codeId);
+    const textToCopy = codeBlock.innerText;
+    navigator.clipboard.writeText(textToCopy);
+  }
 </script>
+
 {% endblock scripts %}
 
 

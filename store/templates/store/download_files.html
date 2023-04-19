@@ -29,7 +29,7 @@
                           <tbody id="displayCartItems">
                             {% for product in products %}
                             <tr>
-                                <th style="width: fit-content;"><img src="{{product.product.imageURL}}" alt="" class="row-image mr-3">{{product.product}}</th>
+                                <th style="width: fit-content;"><img src="{{product.product.imageURL}}" loading='lazy' alt="" class="row-image mr-3">{{product.product}}</th>
                                 <td class="text-center"><a class='btn add-btn' href="{% url 'download_file' product.product.id order.order_id %}" download title="Download this file">Download <i class="bi bi-download"></i></a></td>
                                 <td class="text-center">{{product.product.file.size|filesizeformat}}</td>
                                 <td class="text-center">{{product.product.total_ratings}} <a href="{% url 'view_product' product.product.name %}" style="float: right;padding: 0 4px;" class="btn btn-light">Rate</a></td>

@@ -5,7 +5,11 @@
 <link rel="stylesheet" href="{% static 'blog/styles/search.css' %}">
 {% endblock link %}
 {% block titke %}Search |{% endblock titke %}
-
+{% block loader %}
+    <div class="loader-wrapper">
+        <span class="loader"><span class="loader-inner"></span></span>
+    </div>
+{% endblock loader %}
 {% block landing_page_content %}
 <section class="result-header text-center mt-5 mb-5 w-100">
     <h1 class=" text-white p-5">Search results for: "{{query}}"</h1>
@@ -27,11 +31,11 @@
     </div>
 
     <div class="post-img-area p-lg-2 pt-3 pt-lg-4 pb-0">
-        <img src="{{post.post_img.url}}" class="post-img" alt="post image">
+        <img src="{{post.post_img.url}}" loading='lazy' class="post-img" alt="post image">
     </div>
     <h2 class="mt-4 text-center mx-4"><a class="post-h2-link" href="{% url 'post_detail' post.slug %}">{{post.title | title}}</a></h2>
     <div class="mt-3 mt-lg-4 text-center mx-lg-4 mx-sm-2 post-icons">
-        <p class=""><a href="{% url 'author' post.author.slug %}" class="mr-3 owner"><img class="owner-img mr-2" src="{{post.author.avatar.url}}" alt="author image">{{post.author.name}}
+        <p class=""><a href="{% url 'author' post.author.slug %}" class="mr-3 owner"><img class="owner-img mr-2" loading='lazy' src="{{post.author.avatar.url}}" alt="author image">{{post.author.name}}
             </a><br class="break-icons"/><i class="bi bi-calendar ml-2 mr-2"></i>{{post.created_at|date:'M. d, Y'}}<a class="comment-link ml-4 mr-2" href="{% url 'post_detail' post.slug %}#comments"><i class="bi bi-chat-dots mr-2"></i>{{post.comments.total|length}}</a><i class="bi bi-eye ml-3 mx-2"></i>{% get_hit_count for post %}
         
         </p>
@@ -66,14 +70,16 @@
 {% endif %}
 {% endblock contents %}
 {% block scripts %}
+<script src="{% static 'scripts/hilitor.js' %}"></script>
 <script>
-    let searched = "{{query}}"
-    if (searched !== "") {
-  	let text = document.getElementById("text").innerHTML;
-  	let re = new RegExp(searched,"g"); // search for all instances
-		let newText = text.replace(re, `<mark>${searched}</mark>`);
-		document.getElementById("text").innerHTML = newText;
-  }
+  
+  
+  var myHilitor; // global variable
+  window.addEventListener("DOMContentLoaded", function(e) {
+    word = "{{query}}"
+    myHilitor = new Hilitor("text"); // id of the element to parse
+    myHilitor.apply(word);
+  }, false);
 
 </script>
 {% endblock scripts %}

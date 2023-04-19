@@ -56,6 +56,7 @@ def home(request):
 
     data = cartdata(request)
     cartitems = data['cartitems']
+    carttotal = data['cartitems']
 
     user = User.objects.get(username="Quest")
     author = Author.objects.get(user=user)
@@ -67,7 +68,8 @@ def home(request):
         'recent_posts': recent_posts,
         'featured_post': featured_post,
         'cartitems': cartitems,
-        'author': author
+        'author': author,
+        "carttotal": carttotal
     })
 
 

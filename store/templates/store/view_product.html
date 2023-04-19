@@ -2,13 +2,21 @@
 {% load static %}
 {% block sublink %}<link rel="stylesheet" href="{% static 'store/styles/view_product.css' %}"> {% endblock sublink %}
 {% block title %}{{product.name}} | {% endblock title %}
+{% block cart %}
+<div id="cart-item-indicator" class="form-inline cart-item-indicator">
+    <a href="{% url 'cart' %}">
+        <img id="cart-icon" alt="cart-icon" src="{% static 'store/images/cart.png' %}">
+    </a>
+    <p id="cart-total">{{cartitems}}</p>
+</div>
+{% endblock cart %}
 {% block rowslider %}
 
 <section class="mx-lg-3 pt-lg-5 pb-5" data-aos="fade-up">
     <div class="container mt-5">
         <div class="row justify-content-center align-items-center mb-5">
             <div class="col-lg-5 col-md-6 mb-3">
-                <img src="{{product.image.url}}" class="w-100" alt="product image">
+                <img src="{{product.image.url}}" oading='lazy' class="w-100" alt="product image">
             </div>
             <div class="col-lg-3 col-md-5 product-details">
                 <p class="sale text-center">Sale</p>
@@ -38,7 +46,7 @@
                     <div class="d-flex justify-content-between">
                         <div class="d-flex customer align-items-center">
                             <div class="review-image-area mr-2">
-                                <img src="{{i.user.avatar.url}}" alt="customer image">
+                                <img src="{{i.user.avatar.url}}" loading='lazy' alt="customer image">
                             </div>
                             <div class="text-white name ms-3">
                                 <p>{{i.user.email}}</p>

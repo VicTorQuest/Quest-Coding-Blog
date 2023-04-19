@@ -1,27 +1,146 @@
 import random
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404, redirect
+from django.urls import reverse
+from django.utils.decorators import method_decorator
+from django.views.generic import FormView
 from hitcount.utils import get_hitcount_model
 from hitcount.views import HitCountMixin
-from .forms import CommentForm
-from .models import Post, FeaturedPost, Category, Comment, Author
 from store.utils import cartdata
+from .forms import CommentForm, CreatePostForm
+from .models import Post, Category, Comment, Author
+from .permissions import BlogpostApiPermission
+from .serializers import PostSerializer, CreatePostSerializer
 from .thread import SendThreadEmail
-from .serializers import PostSerializer
 from hitcount.models import HitCount
-from rest_framework import viewsets
+from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.response import Response
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
 from_this_email = getattr(settings, 'APPLICATION_EMAIL', "questcoding2001gmail.com")
+domain_name = getattr(settings, 'DOMAIN_NAME', 'questcoding.blog')
 User = get_user_model()
 user = User.objects.get(username="Quest")
 main_author = Author.objects.get(user=user)
-# Create your views here.
+
+@staff_member_required
+def create_blog_post(request):
+    all_posts = Post.objects.filter(status=Post.ACTIVE)
+    recent = list(all_posts)
+    recent_posts = recent[:3]
+    categories = Category.objects.all()
+
+
+    form = CreatePostForm()
+
+    if request.method == 'POST':
+        form = CreatePostForm(request.POST or None, request.FILES or None)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Blog post was successfully uploaded')
+            return redirect('create_blog_post')
+        else:
+            messages.success(request, 'Please fix the errors below')
+
+    return render(request, 'blog/create_post.html', {
+        'author': main_author,
+        'categories': categories,
+        'recent_posts': recent_posts,
+        'form': form
+    })
+
+
+decorators = [login_required, staff_member_required]
+@method_decorator(decorators, name='dispatch')
+class CreateBlogPost(FormView):
+    form_class = CreatePostForm
+    template_name = "blog/create_post.html"
+    success_url = 'create_blog_post'
+
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        all_posts = Post.objects.filter(status=Post.ACTIVE)
+        recent = list(all_posts)
+        recent_posts = recent[:3]
+        categories = Category.objects.all()
+        context['author'] = main_author
+        context['categories'] = categories
+        context['recent_posts'] = recent_posts
+        return context
+    
+    def form_invalid(self, form):
+        response = super(CreateBlogPost, self).form_invalid(form)
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse(form.errors, status=400)
+        else:
+            return response
+
+    
+    def form_valid(self, form):
+        response = super(CreateBlogPost, self).form_valid(form)
+        if self.request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            newpost = form.save()
+            post_url = domain_name + reverse('post_detail', kwargs={'slug': newpost.slug})
+            return JsonResponse({'post_url': post_url})
+        else:
+            return response
+
+@login_required
+@staff_member_required
+def create_post_api(request):
+    if request.method == 'POST' and request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        author_id = int(request.POST.get('author'))
+        author = Author.objects.get(id=author_id)
+        category = request.POST.get('category').split()
+        title = request.POST.get('title')
+        intro = request.POST.get('intro')
+        post_img = request.FILES.get('post_img')
+        content = request.POST.get('content')
+        
+        categories = [int(num) for num in category[0].split(',')]
+        
+        newpost = Post.objects.create(author=author,  title=title, intro=intro, post_img=post_img, content=content)
+        for i in categories:
+            category = Category.objects.get(id=i)
+            newpost.category.add(category)
+        newpost.save()
+
+        post_url = domain_name + reverse('post_detail', kwargs={'slug': newpost.slug})
+        
+    return JsonResponse({'message': 'Good', 'post_url': post_url})
+
+
+
+
+class CreatePostApi(CreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = CreatePostSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    authentication_classes = [SessionAuthentication]
+
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        # Get the created object from the response data
+        created_object = response.data
+        new_post = Post.objects.get(title=created_object['title'])
+        post_url = domain_name + reverse('post_detail', kwargs={'slug': new_post.slug})
+        # add the post url to the response
+        extra_data = {'post_url': post_url}
+        created_object.update(extra_data)
+        return Response(created_object, status=response.status_code)
+
+
+
+
 def post_detail(request, slug):
 
     all_posts = Post.objects.filter(status=Post.ACTIVE)
@@ -43,8 +162,20 @@ def post_detail(request, slug):
                 related_posts.append(i)
     related_posts = set(related_posts)
     
+    
     if post in related_posts:
         related_posts.remove(post)
+
+    related_posts = list(related_posts)
+    def reducerelated(post_list):
+        if len(post_list) <= 5:
+            return post_list
+        else:
+            post_list.pop()
+
+            return reducerelated(post_list)
+
+    final_related_posts = reducerelated(related_posts) 
     
     posts = list(all_posts)
     if post in posts:
@@ -99,7 +230,7 @@ def post_detail(request, slug):
         'post': post,
         'form': form,
         'posts': posts,
-        'related_posts': related_posts,
+        'related_posts': final_related_posts,
         'categories': categories,
         'recent_posts': recent_posts,
         'next_post': next_post,
@@ -180,7 +311,6 @@ def author(request, slug):
     data = cartdata(request)
     cartitems = data['cartitems']
 
-    print(author.user.username)
     return render(request, 'blog/author.html', {
         'all_authors_posts': all_authors_posts,
         'posts': posts,
@@ -216,10 +346,24 @@ def category(request, slug):
     })
 
 
-class blogposts(viewsets.ModelViewSet):
+class blogposts(ListAPIView):
     queryset = Post.objects.filter(status=Post.ACTIVE)
     serializer_class = PostSerializer
-    http_method_names = ['get']
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [BlogpostApiPermission]
+
+def testapi(request):
+    all_posts = Post.objects.filter(status=Post.ACTIVE)
+    categories = Category.objects.all()
+    recent = list(all_posts)
+    recent_posts = recent[:3]
+    return render(request, 'test_api.html', {
+        'author': main_author,
+        'categories': categories,
+        'recent_posts': recent_posts,
+    })
+    
+
 
 
 def search(request):

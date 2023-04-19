@@ -1,0 +1,114 @@
+.middle-content {
+    display: none;
+}
+
+.heading {
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+.btn-post {
+    background-color: var(--main-color);
+    transition: 0.35s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-post:hover {
+    background-color: white;
+}
+
+.hide-progress {
+    display: none;
+}
+
+br {
+    line-height: 0.5px;
+    margin-top: 0px;
+}
+
+.django-ckeditor-widget, #cke_id_content {
+    width: 100% !important;
+}
+
+
+.popular-posts {
+    display: none;
+}
+
+
+.recent-projects {
+    display: none;
+}
+
+
+.loader-sm {
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    position: relative;
+    border: 1px solid #121212;
+    animation: loader-sm 1.5s infinite ease;
+  }
+  
+  .loader-sm-inner {
+    vertical-align: top;
+    display: inline-block;
+    width: 100%;
+    background-color: #121212;
+    animation: loader-sm-inner 1.5s infinite ease-in;
+  }
+  
+  @keyframes loader-sm {
+    0% {
+      transform: rotate(0deg);
+    }
+    
+    25% {
+      transform: rotate(180deg);
+    }
+    
+    50% {
+      transform: rotate(180deg);
+    }
+    
+    75% {
+      transform: rotate(360deg);
+    }
+    
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes loader-sm-inner {
+    0% {
+      height: 0%;
+    }
+    
+    25% {
+      height: 0%;
+    }
+    
+    50% {
+      height: 100%;
+    }
+    
+    75% {
+      height: 100%;
+    }
+    
+    100% {
+      height: 0%;
+    }
+  }
+
+
+
+@media screen and (max-width:450px) {
+    .heading {
+        font-size: 26px;
+    }
+}

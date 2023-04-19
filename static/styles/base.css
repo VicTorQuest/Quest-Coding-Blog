@@ -1407,7 +1407,9 @@ hr {
     align-items: center;
     object-fit: cover;
     font-size: large;
-    background-color: var(--main-color-dark);
+    background-color: var(--main-color);
+    color: #121212;
+    font-weight: 500;
     height: 25px;
     width: 25px;
     border-radius: 100%;

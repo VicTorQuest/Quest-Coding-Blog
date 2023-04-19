@@ -23,15 +23,10 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include, re_path
 from mainapp.views import account, edit_account, address,recent_order, logout_page,contact, home, privacy_policy, refund_policy, robots_txt, terms, videos, customhandler404, customhandler403, customhandler500, RequestRefund, downloads, toggle_maintenance, maintenance_switch
 from blog.sitemaps import CategorySitemaps, PostSitemaps, CommentSiteMaps, AuthorSitemaps
-from blog.views import blogposts
 from mainapp.sitemaps import StaticViewSitmap
 from store.sitemaps import productSitmaps
-from store.views import product_files
-from rest_framework.routers import DefaultRouter
 sitemaps = {'static': StaticViewSitmap, 'posts': PostSitemaps, 'comments': CommentSiteMaps, 'categories':CategorySitemaps, 'authors': AuthorSitemaps, 'products': productSitmaps}
-router = DefaultRouter()
-router.register('files', product_files, basename='product_files')
-router.register('blogposts', blogposts, basename='blogposts')
+
 
 urlpatterns = [
     path('sitemap.xml/', sitemap, {'sitemaps': sitemaps}),
@@ -39,6 +34,7 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('admin/', admin.site.urls),
     path('', home, name='home'),
+    path('api/', include('rest_framework.urls')),
     path('contact/', contact, name='contact'),
     path('privacy-policy/', privacy_policy, name='privacy'),
     path('refund-policy', refund_policy, name='refund'),
@@ -56,7 +52,6 @@ urlpatterns = [
     path('my-account/downloads/', downloads, name='downloads'),
     path('my-account/orders/', recent_order, name='orders'),
     path('my-account/request-refund/', login_required(RequestRefund.as_view()) , name='request_refund'),
-    path('api/', include(router.urls)),
     path('toggle-maintenance/', toggle_maintenance, name='toggle_maintenance'),
      path('maintenance-switch/', maintenance_switch), 
     re_path(r"^maintenance-mode/", include("maintenance_mode.urls")),

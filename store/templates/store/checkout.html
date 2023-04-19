@@ -1,6 +1,11 @@
 {% extends 'store/main.html' %}
 {% load static %}
 {% block title %}Checkout | {% endblock title %}
+{% block loader %}
+    <div class="loader-wrapper">
+        <span class="loader"><span class="loader-inner"></span></span>
+    </div>
+{% endblock loader %}
 {% block rowslider %}
 <section class="mx-lg-3 pt-lg-5" data-aos="fade-up">
     <div class="my-5 mx-lg-3 m-lg-5 p-3 p-lg-5">
@@ -325,7 +330,7 @@
                         <tbody>
                             {% for item in items %}
                             <tr>
-                              <th scope="row"><img class="row-image" src="{{item.product.imageURL}}"></th>
+                              <th scope="row"><img class="row-image" loading='lazy' src="{{item.product.imageURL}}"></th>
                               <td>{{item.product.name}}</td>
                               <td>{{item.product.price|floatformat:2}}</td>
                               <td>x{{item.quantity}}</td>
@@ -351,7 +356,7 @@
 </section>
 {% endblock rowslider %}
 {% block addedscripts %}
-<script src="https://www.paypal.com/sdk/js?client-id=Ad6Ni3jklm8NmB5-ANjqJMMtIl0PczHUTfhGXq88QPbWtt2dh5HzGO3Vrl8YbMWF3shLjZR_EGDS8USI&currency=USD"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AdD0IwB4b0lTsR8yRnhhg1UclN83H0vUaigzUp63cgS4RejctP4kf8MEtcfXARctPAUQnCxvscsQ95ra&currency=USD"></script>
 
 <script>
     var total = '{{order.get_cart_total}}'
@@ -379,17 +384,10 @@
         // Finalize the transaction
         onApprove: function(data, actions) {
             return actions.order.capture().then(function(orderData) {
-                // Successful capture! For demo purposes:
-                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
                 var transaction = orderData.purchase_units[0].payments.captures[0];
                 form.transaction_id.value = transaction.id
                 submitFormData()
 
-                // Replace the above to show a success message within this page, e.g.
-                // const element = document.getElementById('paypal-button-container');
-                // element.innerHTML = '';
-                // element.innerHTML = '<h3>Thank you for your payment!</h3>';
-                // Or go to another URL:  actions.redirect('thank_you.html');
             });
         }
 
@@ -403,7 +401,6 @@
 
     form.addEventListener('submit', function(e){
         e.preventDefault()
-        console.log('form submitted....')
 
         document.getElementById('form-button').classList.add('hidden')
         document.getElementById('bottom-form-hr').classList.add('hidden')
@@ -415,7 +412,6 @@
     // })
 
     function submitFormData() {
-        console.log('payment button clicked')
 
         var userFormData = {
             'first_name': form.first_name.value,
@@ -448,7 +444,6 @@
 
         .then((response) => response.json())
         .then((data) => {
-            console.log('Success:', data)
             alert('Transaction completed')
 
             cart = {}

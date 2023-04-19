@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block link %}
+<link rel="stylesheet" href="{% static 'styles/terms.css' %}">
+<style>
+    .post-item {
+        line-height: 0.8rem !important;
+    }
+</style>
+{% endblock link %}
+{% block title %}Test api | {% endblock title %}
+{% block rowslider %}
+<section class="mx-lg-3 pt-lg-5">
+    <div class="my-5 mx-3 m-lg-5 post p-3 p-lg-5 full-post">
+        <h1 class="pb-3 mb-4 mb-lg-5 heading">Blog Posts</h1>
+        <div class="blog-posts" id="blog-posts">
+      
+            
+ 
+            
+            
+        </div>
+    </div>
+</section>
+{% endblock rowslider %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            url: '/blogposts/api/',
+            type: 'GET',
+            headers: {'Authorization': 'Token 1e051a6143c144500b8fe448c14b5e781fa4c8f2'},
+            success: function(response){
+                response.forEach(i => {
+                    $('#blog-posts').append(`<div class='post-item mb-3'><h5><a href='http://127.0.0.1:8000/${i.url}'>${i.title}</a></h5><small>${i.created_at}</small></div>`)
+                });
+                console.log(response)
+            },
+            error: function(response) {
+                console.log('nahh')
+            }
+        })
+    })
+</script>
+{% endblock scripts %}

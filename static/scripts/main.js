@@ -59,15 +59,6 @@ $(document).ready(function(){
                     var cartTemplate2 = "<p id='cart-total'>"+cartTotal+"</p>"
                     $('#cart-item-indicator:first').addClass('form-inline')
                     $('#cart-item-indicator').show()
-                    // if ($('#cart-item-indicator').length) {
-                    //     $('#cart-item-indicator').empty();
-                    //     $('#cart-item-indicator').append(cartTemplate, cartTemplate2);
-                    // }
-                    // else {
-                    //     console.log('adding cart item indicator')
-                    //     $('#cart-item-indicator').html(cartTemplate, cartTemplate2);
-                    //     console.log('cart item indicator added')
-                    // }                    
                     $('#cart-total').empty();
                     var temp=response.cartitems
                     $('#cart-total').append(temp);
@@ -79,7 +70,6 @@ $(document).ready(function(){
 
             },
             error: function(response){
-                console.log('error getting data')
             }
         })
     }, 2000);

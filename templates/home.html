@@ -4,17 +4,17 @@
 {% providers_media_js %}
 {% load hitcount_tags %}
 {% block link %}
-<link rel="stylesheet" href="{% static 'owlcarousel/dist/assets/owl.theme.default.min.css' %}">
 <link rel="stylesheet" href="{% static 'owlcarousel/dist/assets/owl.carousel.min.css' %}">
 {% endblock link %}
 
 {% block title %} Blog | {% endblock title %}
 
 
-{% block landing_page_content %}
-
-{% endblock landing_page_content %}
-
+{% block loader %}
+    <div class="loader-wrapper">
+        <span class="loader"><span class="loader-inner"></span></span>
+    </div>
+{% endblock loader %}
 
 
 {% block rowslider %}
@@ -28,20 +28,20 @@
             <div class="item mx-2">
                     <div class="card row-card h-100">
                         <div class="media-icons">
-                            {% if featured.post.author.name %}
-                            <a target="_blank" href="{{featured.post.author.name}}"><i class="bi bi-github"></i></a>
+                            {% if featured.github_link %}
+                            <a target="_blank" href="{{featured.github_link}}"><i class="bi bi-github"></i></a>
                             {% endif %}
                             {% if featured.youtube_link %}
                             <a target="_blank" href="{{featured.youtube_link}}"><i class="bi bi-youtube"></i></a>
                             {% endif %}
                         </div>
-                        <img class="card-img-top row-card" src="{{featured.post.post_img.url}}" alt="featured post image">
+                        <img class="card-img-top row-card" src="{{featured.post.post_img.url}}" loading='lazy' alt="featured post image">
                         <div class="card-body text-center row-card-bottom ">
                             <p class="mb-2 date"><i class="bi bi-calendar mr-2"></i>{{featured.post.created_at|date:'d. m, Y'}}</p>
                             <h4 class="card-title"><a href="{% url 'post_detail' featured.post.slug %}">{{featured.post.title}}</a></h4>
         
                             <a href="{% url 'author' featured.post.author.slug %}" class="d-flex align-items-center justify-content-center text-center mb-0 mt-3 name">
-                                <img class="owner-img mr-2" alt="author image" src="{{featured.post.author.avatar.url}}" alt="">
+                                <img class="owner-img mr-2" alt="author image" loading='lazy' src="{{featured.post.author.avatar.url}}" alt="">
                                 <p class="mr-2 mb-0">{{featured.post.author.name}}</p>
                             </a>
                         </div>
@@ -72,11 +72,11 @@
         
 
     <div class="post-img-area px-lg-2 pt-3 pt-lg-4 pb-0 shadow">
-        <img src="{{post.post_img.url}}" class="post-img pb-0" alt="post image">
+        <img src="{{post.post_img.url}}" loading='lazy' class="post-img pb-0" alt="post image">
     </div>
     <h2 class="mt-3 mt-lg-4 text-center mx-lg-4 mx-sm-2"><a class="post-h2-link" href="{% url 'post_detail' post.slug %}">{{post.title | title}}</a></h2>
     <div class="post-icons text-center mt-3">
-        <p class=""><a href="{% url 'author' post.author.slug %}" class="mr-3 owner"><img class="owner-img mr-2" alt="author image" src="{{post.author.avatar.url}}" alt="">{{post.author.name}}</a><br class="break-icons"/><i class="bi bi-calendar ml-2 mr-2"></i>{{post.created_at|date:'d M Y'}}<a class="comment-link ml-4 mr-2" href="{% url 'post_detail' post.slug %}#comments"><i class="bi bi-chat-dots mr-2"></i>{{post.comments.total|length}}</a><i class="bi bi-eye ml-3 mx-2"></i>{% get_hit_count for post %}
+        <p class=""><a href="{% url 'author' post.author.slug %}" class="mr-3 owner"><img class="owner-img mr-2" alt="author image" loading='lazy' src="{{post.author.avatar.url}}" alt="">{{post.author.name}}</a><br class="break-icons"/><i class="bi bi-calendar ml-2 mr-2"></i>{{post.created_at|date:'d M Y'}}<a class="comment-link ml-4 mr-2" href="{% url 'post_detail' post.slug %}#comments"><i class="bi bi-chat-dots mr-2"></i>{{post.comments.total|length}}</a><i class="bi bi-eye ml-3 mx-2"></i>{% get_hit_count for post %}
         
         </p>
     </div>
@@ -111,6 +111,7 @@
 <script src="{% static 'owlcarousel\dist\owl.carousel.min.js' %}"></script>
 <script>
     $('.owl-carousel').owlCarousel({
+    navigation : true,
     loop:true,
     margin:10,
     nav:true,
