@@ -16,7 +16,6 @@ class PostForm(forms.ModelForm):
 
         def clean_category(self):
             category =  self.cleaned_data['category']
-            print(category)
             if category.count() > 3:
                 raise ValidationError(_("You can't assign more than 3 categories"))
             return category
@@ -40,7 +39,6 @@ class CommentForm(forms.ModelForm):
     def clean_name(self):
         value = self.cleaned_data['name']
         bad_words = profanity.contains_profanity(value)
-        print(bad_words)
         if bad_words:
             raise ValidationError(_("the use of profanity is prohibited in this platform"))
         updated_value = profanity.censor(value)
@@ -50,7 +48,6 @@ class CommentForm(forms.ModelForm):
     def clean_body(self):
         value = self.cleaned_data['body']
         bad_words = profanity.contains_profanity(value)
-        print(bad_words)
         if bad_words:
             raise ValidationError(_("the use of profanity is prohibited in this platform"))
         updated_value = profanity.censor(value)

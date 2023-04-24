@@ -16,14 +16,13 @@
 
 
 {% block rowslider %}
-<br>
-<section class="tag-headerblock container-post mt-5 mb-4 mb-lg-0"
-    <div class="p-5 tag-header text-center">
+<section class="container-post mt-5 mb-lg-0">
+    <div class="pt-4 pb-2 px-2 text-center">
         <div class="author-img-area text-center">
             <img src="{{author.avatar.url}}" alt="{{author.name}}'s profile image">
         </div>
-        <h1 class="text-white text-center font-weight-bold mt-3">{{author.name|title}}</h1>
-        <h3 class="text-center text-light">{{author.bio}}</h3>
+        <h1 class="text-white text-center font-weight-bold mt-3 author-name">{{author.name|title}}</h1>
+        <h3 class="text-center text-light author-bio">{{author.bio}}</h3>
         <div class="author-meta d-flex justify-content-center align-items-center">
             <div class="author-location" data-test-label="author-location">
                 <i>{{author.location|title}}</i>
@@ -53,7 +52,7 @@
                 <a href="{{author.youtube}}" target="_blank" class=""><i class="bi bi-youtube"></i></a>
                 {% endif %}
                 {% if author.portifolio %}
-                <a href="{{author.portifolio}}" target="_blank" class=""><i class="bi bi-globe"></i></a>
+                <a href="{{author.portifolio}}" target="_blank" class="pr-0"><i class="bi bi-globe"></i></a>
                 {% endif %}
             </div>
         </div>

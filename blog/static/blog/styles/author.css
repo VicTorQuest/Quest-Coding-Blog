@@ -112,6 +112,18 @@
         display: none;
     }
 
+
+    .author-name {
+        font-weight: normal;
+        font-size: 32px;
+    }
+
+
+    .author-bio {
+        font-weight: normal;
+        font-size: 18px;
+    }
+
     .author-posts h2 {
         font-size: 18px;
     }

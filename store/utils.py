@@ -58,18 +58,11 @@ def cartdata(request):
     return {'cartitems': cartitems, 'order': order, 'items': items, 'customer': customer, 'carttotal': carttotal}
 
 def guestorder(request, data):
-    print('User is not logged in')
-    print('Cookies:', request.COOKIES)
     name = "{} {}".format(data['form']['first_name'], data['form']['last_name'])
     email = data['form']['email']
-    print ('credentials gotten')
-
     cookiedata = cookiecart(request)
     items = cookiedata['items']
-
-    print('checking customer')
     customer, created = Customer.objects.get_or_create(email=email, )
-    print('customer resolved')
     customer.name = name
     customer.save()
 

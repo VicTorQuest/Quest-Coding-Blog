@@ -1,11 +1,13 @@
 import random
+import time
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth import get_user_model
 from django.contrib import messages
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
+from django.core import serializers
 from django.core.paginator import Paginator
-from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404, redirect
 from django.urls import reverse
@@ -24,6 +26,7 @@ from rest_framework.generics import ListAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from django.template.defaultfilters import register
 
 from_this_email = getattr(settings, 'APPLICATION_EMAIL', "questcoding2001gmail.com")
 domain_name = getattr(settings, 'DOMAIN_NAME', 'questcoding.blog')
@@ -367,20 +370,28 @@ def testapi(request):
 
 
 def search(request):
+    q = request.GET.get('query', '')
+    if q != "" or None:
+        vector = SearchVector('title', weight='A') + \
+            SearchVector('intro', weight='B') + \
+                SearchVector('content', weight='C') + \
+                    SearchVector('author__name', weight='D') 
+        # vector = SearchVector('title', 'intro', 'content', 'author__name')
+        query = SearchQuery(q)
+        # posts = Post.objects.filter(status=Post.ACTIVE).filter(Q(title__icontains=query) | Q(intro__icontains=query) | Q(content__icontains=query) | Q(author__name__icontains=query))
+        posts = Post.objects.annotate(rank=SearchRank(vector, query, cover_density=True)).filter(rank__gte=0.001).order_by('-rank').filter(status=Post.ACTIVE)
+        # posts = Post.objects.annotate(search=vector).filter(search=query)
+    else:
+        posts = []    
+        
     all_posts = Post.objects.filter(status=Post.ACTIVE)
+    categories = Category.objects.all()
     
     recent = list(all_posts)
-    recent_posts = recent[:3]
-    query = request.GET.get('query', '')
-    
-
-    categories = Category.objects.all()
-
-    posts = Post.objects.filter(status=Post.ACTIVE).filter(Q(title__icontains=query) | Q(intro__icontains=query) | Q(content__icontains=query) | Q(author__name__icontains=query))
+    recent_posts = recent[:3]   
     this_page = Paginator(posts, 4)
     page = request.GET.get("page")
     current_page = this_page.get_page(page)
-
 
 
     hitcount = HitCount.objects.order_by('-hits')[:3]
@@ -389,10 +400,41 @@ def search(request):
         popular_posts.append(get_object_or_404(Post, pk=i.object_pk))
     return render(request, 'blog/search.html', {
         'posts': posts,
-        'query': query,
+        'query': q,
         'categories': categories,
         'recent_posts': recent_posts,
         'current_page': current_page,
         'popular_posts': popular_posts,
         'author': main_author
     })
+
+
+def search_query(request):
+    q = request.GET.get('query', '')
+    if q != "" or None:
+        vector = SearchVector('title', weight='A') + \
+            SearchVector('intro', weight='B') + \
+                SearchVector('content', weight='C') + \
+                    SearchVector('author__name', weight='D') 
+        query = SearchQuery(q)
+        posts = Post.objects.annotate(rank=SearchRank(vector, query, cover_density=True)).filter(rank__gte=0.001).order_by('-rank').filter(status=Post.ACTIVE)
+        post_data = []
+        for post in posts:
+            item = {
+                'title': post.title,
+                'author': post.author.name,
+                'author_url': post.author.get_absolute_url(),
+                'author_img': post.author.avatar.url,
+                'category': [i.title for i in post.category.all()],
+                'category_url': [i.get_absolute_url() for i in post.category.all()],
+                'intro': post.intro,
+                'post_img': post.post_img.url,
+                'post_url': post.get_absolute_url(),
+                'date': post.created_at.date().strftime('%b  %d, %Y'),
+                'total_comments': Comment.objects.total().filter(post=post).count(),
+                'hitcount': get_hitcount_model().objects.get_for_object(post).hits
+            }
+            post_data.append(item)
+        return JsonResponse({'posts': post_data, 'query': q})
+    else:
+        return JsonResponse({'query': q})

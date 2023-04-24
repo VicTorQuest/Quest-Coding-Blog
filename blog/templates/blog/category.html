@@ -6,7 +6,7 @@
 
 
 {% block rowslider %}
-<section class="tag-headerblock container-post mb-4 mb-lg-0" data-aos="fade-up">
+<section class="tag-headerblock container-post mb-5 mb-lg-0" data-aos="fade-up">
     <div class="p-5 tag-header">
         <div class="tag-icon">
             <i class="bi bi-tag"></i>
@@ -14,11 +14,13 @@
         <h2 class="text-white font-weight-bold mt-3">{{category.title}}</h2>
     </div>
 </section>
-<div class="rowslider-container mb-5">
-    <div class="row tag-contents card-deck">
+
+
+<div class="rowslider-container">
+    <div class="row mx-0">
         {% for post in posts %}
-        <div class="col-lg-4 col-sm-6 mb-4 px-3">
-            <div class="card row-card h-100">
+        <div class="col-lg-4 col-sm-6 mb-5">
+            <div class="card h-100">
                 
                 <div class="tag-icons">
                     {% for i in post.category.all %}
@@ -26,24 +28,18 @@
                     {% endfor %}
                 </div>
                
-                <img class="card-img-top row-card" loading='lazy' src="{{post.post_img.url}}" alt="post image">
-                <div class="card-body text-center row-card-bottom pb-0">
+                <img class="card-img-top" loading='lazy' src="{{post.post_img.url}}" alt="post image">
+                <div class="card-body text-center pb-0">
                     <p class="mx-3 mb-3 font-weight-normal"><i class="bi bi-calendar mr-2"></i>{{post.created_at|date:'M d, Y'}}</p>
                     <h4 class="card-title"><a href="{% url 'post_detail' post.slug %}">{{post.title}}</a></h4>
 
                     <p class="font-weight-normal">{{post.intro|slice:90|add:'....'}}</p>
-
-                    
-                    
                 </div>
+                
                 <div class="post-icons text-center card-footer border-light text-white p-0 py-3">
-                    <hr class="mb-3 px-0">
-                    <p class="mx-3 p-0 mb-0"><a href="{% url 'author' post.author.slug %}"><img class="owner-img mr-2" loading='lazy' src="{{post.author.avatar.url}}" alt="author image">{{post.author.name}}
-                        </a>
-                    </p>
-                    <p class="mx-3 mb-0"><a class="comment-link" href="{% url 'post_detail' post.slug %}#comments"><i class="bi bi-chat-dots mr-2"></i>{{post.comments.total|length}}</a>
-                    </p>
-                    <p class="mx-3 mb-0"><i class="bi bi-eye mr-2"></i>{% get_hit_count for post %}</p>
+                    <a href="{% url 'author' post.author.slug %}"><img class="owner-img mr-2" loading='lazy' src="{{post.author.avatar.url}}" alt="author image">{{post.author.name}}</a>
+                    <a class="comment-link ml-2" href="{% url 'post_detail' post.slug %}#comments"><i class="bi bi-chat-dots mr-2"></i>{{post.comments.total|length}}</a>
+                    <span class="ml-2 mb-0"><i class="bi bi-eye mr-2"></i>{% get_hit_count for post %}</span>
                 </div>
             </div>
         </div>
@@ -52,9 +48,6 @@
             <h3 class="text-white">There are no posts for this category...<i class="bi bi-emoji-dizzy"></i></h3>
         </div>
         {% endfor %}
-    </div>  
-
-    
-        
+    </div> 
 </div>
 {% endblock rowslider %}

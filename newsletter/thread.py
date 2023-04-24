@@ -14,10 +14,7 @@ class EmailThreading(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-        print('sending to {}.....'.format(self.email.to[0]))
         self.email.send(fail_silently=True)
-        print('email sent')
-
 
 class SendNewsLetter(threading.Thread):
     def __init__(self, obj, email_list):

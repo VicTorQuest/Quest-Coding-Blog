@@ -214,20 +214,18 @@ input {
                 success: function(response) {
                     $('.message').empty()
                     if (response.mode == 'On') {
-                        console.log(response.mode)
                         $('.message').html(`<div class='alert alert-success' role='alert'>${response.message}</div>`)
                         $('#check').prop('checked', true)
                         return
                     }
                     else {
-                        console.log(response.mode)
                         $('.message').html(`<div class='alert alert-secondary' role='alert'>${response.message}</div>`)
                         $('#check').prop('checked', false)
                         return
                     }
                 },
                 error: function(response) {
-                    console.log(response.mode)
+                    $('.message').html(`<div class='alert alert-success' role='alert'>${response}</div>`)
                 }
                 
             })

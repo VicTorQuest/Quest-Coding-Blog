@@ -7,11 +7,6 @@
 <link rel="stylesheet" href="{% static 'styles/account.css' %}">
 {% endblock link %}
 {% block title %}My account | {% endblock title %}
-{% block loader %}
-    <div class="loader-wrapper">
-        <span class="loader"><span class="loader-inner"></span></span>
-    </div>
-{% endblock loader %}
 {% block contents %}
 <div class="col-md-12 mb-0 post p-3 pb-4 my-4 my-lg-0 mb-5 p-lg-5 full-post">
     <h1 class="pb-4 mb-5 heading">My account</h1>
@@ -46,8 +41,8 @@
             <form action="" class="userform" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="form_type" value="login" >
-                <input type="text" required class="form-input" placeholder="Username or email" name="username">
-                <input type="password" required id="login-password-field" class="form-input" name="password" placeholder="Password">
+                <input type="text" required class="form-input" placeholder="Username or email" autocomplete="" name="username">
+                <input type="password" required id="login-password-field" class="form-input" name="password"  autocomplete="current-password" placeholder="Password">
                 <div class="toggle-login-password-area pr-5">
                     <div class="toggle-login-password">
                         <i class="bi bi-eye"></i>
@@ -67,9 +62,9 @@
             <form id="registerform" action="" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="form_type" value="register" >
-            <input type="text" required class="form-input" placeholder="Username" name="username">
-            <input type="email" required class="form-input" placeholder="Email" name="email">
-            <input type="password" required class="form-input regpassword" id="password-field" name="password" placeholder="Password">
+            <input type="text" required class="form-input" placeholder="Username" autocomplete="username" name="username">
+            <input type="email" required class="form-input" placeholder="Email" autocomplete="email" name="email">
+            <input type="password" required class="form-input regpassword" id="password-field" autocomplete="new-password" name="password" placeholder="Password">
             <div class="toggle-password-area pr-5">
                 <div class="toggle-password">
                     <i class="bi bi-eye"></i>

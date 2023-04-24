@@ -22,7 +22,6 @@ def validate_subscriber_email(value):
 
 def restrict_vulger_words(value):
     bad_words = profanity.contains_profanity(value)
-    print(bad_words)
     if bad_words:
         raise ValidationError(_("the use of profanity is prohibited in this platform"))
     return value

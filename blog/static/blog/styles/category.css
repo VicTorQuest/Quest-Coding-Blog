@@ -72,6 +72,20 @@
 .empty {
     justify-content: center;
     align-items: center;
-    align-self: center;
     align-content: center;
+}
+
+@media screen and (max-width: 480px) {
+    .tag-icon {
+        width: 58px;
+        height: 58px;
+    }
+
+    .tag-header i {
+        font-size: 30px;
+    }
+
+    .tag-headerblock h2 {
+        font-size: 22px;
+    }
 }

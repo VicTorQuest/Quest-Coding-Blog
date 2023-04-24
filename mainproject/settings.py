@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
+    'django.contrib.postgres',
     
     #all auth app config
     'django.contrib.sites',
@@ -247,7 +248,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 SITE_ID = 2
-LOGIN_REDIRECT_URL = '/my-account/'
+LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/my-account'
 # Provider specific settings
 ACCOUNT_LOGOUT_REDIRECT_URL = 'my_account'
@@ -390,7 +391,7 @@ RECAPTCHA_REQUIRED_SCORE = 0.85
 
 
 MAINTENANCE_MODE_IGNORE_ADMIN_SITE = True
-MAINTENANCE_MODE_IGNORE_URLS = ['/toggle-maintenance/', '/getting_cart_total/', '/maintenance-switch/']
+MAINTENANCE_MODE_IGNORE_URLS = ['/toggle-maintenance/', '/maintenance-switch/']
 
 
 if DEBUG:

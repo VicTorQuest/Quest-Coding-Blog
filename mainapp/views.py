@@ -510,7 +510,6 @@ def customhandler404(request, exception):
 def customhandler403(request, exception=None):
     categories = Category.objects.all()
     posts = Post.objects.filter(status=Post.ACTIVE)
-    print(categories)
     recent = list(posts)
     recent_posts = recent[:3]
     return render(request, '403.html', {

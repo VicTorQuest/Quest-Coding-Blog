@@ -122,3 +122,9 @@ ul {
 .recent-projects {
     display: none;
 }
+
+@media screen and (max-width: 480px) {
+    .heading {
+        font-size: 26px;
+    }
+}

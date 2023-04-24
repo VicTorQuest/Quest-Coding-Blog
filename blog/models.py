@@ -117,8 +117,8 @@ class Post(models.Model):
 
 class FeaturedPost(models.Model):
     post = models.OneToOneField(Post, on_delete=models.CASCADE, blank=False, unique=True)
-    github_link = models.URLField()
-    youtube_link = models.URLField()
+    github_link = models.URLField(null=True, blank=True)
+    youtube_link = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return self.post.title

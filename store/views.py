@@ -138,14 +138,11 @@ def getting_cart_items(request):
 
 def rating_product(request):
     if request.method == 'POST':
-        print(request.POST)
         rating = request.POST.get('rating')
         comment = request.POST.get('review')
         product_id = request.POST.get('product_id')
         product = Product.objects.get(id=product_id)
-        print('getting review')
         review, created =  Review.objects.get_or_create(product=product, user=request.user)
-        print('saving review')
         review.review = comment
         review.rating = rating
         review.save()
