@@ -136,21 +136,21 @@ br {
 
 }
 
-.quantity{
-	display: inline-block;
-	font-weight: 700;
-	padding-right:10px;
-	
-
+.quantity {
+    float: right;
 }
 
 .chg-quantity{
-    height: 14px;
-	width: 12px;
 	cursor: pointer;
-	display: block;
-	margin-top: 5px;
 	transition:.1s;
+} 
+
+.bi-plus-square{
+    color: #0bdf80;
+}
+
+.bi-dash-square {
+    color: #fd99a1;
 }
 
 .chg-quantity:hover{

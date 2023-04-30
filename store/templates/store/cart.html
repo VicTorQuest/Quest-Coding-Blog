@@ -47,10 +47,10 @@
                               <td>{{item.product.name}}</td>
                               <td>{{item.product.price|floatformat:2}}</td>
                               <td>
-                                <p class="quantity" id="quantity-{{item.product.id}}">{{item.quantity}}</p>
+                                <span id="quantity-{{item.product.id}}">{{item.quantity}}</span>
                                 <div class="quantity">
-                                    <i data-product="{{item.product.id}}" data-action="add" class="bi bi-caret-up-fill chg-quantity update-cart m-0 p-0"></i>
-                                    <i data-product="{{item.product.id}}" data-action="remove" class="bi bi-caret-down-fill chg-quantity update-cart m-0 p-0"></i>
+                                    <i data-product="{{item.product.id}}" data-action="add" class="bi bi-plus-square chg-quantity update-cart m-0 p-0"></i>
+                                    <i data-product="{{item.product.id}}" data-action="remove" class="bi bi-dash-square chg-quantity update-cart m-0 p-0"></i>
                                 </div>
                               </td>
                               <td style="flex: 1;" id="price-{{item.product.id}}">${{item.get_total|floatformat:2}}</td>
@@ -108,13 +108,26 @@ $(document).ready(function(){
               
                 $('#displayCartItems').empty();
                 for (var item in response.items) {
-                    var tempbody = "<tr><th scope='row'><img src="+response.items[item].product.imageURL+" alt='item-img' class='row-image'></th><td>"+response.items[item].product.name+"</td><td>"+response.items[item].product.price+"</td><td><p class='quantity'>"+response.items[item].quantity+"</p> <div class='quantity'><i data-product="+response.items[item].product.id+" data-action='add' class='bi bi-caret-up-fill chg-quantity update-cart m-0 p-0'></i> <i data-product="+response.items[item].product.id+" data-action='remove' class='bi bi-caret-down-fill chg-quantity update-cart m-0 p-0'></i> </div> </td><td style='flex: 1;'>$"+response.items[item].get_total+"</td></tr>"
+                    var tempbody = "<tr><th scope='row'><img src="+response.items[item].product.imageURL+" alt='item-img' class='row-image'></th><td>"+response.items[item].product.name+"</td><td>"+response.items[item].product.price+"</td><td><span>"+response.items[item].quantity+"</span> <div class='quantity'><i data-product="+response.items[item].product.id+" data-action='add' class='bi bi-plus-square chg-quantity update-cart m-0 p-0'></i> <i data-product="+response.items[item].product.id+" data-action='remove' class='bi bi-dash-square chg-quantity update-cart m-0 p-0'></i> </div> </td><td style='flex: 1;'>$"+response.items[item].get_total+"</td></tr>"
                     $('#displayTable').append(tempbody)
                     if (response.items[item].quantity <= 0) {
                         $('#displayCartItems').empty();
                     }
                 }
                 updatItem()
+
+                if (response.cartitems > 0) {
+                    var cartTemplate = "<a href="+cartUrl+">"+"<img id='cart-icon' src='/static/store/images/cart.png'></a>"
+                    var cartTemplate2 = "<p id='cart-total'>"+cartTotal+"</p>"
+                    $('#cart-item-indicator:first').addClass('form-inline')
+                    $('#cart-item-indicator').show()
+                    $('#cart-total').empty();
+                    var temp=response.cartitems
+                    $('#cart-total').append(temp);
+                }else {
+                    $('#cart-item-indicator').hide()
+                    // $('#cart-item-indicator').remove();
+                }
             },
             error: function(response) {
             }
@@ -124,8 +137,3 @@ $(document).ready(function(){
 })
 </script>
 {% endblock addedscripts %}
-
-
-
-
-

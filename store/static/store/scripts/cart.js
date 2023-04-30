@@ -1,5 +1,6 @@
 var updateBtns = document.getElementsByClassName('update-cart')
 
+
 for (var i = 0; i < updateBtns.length; i++) {
     updateBtns[i].addEventListener('click', function() {
         var productId = this.dataset.product
@@ -11,8 +12,7 @@ for (var i = 0; i < updateBtns.length; i++) {
         
 
         if (user == 'AnonymousUser') {
-            addCookieItem(productId, action)
-            this.innerHTML = "Add to Cart"
+            addCookieItem(productId, action, this)
         }
         else {
             $.ajax({
@@ -23,6 +23,22 @@ for (var i = 0; i < updateBtns.length; i++) {
                 success: function(data){
                     thisBtn[0].innerHTML = "Add to Cart"
                     thisBtn[0].style.pointerEvents = ""
+                    if ($("#product-quantity").length) {
+                        $("#product-quantity").val(data.quantity) 
+                    }
+
+                    if (data.cartitems > 0) {
+                        var cartTemplate = "<a href="+cartUrl+">"+"<img id='cart-icon' src='/static/store/images/cart.png'></a>"
+                        var cartTemplate2 = "<p id='cart-total'>"+cartTotal+"</p>"
+                        $('#cart-item-indicator:first').addClass('form-inline')
+                        $('#cart-item-indicator').show()
+                        $('#cart-total').empty();
+                        var temp=data.cartitems
+                        $('#cart-total').append(temp);
+                    }else {
+                        $('#cart-item-indicator').hide()
+                        // $('#cart-item-indicator').remove();
+                    }
                 }
             })
         }
@@ -30,12 +46,17 @@ for (var i = 0; i < updateBtns.length; i++) {
 }
 
 
-function addCookieItem(productId, action) {
+function addCookieItem(productId, action, btn) {
+    prodQuantity = document.getElementById('product-quantity')
     if (action == 'add') {
         if (cart['items'][productId] === undefined ) {
             cart['items'][productId] = {'quantity': 1}
         }else {
             cart['items'][productId]['quantity'] += 1
+        }
+        if (typeof(prodQuantity) != 'undefined' && prodQuantity != null) {
+            console.log('yes')
+            prodQuantity.value = cart['items'][productId]['quantity']
         }
     }
 
@@ -47,5 +68,24 @@ function addCookieItem(productId, action) {
         }
     }
     document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
-    // location.reload()
+    btn.innerHTML = "Add to Cart"
+    btn.style.pointerEvents = ''
+    cartIndicator = document.getElementById("cart-item-indicator")
+    cartTotal = document.getElementById('cart-total')
+    var totalitems = 0
+    for([key, val] of Object.entries(cart['items'])) {
+        totalitems += val['quantity']
+      }
+        
+    if (totalitems > 0) {
+        var cartTemplate = "<a href="+cartUrl+">"+"<img id='cart-icon' src='/static/store/images/cart.png'></a>"
+        var cartTemplate2 = "<p id='cart-total'>"+cartTotal+"</p>"
+        cartIndicator.classList = "form-inline cart-item-indicator"
+        cartIndicator.style.display = 'flex'
+        cartTotal.innerHTML = ""
+        cartTotal.innerHTML = totalitems 
+    }else {
+        $('#cart-item-indicator').hide()
+        // $('#cart-item-indicator').remove();
+    }
 }

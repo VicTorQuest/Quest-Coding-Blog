@@ -235,16 +235,14 @@ input {
     display: flex;
     justify-content: center;
     align-items: center;
-    align-content: center;
     width: 44px;
     height: 44px;
-    border-radius: 50px;
-    background-color: var(--main-color);
+    border-radius: 50%;
+    transition: all 0.35 ease;
 }
 
 .share-icons .facebook {
     background-color: #135cb6;
-    transition: all 0.35 ease;
 }
 
 .share-icons .facebook:hover {
@@ -253,7 +251,6 @@ input {
 
 .share-icons .twitter {
     background-color: #00aced;
-    transition: all 0.35 ease;
 }
 
 .share-icons .twitter:hover {
@@ -262,6 +259,11 @@ input {
 
 .share-icons i {
     font-size: 18px;
+}
+
+.share-icons i::before {
+    margin: 0px;
+    padding: 0px;
 }
 
 .sub-categories a {
@@ -279,7 +281,6 @@ input {
 
 .share-icons .reddit {
     background-color:#ff5700;
-    transition: all 0.35 ease;
 }
 
 .share-icons .reddit:hover {
@@ -288,7 +289,6 @@ input {
 
 .share-icons .telegram {
     background-color:#0088cc;
-    transition: all 0.35 ease;
 }
 
 
@@ -298,7 +298,6 @@ input {
 
 .share-icons .whatsapp {
     background-color:#1fb381;
-    transition: all 0.35 ease;
 }
 
 .share-icons .whatsapp:hover {
@@ -446,10 +445,9 @@ input {
         display: flex;
         justify-content: center;
         align-items: center;
-        align-content: center;
         width: 35px;
         height: 35px;
-        border-radius: 50px;
+        border-radius: 50%;
         background-color: var(--main-color);
     }
 

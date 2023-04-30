@@ -58,36 +58,5 @@ $(document).ready(function(){
     $("#searchSm").click(function () {
         $(".search-box").toggle();
         $("input[type='search']").focus();
-    });
-
-    setInterval(function(){
-        $.ajax({
-            type: 'GET',
-            url: '/getting_cart_total/',
-            success: function(response){
-          
-                
-
-                if (response.cartitems > 0) {
-                    var cartTemplate = "<a href="+cartUrl+">"+"<img id='cart-icon' src='/static/store/images/cart.png'></a>"
-                    var cartTemplate2 = "<p id='cart-total'>"+cartTotal+"</p>"
-                    $('#cart-item-indicator:first').addClass('form-inline')
-                    $('#cart-item-indicator').show()
-                    $('#cart-total').empty();
-                    var temp=response.cartitems
-                    $('#cart-total').append(temp);
-                }else {
-                    $('#cart-item-indicator').hide()
-                    // $('#cart-item-indicator').remove();
-                }
-
-
-            },
-            error: function(response){
-            }
-        })
-    }, 2000);
-
-    
-    
+    });    
 })

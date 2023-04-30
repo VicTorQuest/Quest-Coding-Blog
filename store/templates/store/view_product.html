@@ -34,7 +34,7 @@
                 </div>
                 <p class="product-price">USD ${{product.price}}</p>
                 <label for="">Quantity: </label>
-                <input type="text" readonly id="product-quantity" value="{{current_item.quantity}}">
+                <input type="text" readonly id="product-quantity" value="{% if request.user.is_authenticated %}{{current_item.quantity}}{% else %}{% endif %}">
                 <button id="update-cart" data-product={{product.id}} data-action="add" class="btn add-btn update-cart">Add to cart</button>
             </div>
         </div>
@@ -107,10 +107,20 @@
 {% block addedscripts %}
 <script src="{% static 'store/scripts/rating.js' %}"></script>
 <script>
-    var product_id = parseInt("{{product.id}}")
+    $(document).ready(function() {
+    if (user == 'AnonymousUser') {
+        var product_id = parseInt("{{product.id}}")
+        if (cart['items'][product_id]) {
+            $('#product-quantity').val(cart['items'][product_id]['quantity'])
+        } else {
+            $('#product-quantity').val(0)
+        }
+    }
+})
+    
     
 </script>
-<script src="{% static 'store/scripts/items.js' %}"></script>
+<!-- <script src="{% static 'store/scripts/items.js' %}"></script> -->
 {% endblock addedscripts %}
 
 

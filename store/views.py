@@ -1,20 +1,16 @@
 import boto3
-from botocore.client import Config
-from botocore import UNSIGNED
-import time
 import json
 import os
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, JsonResponse, FileResponse, HttpResponseRedirect
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from blog.models import Category, Post, Author
 from hitcount.models import HitCount
-from .models import Customer, Order, OrderItem, Product, BillingAddress, Review, Download
+from .models import Order, OrderItem, Product, BillingAddress, Review, Download
 from .serializers import ProductSerializer
-from .utils import cookiecart, cartdata, guestorder
+from .utils import cartdata, guestorder
 from rest_framework import viewsets
 from django_countries import countries
 
@@ -250,16 +246,21 @@ def updateitem(request):
         product = Product.objects.get(id=productId)
         order, created = Order.objects.get_or_create(customer=customer, completed=False)
         orderitem, created = OrderItem.objects.get_or_create(product=product, order=order)
-        time.sleep(1)
         if action == 'add':
             orderitem.quantity = orderitem.quantity + 1
         elif action == 'remove':
             orderitem.quantity = orderitem.quantity - 1
         
         orderitem.save()
+        data = cartdata(request)
+        cartitems = data['cartitems']
         if orderitem.quantity <= 0:
             orderitem.delete()
-    return HttpResponse("Item was {} successfuly!!!!".format(action+'ed'))
+        return JsonResponse({'quantity': orderitem.quantity, 'cartitems': cartitems})
+    else:
+        data = cartdata(request)
+        cartitems = data['cartitems']
+        return JsonResponse({'cartitems': cartitems})
 
 def processorder(request):
     if request.method == 'POST':
@@ -359,7 +360,7 @@ def download_file(request, id, order_id):
             return response
         except:
             messages.error(request, "Trasaction was unauthorized")
-            return False
+            return HttpResponse('Payment required', status=402)
     else:
         messages.error(request, "Trasaction was unauthorized")
-        return False
+        return HttpResponse('Payment required', status=402)
