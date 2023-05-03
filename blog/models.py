@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.postgres.indexes import GinIndex
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
@@ -90,16 +91,8 @@ class Post(models.Model):
     last_modified = models.DateTimeField(auto_now=True, null=True)
     status = models.CharField(max_length=10, choices=CHOICES_STATUS, default=ACTIVE)
 
-    class Meta:
-        ordering = ('-created_at',)
-
     def __str__(self):
         return self.title
-
-    # def clean(self, *args, **kwargs):
-    #     if self.id and self.category.count() > 3:
-    #         raise ValidationError({'category': _("You can't assign more than 3 categories")})
-    #     super(Post, self).clean(*args, **kwargs)
 
     
     def get_absolute_url(self):

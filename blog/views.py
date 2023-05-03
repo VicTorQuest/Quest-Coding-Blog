@@ -417,24 +417,25 @@ def search_query(request):
                 SearchVector('content', weight='C') + \
                     SearchVector('author__name', weight='D') 
         query = SearchQuery(q)
-        posts = Post.objects.annotate(rank=SearchRank(vector, query, cover_density=True)).filter(rank__gte=0.001).order_by('-rank').filter(status=Post.ACTIVE)
+        posts = Post.objects.annotate(rank=SearchRank(vector, query, cover_density=True)).filter(rank__gte=0.001).order_by('-rank').filter(status=Post.ACTIVE).explain(analyze=True)
+        print(posts)
         post_data = []
-        for post in posts:
-            item = {
-                'title': post.title,
-                'author': post.author.name,
-                'author_url': post.author.get_absolute_url(),
-                'author_img': post.author.avatar.url,
-                'category': [i.title for i in post.category.all()],
-                'category_url': [i.get_absolute_url() for i in post.category.all()],
-                'intro': post.intro,
-                'post_img': post.post_img.url,
-                'post_url': post.get_absolute_url(),
-                'date': post.created_at.date().strftime('%b  %d, %Y'),
-                'total_comments': Comment.objects.total().filter(post=post).count(),
-                'hitcount': get_hitcount_model().objects.get_for_object(post).hits
-            }
-            post_data.append(item)
+        # for post in posts:
+        #     item = {
+        #         'title': post.title,
+        #         'author': post.author.name,
+        #         'author_url': post.author.get_absolute_url(),
+        #         'author_img': post.author.avatar.url,
+        #         'category': [i.title for i in post.category.all()],
+        #         'category_url': [i.get_absolute_url() for i in post.category.all()],
+        #         'intro': post.intro,
+        #         'post_img': post.post_img.url,
+        #         'post_url': post.get_absolute_url(),
+        #         'date': post.created_at.date().strftime('%b  %d, %Y'),
+        #         'total_comments': Comment.objects.total().filter(post=post).count(),
+        #         'hitcount': get_hitcount_model().objects.get_for_object(post).hits
+        #     }
+        #     post_data.append(item)
         return JsonResponse({'posts': post_data, 'query': q})
     else:
         return JsonResponse({'query': q})

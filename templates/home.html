@@ -75,7 +75,7 @@
         <a class="comment-link ml-4 mr-2" href="{% url 'post_detail' post.slug %}#comments"><i class="bi bi-chat-dots mr-2"></i>{{post.comments.total|length}}</a>
         <i class="bi bi-eye ml-3 mx-2"></i>{% get_hit_count for post %}
     </div>
-    <p class="text-center mx-lg-5 mx-2 post-detail">{{post.intro|slice:175|add:'....'}}</p>
+    <p class="text-center mx-lg-5 mx-2 post-detail">{{post.intro|truncatechars:175}}</p>
     <div class="text-center mt-4">
         <a href="{% url 'post_detail' post.slug %}" class="btn continue-reading text-center mb-4">Continue reading</a>
     </div>
