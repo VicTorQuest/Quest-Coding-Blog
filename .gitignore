@@ -1,7 +1,13 @@
 .env
+*.env
 *.log
 *.pot
 *.pyc
 __pycache__
 db.sqlite3
 media
+__pycache__/
+*.py[cod]
+*/migrations/
+!*/migrations/__init__.py
+staticfiles/

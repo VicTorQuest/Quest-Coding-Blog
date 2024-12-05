@@ -68,7 +68,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'hitcount',
     'django_countries',
-    'captcha',
+    'django_recaptcha',
     'maintenance_mode',
 ]
 
