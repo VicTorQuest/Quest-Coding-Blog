@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'crispy_forms',
+    'crispy_bootstrap5',
     'django_social_share',
     'ckeditor',
     'ckeditor_uploader',
@@ -81,6 +82,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'maintenance_mode.middleware.MaintenanceModeMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 
@@ -183,7 +185,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 MESSAGE_TAGS = {
     messages.DEBUG: "alert-info",
@@ -247,8 +249,9 @@ AWS_DEFAULT_ACL = 'public-read'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-SITE_ID = 2
+SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 LOGIN_URL = '/my-account'
 # Provider specific settings
 ACCOUNT_LOGOUT_REDIRECT_URL = 'my_account'

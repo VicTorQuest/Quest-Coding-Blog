@@ -2,8 +2,8 @@ from dataclasses import field
 from django import forms
 from .models import Subscriber, MailMessage, UnsubscribedEmail
 from blog.validators import validate_email, validate_subscriber_email, validate_name
-from captcha.fields import ReCaptchaField
-from captcha.widgets import ReCaptchaV2Checkbox
+from  django_recaptcha.fields import ReCaptchaField
+from django_recaptcha.widgets import ReCaptchaV2Checkbox
 
 
 
