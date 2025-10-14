@@ -5,8 +5,8 @@ const navbar = document.querySelector(".navbar");
 const menuBtn = document.querySelector(".menu-btn");
 const cancelBtn = document.querySelector(".cancel-btn");
 const btnScrollToTop = document.querySelector("#btnScrollToTop")
-const icon = document.querySelector('.search_icon')
 const search = document.querySelector('.search')
+
 
 $(window).scroll(function() {
     if ($(this).scrollTop() > 300) {
@@ -20,9 +20,8 @@ btnScrollToTop.addEventListener('click', function() {
     window.scrollTo(0, 0)
 })
 
-icon.onclick = function() {
-    search.classList.toggle('active')
-}
+
+
 
 cookieButton.addEventListener("click", () => {
     cookieContainer.classList.remove("active");

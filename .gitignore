@@ -1,13 +1,63 @@
-.env
+# Python bytecode and cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments and Environment Files
+venv/
+.env/
 *.env
+.env.*
+
+# Django
 *.log
 *.pot
 *.pyc
-__pycache__
-db.sqlite3
-media
-__pycache__/
-*.py[cod]
-*/migrations/
-!*/migrations/__init__.py
-staticfiles/
+*.pyo
+*.sqlite3
+/db.sqlite3
+/media/
+
+# Just ignore their __pycache__
+**/migrations/__pycache__/
+
+# Local settings
+settings_local.py
+config/settings/local.py
+
+# Secret keys and credentials
+*.pem
+
+# Logs
+logs/
+*.log
+
+# Test & Coverage
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Jupyter
+.ipynb_checkpoints
+
+# Editor / IDE
+.idea/
+.vscode/
+*.iml
+
+# macOS
+.DS_Store
+
+# Docker / Runtime
+*.pid
+docker-compose.override.yml
+
+# Frontend (optional, if using React/Vite etc.)
+node_modules/
+dist/
+build/
