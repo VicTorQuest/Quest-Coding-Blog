@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 from django.contrib.messages import constants as messages
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -128,24 +129,33 @@ WSGI_APPLICATION = 'mainproject.wsgi.application'
 #     }
 # }
 
+# DATABASES = {
+
+#     'default': {
+
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+#         'NAME': os.environ.get('DATABASE_NAME'),
+
+#         'USER': 'postgres',
+
+#         'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+
+#         'HOST': '127.0.0.1',
+
+#         'PORT': '5432',
+
+#     }
+
+# }
+
+
 DATABASES = {
-
-    'default': {
-
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-        'NAME': os.environ.get('DATABASE_NAME'),
-
-        'USER': 'postgres',
-
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-
-        'HOST': '127.0.0.1',
-
-        'PORT': '5432',
-
-    }
-
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL', 'sqlite:///db.sqlite3'),
+        conn_max_age=600,
+        ssl_require=not DEBUG,
+    )
 }
 
 
