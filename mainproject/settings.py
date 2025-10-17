@@ -410,4 +410,6 @@ MAINTENANCE_MODE_IGNORE_URLS = ['/toggle-maintenance/', '/maintenance-switch/']
 if DEBUG:
     DOMAIN_NAME = 'http://' + '127.0.0.1:8000'
 else:
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
     DOMAIN_NAME = "https://" + str(ALLOWED_HOSTS[0])
