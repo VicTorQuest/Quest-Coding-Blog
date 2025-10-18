@@ -205,6 +205,40 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger'
 }
 
+
+# Ensure logs directory exists
+log_dir = os.path.join(BASE_DIR, 'logs')
+if DEBUG:
+    os.makedirs(log_dir, exist_ok=True)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+    'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/errors.log') if DEBUG else '/tmp/django-errors.log',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
 CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/'
 CKEDITOR_UPLOAD_PATH = "post_images/"
 CKEDITOR_IMAGE_BACKEND = 'pillow'
