@@ -33,7 +33,7 @@ DEBUG = str(os.getenv('DEBUG')) == '1'
 ALLOWED_HOSTS = []
 
 if not DEBUG:
-    ALLOWED_HOSTS += [os.getenv('ALLOWED_HOSTS')]
+    ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
 AUTH_USER_MODEL = 'accounts.User'
 # Application definition
