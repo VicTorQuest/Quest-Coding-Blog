@@ -26,7 +26,7 @@ from maintenance_mode.core import get_maintenance_mode, set_maintenance_mode
 
 domain_name = getattr(settings, 'DOMAIN_NAME', 'questcoding.blog')
 site_email = getattr(settings, 'APPLICATION_EMAIL', "admin@questcoding.blog")
-user = User.objects.get(username="Quest")
+user = User.objects.filter(username="Quest").first()
 author = Author.objects.get(user=user)
 # Create your views here.
 def home(request):
