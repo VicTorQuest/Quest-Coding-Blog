@@ -126,7 +126,7 @@ def account(request):
         elif request.POST.get('form_type') == 'login':
             username = request.POST.get('username')
             password = request.POST.get('password')
-            isanemail = re.match("([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", username)
+            isanemail = re.match(r"([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)", username)
             if isanemail:
                 try:
                     userobj = User.objects.get(email=username)
