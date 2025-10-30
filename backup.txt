@@ -1,0 +1,71 @@
+Author 
+
+victor okolie
+
+Backend web developer, Web3 developer, and Owner of questcoding.blog website
+
+Lagos, Nigeria
+
+https://victorokolie.com
+
+https://github.com/VicTorQuest
+
+https://twitter.com/victorokolie_
+
+https://www.linkedin.com/in/victor-okolie-a74623245
+
+https://youtube.com/channel/UCYo8lxrYSZSOwQys2rsE4Ag
+
+
+
+Category:
+
+Automation
+Database
+Django
+Hosting
+Javascript
+Postgresql
+Python
+Python Bots
+Uncategorized
+Web Dev
+Web3
+
+
+Posts
+
+How to create sitemaps for your django website and submit to google
+
+when putting your website out there, SEO is one key factor to cover so the platform can pop up on google search when users lookup specific queries, here's how you can create and submit your sitemaps for your Django website
+
+
+
+how to connect cpanel webmail to gmail
+
+imagine getting and sending your webmail but using your Gmail. In this tutorial, I'll demonstrate how you can connect your Cpanel webmail to your Gmail account
+
+
+
+HTTP status codes/messages and what they signify
+
+Hello there! In this blog post, I'll be listing out the web's HTTP status codes and explaining what they actually mean
+
+HTTP status codes are three-digit responses from the server to the browser-side request.
+
+
+
+How to host your django media files in production  with AWS S3 Bucket
+
+Django is a powerful backend framework for web development, sadly it doesn't support image hosing during production. In this blog, post, i will demonstrate how you can host user uploaded images on aws using the S3 Bucket
+
+1. You need to create an account on aws
+
+
+Top alternatives of herokuapp free web hosting
+
+As of November 28, 2022, Heroku will discontinue free product plans offers as well as free dynos and data services. In this article, I'll be talking about various alternatives for hosting your webapps, projects for free
+
+1. Railway
+
+2. Netlify
