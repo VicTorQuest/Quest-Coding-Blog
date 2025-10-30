@@ -1,12 +1,12 @@
 import random
 import uuid
+from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
-from mainapp.models import User
 from django_countries.fields import CountryField
 
-
+User = settings.AUTH_USER_MODEL
 
 def generate_order_id():
     number = str(random.randint(0, 10))
@@ -19,9 +19,9 @@ def generate_order_id():
 
 
 class Customer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=100, null=True)
-    email = models.EmailField(null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
     phone_number = models.CharField(max_length=15, null=True)
 
     def __str__(self):
@@ -32,11 +32,11 @@ class Customer(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length=200, null=True)
+    name = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=7, decimal_places=2)
-    file = models.FileField(upload_to="files", null=True)
-    image = models.ImageField(default='placeholder.png', upload_to='product_images', blank=True, null=True)
-    digital = models.BooleanField(default=True, null=True)
+    file = models.FileField(upload_to="files")
+    image = models.ImageField(default='placeholder.png', upload_to='product_images')
+    digital = models.BooleanField(default=True)
     rating = models.DecimalField(default=0, validators=[MaxValueValidator(5.0), MinValueValidator(0.0)], decimal_places=1, max_digits=2)
     rated_by = models.ManyToManyField(User, blank=True)
     combined_ratings = models.DecimalField(default=0, decimal_places=1, max_digits=1000)
@@ -61,10 +61,10 @@ class Product(models.Model):
     
 
 class Review(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    review = models.TextField(null=True)
-    rating = models.DecimalField(default=0, validators=[MaxValueValidator(5.0), MinValueValidator(0.0)], decimal_places=1, max_digits=2, null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    review = models.TextField()
+    rating = models.DecimalField(default=0, validators=[MaxValueValidator(5.0), MinValueValidator(0.0)], decimal_places=1, max_digits=2)
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -77,7 +77,7 @@ class Order(models.Model):
     customer = models.ForeignKey(Customer, models.SET_NULL, null=True)
     date_ordered = models.DateTimeField(auto_now_add=True)
     completed = models.BooleanField(default=False)
-    order_id = models.CharField(max_length=200, default='', unique=True, blank=True , null=True)
+    order_id = models.CharField(max_length=200, unique=True, blank=True , null=True)
     transaction_id = models.CharField(max_length=200, unique=True, blank=True , null=True)
 
     def __str__(self):
@@ -85,7 +85,7 @@ class Order(models.Model):
     
 
     def save(self, *args, **kwargs):
-        if self.order_id == '' or None:
+        if self.order_id == '' or self.order_id is None:
             code = generate_order_id()
             self.order_id = code
         super(Order, self).save(*args, **kwargs)
@@ -143,7 +143,7 @@ REFUND_STATUS = (
 )
 
 class Refund(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     order_id = models.CharField(max_length=50, unique=True, blank=True)
     items = models.ManyToManyField(OrderItem)
     status = models.CharField(max_length=12, choices=REFUND_STATUS, default='Sent')

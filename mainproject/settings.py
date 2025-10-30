@@ -35,7 +35,7 @@ ALLOWED_HOSTS = []
 if not DEBUG:
     ALLOWED_HOSTS += [os.getenv('ALLOWED_HOSTS')]
 
-AUTH_USER_MODEL = 'mainapp.User'
+AUTH_USER_MODEL = 'accounts.User'
 # Application definition
 
 INSTALLED_APPS = [
@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
 
     #my apps
-    'mainapp.apps.MainappConfig',
+    'accounts.apps.AccountsConfig',
     'blog.apps.BlogConfig',
     'newsletter.apps.NewsletterConfig',
     'store.apps.StoreConfig',
@@ -69,8 +69,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'django_social_share',
-    'ckeditor',
-    'ckeditor_uploader',
+    'django_ckeditor_5',
     'hitcount',
     'django_countries',
     'django_recaptcha',
@@ -242,19 +241,57 @@ LOGGING = {
     },
 }
 
-CKEDITOR_BASEPATH = '/static/ckeditor/ckeditor/'
-CKEDITOR_UPLOAD_PATH = "post_images/"
-CKEDITOR_IMAGE_BACKEND = 'pillow'
+# CKEditor 5 settings
+CKEDITOR_5_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
-CKEDITOR_CONFIGS = {
-    'awesome_ckeditor': {
-        'toolbar': 'full',
+
+CKEDITOR_5_CONFIGS = {
+    'default': {
+        'toolbar': [
+            {
+                'name': 'basicstyles',
+                'items': ['bold', 'italic', 'underline', 'strikethrough', 'link']
+            },
+            {
+                'name': 'paragraph',
+                'items': ['bulletedList', 'numberedList', 'blockQuote']
+            },
+            {
+                'name': 'insert',
+                'items': ['imageUpload', 'mediaEmbed', 'table']
+            },
+            {
+                'name': 'document',
+                'items': ['undo', 'redo', 'sourceEditing']
+            },
+            {
+                'name': 'heading',
+                'items': ['heading', 'formatPainter', 'removeFormat']
+            }
+        ],
+        'height': '400px',
+        'width': '100%',
+        'image': {
+            'toolbar': ['imageTextAlternative', 'imageStyle:alignLeft', 'imageStyle:alignCenter', 'imageStyle:alignRight'],
+        },
+        'table': {
+            'contentToolbar': ['tableColumn', 'tableRow', 'mergeTableCells'],
+        },
+        'mediaEmbed': {
+            'previewsInData': True,
+        },
     },
 
-    'default': {
-        'toolbar': 'full',
+    'minimal': {
+        'toolbar': [
+            {'name': 'basicstyles', 'items': ['bold', 'italic', 'link']},
+            {'name': 'undo', 'items': ['undo', 'redo']},
+        ],
+        'height': '250px',
+        'width': '100%',
     },
 }
+
 
 JAZZMIN_UI_TWEAKS = {
     "theme": "flatly",
@@ -348,12 +385,12 @@ JAZZMIN_SETTINGS = {
     "site_icon": 'favicon.ico',
     "welcome_sign": "Welcome to the admin",
     "copyright": "Quest Coding",
-    "search_model": "mainapp.User",
+    "search_model": "accounts.User",
     "user_avatar": 'avatar',
 
     "topmenu_links": [
 
-        {"model": "mainapp.User"},
+        {"model": "accounts.User"},
         {"model": "blog.Post"},
 
         {"app": "newsletter"},
@@ -367,7 +404,7 @@ JAZZMIN_SETTINGS = {
 
 
     "icons": {
-        "mainapp.user": "fas fa-user",
+        "accounts.user": "fas fa-user",
         "account.emailaddress": "fas fa-envelope",
         "blog.category": "fas fa-object-ungroup",
         "blog.comment": "fas fa-comments",

@@ -1,6 +1,7 @@
 import boto3
 import json
 import os
+from django.apps import apps
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt
@@ -15,8 +16,17 @@ from rest_framework import viewsets
 from django_countries import countries
 
 User = get_user_model()
-user = User.objects.get(username="Quest")
-author = Author.objects.get(user=user)
+author = None  # fallback default
+
+# Only run this after migrations and when tables exist
+if apps.ready and apps.is_installed('mainapp'):
+    try:
+        if User.objects.exists() and Author.objects.exists():
+            user = User.objects.filter(username="Quest").first()
+            if user:
+                author = Author.objects.filter(user=user).first()
+    except Exception:
+        author = None
 
 # Create your views here.
 def store(request):

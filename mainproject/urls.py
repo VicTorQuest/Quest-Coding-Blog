@@ -21,9 +21,9 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include, re_path
-from mainapp.views import account, edit_account, address,recent_order, logout_page,contact, home, privacy_policy, refund_policy, robots_txt, terms, videos, customhandler404, customhandler403, customhandler500, RequestRefund, downloads, toggle_maintenance, maintenance_switch
+from accounts.views import account, edit_account, address,recent_order, logout_page,contact, home, privacy_policy, refund_policy, robots_txt, terms, videos, customhandler404, customhandler403, customhandler500, RequestRefund, downloads, toggle_maintenance, maintenance_switch
 from blog.sitemaps import CategorySitemaps, PostSitemaps, CommentSiteMaps, AuthorSitemaps
-from mainapp.sitemaps import StaticViewSitmap
+from accounts.sitemaps import StaticViewSitmap
 from store.sitemaps import productSitmaps
 sitemaps = {'static': StaticViewSitmap, 'posts': PostSitemaps, 'comments': CommentSiteMaps, 'categories':CategorySitemaps, 'authors': AuthorSitemaps, 'products': productSitmaps}
 
@@ -31,7 +31,6 @@ sitemaps = {'static': StaticViewSitmap, 'posts': PostSitemaps, 'comments': Comme
 urlpatterns = [
     path('sitemap.xml/', sitemap, {'sitemaps': sitemaps}),
     path('robots.txt/', robots_txt,  name='robots.txt'),
-    path('ckeditor/', include('ckeditor_uploader.urls')),
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('api/', include('rest_framework.urls')),

@@ -4,12 +4,12 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
-from mainapp.models import User
 from django.utils.translation import gettext_lazy as _
 from .validators import  validate_email, validate_name
-from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 
 domain_name = getattr(settings, 'DOMAIN_NAME', 'questcoding.blog')
+User = settings.AUTH_USER_MODEL
 
 #Managers
 class CommentManager(models.Manager):
@@ -40,16 +40,16 @@ class Category(models.Model):
 
 
 class Author(models.Model):
-    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    name = models.CharField(max_length=30, null=True)
-    bio = models.TextField(max_length=100, null=True)
-    location = models.CharField(max_length=30, null=True, help_text="your state, country")
-    portifolio = models.URLField(null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=30)
+    bio = models.TextField(max_length=100)
+    location = models.CharField(max_length=30, help_text="your state, country")
+    portifolio = models.URLField()
     github = models.URLField(null=True, blank=True)
     twitter = models.URLField(null=True, blank=True)
     linkedin = models.URLField(null=True, blank=True)
     youtube = models.URLField(null=True, blank=True)
-    avatar = models.ImageField(upload_to="profile_pics", blank=True)
+    avatar = models.ImageField(upload_to="profile_pics", null=True, blank=True)
     slug = models.SlugField(unique=True)
 
     def __str__(self):
@@ -78,17 +78,18 @@ class Post(models.Model):
         (ACTIVE, 'Active'),
         (DRAFT, 'Draft')
     )
-    author = models.ForeignKey(Author, null=True, on_delete=models.CASCADE)
+
+    author = models.ForeignKey(Author, null=True, on_delete=models.SET_NULL)
     category = models.ManyToManyField(Category, related_name='categories')
-    title = models.CharField(max_length=150, blank=False, null=True)
-    slug = models.SlugField(blank=False, null=True, unique=True)
-    intro = models.TextField(null=True)
-    post_img = models.ImageField(default="default.png", upload_to="post_images")
-    content = RichTextUploadingField(null=True)
-    likes = models.ManyToManyField(User,  related_name='post_likes', blank=True)
-    dislikes = models.ManyToManyField(User,  related_name='post_dislikes', blank=True)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
-    last_modified = models.DateTimeField(auto_now=True, null=True)
+    title = models.CharField(max_length=150)
+    slug = models.SlugField(unique=True)
+    intro = models.TextField()
+    post_img = models.ImageField(upload_to="post_images")
+    content = CKEditor5Field()
+    likes = models.ManyToManyField(User, related_name='post_likes', blank=True)
+    dislikes = models.ManyToManyField(User, related_name='post_dislikes', blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=10, choices=CHOICES_STATUS, default=ACTIVE)
 
     def __str__(self):
@@ -122,9 +123,9 @@ class Comment(models.Model):
     name = models.CharField(max_length=25, validators=[validate_name])
     email = models.EmailField(validators=[validate_email], max_length=254)
     body = models.TextField(max_length=700)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-    parent = models.ForeignKey('self', null=True, on_delete=models.CASCADE, blank=True)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE)
 
     objects = CommentManager()
 

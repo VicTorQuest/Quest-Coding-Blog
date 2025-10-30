@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from .models import Comment, Post
 from django_recaptcha.fields import ReCaptchaField
 from django_recaptcha.widgets import ReCaptchaV2Checkbox
-from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 class PostForm(forms.ModelForm):
@@ -66,7 +66,7 @@ class CommentForm(forms.ModelForm):
 
 
 class CreatePostForm(forms.ModelForm):
-    content = forms.CharField(widget=CKEditorUploadingWidget())
+    content = CKEditor5Field()
     class Meta:
         model = Post
         fields = [

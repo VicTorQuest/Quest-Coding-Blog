@@ -1,3 +1,4 @@
+from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -15,8 +16,17 @@ from hitcount.models import HitCount
 domain_name = getattr(settings, 'DOMAIN_NAME', 'questcoding.blog')
 User = get_user_model()
 site_email = getattr(settings, 'APPLICATION_EMAIL', "questcoding2001gmail.com")
-user = User.objects.get(username="Quest")
-author = Author.objects.get(user=user)
+author = None  # fallback default
+
+# Only run this after migrations and when tables exist
+if apps.ready and apps.is_installed('mainapp'):
+    try:
+        if User.objects.exists() and Author.objects.exists():
+            user = User.objects.filter(username="Quest").first()
+            if user:
+                author = Author.objects.filter(user=user).first()
+    except Exception:
+        author = None
 
 # Create your views here.
 def subscribe(request):
