@@ -58,7 +58,7 @@ def home(request):
     cartitems = data['cartitems']
     carttotal = data['cartitems']
 
-    user = User.objects.get(username="Quest")
+    user = User.objects.filter(username="Quest").first()
     author = Author.objects.get(user=user)
     return  render(request,'home.html', {
         "posts": posts,
