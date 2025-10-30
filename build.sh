@@ -1,5 +1,4 @@
 #!/bin/bash
-python manage.py flush --noinput
 python manage.py migrate --noinput
 
 echo "
