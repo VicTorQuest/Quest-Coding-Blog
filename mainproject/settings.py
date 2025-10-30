@@ -160,6 +160,22 @@ DATABASES = {
     )
 }
 
+if os.getenv('DATABASE_URL'):
+    DATABASES = {
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL', 'sqlite:///db.sqlite3'),
+        conn_max_age=600,
+        ssl_require=not DEBUG,
+    )
+}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -292,12 +308,6 @@ CKEDITOR_5_CONFIGS = {
     },
 }
 
-
-JAZZMIN_UI_TWEAKS = {
-    "theme": "flatly",
-    "dark_mode_theme": "darkly",
-}
-
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static/')]
@@ -371,103 +381,6 @@ SOCIALACCOUNT_PROVIDERS = {
             'read:org',
         ],
     }
-}
-
-
-
-JAZZMIN_SETTINGS = {
-     "site_title": "Quest Coding Blog",
-     "site_header": "Quest Coding Admin",
-     "site_brand": "Quest Coding Blog",
-     "site_logo": "favicon.ico",
-    #  "login_logo": None,
-    "site_logo_classes": "img-circle",
-    "site_icon": 'favicon.ico',
-    "welcome_sign": "Welcome to the admin",
-    "copyright": "Quest Coding",
-    "search_model": "accounts.User",
-    "user_avatar": 'avatar',
-
-    "topmenu_links": [
-
-        {"model": "accounts.User"},
-        {"model": "blog.Post"},
-
-        {"app": "newsletter"},
-        {"model": "store.Order"},
-        
-    ],
-
-
-    "navigation_expanded": False,
-    "hide_apps": ["auth"],
-
-
-    "icons": {
-        "accounts.user": "fas fa-user",
-        "account.emailaddress": "fas fa-envelope",
-        "blog.category": "fas fa-object-ungroup",
-        "blog.comment": "fas fa-comments",
-        "blog.author": "fas fa-user-edit",
-        "blog.post": "fas fa-pen-square",
-        "blog.featuredpost": "fas fa-pen-square",
-        "blog.subcategory": "fas fa-object-group",
-        "hitcount.blacklistip": "fas fa-times-circle",
-        "hitcount.blacklistuseragent": "fas fa-times-circle",
-        "hitcount.hitcount": "fas fa-sort-numeric-up",
-        "hitcount.hit": "fas fa-mouse",
-        "newsletter.mailmessage": "fas fa-mail-bulk",
-        "newsletter.subscriber": "fas fa-paper-plane",
-        "newsletter.unsubscribedemail": "fas fa-minus-circle",
-        "sites.site": "fas fa-globe",
-        "socialaccount.socialaccount": "fas fa-user",
-        "socialaccount.socialtoken": "fas fa-check",
-        "socialaccount.socialapp": "fas fa-globe",
-        "store.customer": "fas fa-user",
-        "store.orderitem": "fas fa-shopping-basket",
-        "store.order": "fas fa-shopping-cart",
-        "store.product": "fas fa-gift",
-        "store.review": "fas fa-comments",
-        "store.billingaddress": "fas fa-shipping-fast",
-        "store.refund": "fas fa-undo-alt"
-    },
-
-
-}
-
-# JAZZMIN_SETTINGS["show_ui_builder"] = True
-
-JAZZMIN_UI_TWEAKS = {
-    "navbar_small_text": False,
-    "footer_small_text": False,
-    "body_small_text": False,
-    "brand_small_text": False,
-    "brand_colour": "navbar-dark",
-    "accent": "accent-primary",
-    "navbar": "navbar-dark",
-    "no_navbar_border": False,
-    "navbar_fixed": True,
-    "layout_boxed": False,
-    "footer_fixed": False,
-    "sidebar_fixed": True,
-    "sidebar": "sidebar-dark-info",
-    "sidebar_nav_small_text": False,
-    "sidebar_disable_expand": False,
-    "sidebar_nav_child_indent": True,
-    "sidebar_nav_compact_style": False,
-    "sidebar_nav_legacy_style": False,
-    "sidebar_nav_flat_style": False,
-    "theme": "darkly",
-    "dark_mode_theme": "darkly",
-    "button_classes": {
-        "primary": "btn-primary",
-        "secondary": "btn-secondary",
-        "info": "btn-outline-info",
-        "warning": "btn-outline-warning",
-        "danger": "btn-danger",
-        "success": "btn-success"
-    },
-    "actions_sticky_top": True
 }
 
 RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
